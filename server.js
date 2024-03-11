@@ -6,6 +6,8 @@ const sassMiddleware = require('./lib/sass-middleware');
 const express = require('express');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
+const bcrypt = require('bcryptjs');
+const cookieSession = require('cookie-session')
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -24,6 +26,10 @@ app.use(
   })
 );
 app.use(express.static('public'));
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
 
 // method override using query. More info at https://github.com/expressjs/method-override#override-using-a-query-value
 app.use(methodOverride('_method'));
