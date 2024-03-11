@@ -1,6 +1,10 @@
--- Drop and recreate Users table (Example)
-
+-- Drop and recreate Users table
 DROP TABLE IF EXISTS users CASCADE;
+
+-- Created by Victoria Lane
+-- Created on March 11, 2024
+-- Purpose: DB table to store user data
+
 CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
   username VARCHAR(255) NOT NULL,
