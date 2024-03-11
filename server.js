@@ -24,6 +24,8 @@ app.use(
   })
 );
 app.use(express.static('public'));
+
+// method override using query. More info at https://github.com/expressjs/method-override#override-using-a-query-value
 app.use(methodOverride('_method'));
 
 // Separated Routes for each Resource
