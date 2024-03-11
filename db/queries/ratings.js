@@ -13,7 +13,7 @@ const getAverageRatingByResource = (resourceID) => {
   return db.query('SELECT avg(rating) FROM ratings WHERE resource_id = $1;', [resourceID])
     .then(data => {
       return data.rows[0]
-    })
+    });
 };
 
 /**
@@ -29,4 +29,4 @@ const addNewRating = (ratingObj) => {
     });
 };
 
-module.exports = { getAverageRatingByResource, addNewRating }
+module.exports = { getAverageRatingByResource, addNewRating };
