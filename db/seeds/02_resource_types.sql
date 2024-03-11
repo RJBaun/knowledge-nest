@@ -1,6 +1,6 @@
 -- Created by Rylan Baun
 -- Created on March 11th, 2024
--- Purpose: Seed data for DB table resource_types
+-- Purpose: Seed data for DB table 'resource_types'
 
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Images', 'Visual representations such as photographs, illustrations, graphics, and diagrams', 'class="fa-regular fa-file-image"');
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Audio', 'Sound-based content including music, podcasts, recordings, and spoken-word materials', 'class="fa-regular fa-file-audio"');
@@ -14,4 +14,3 @@ INSERT INTO resource_types (name, description, icon_link) VALUES ('Templates & A
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Courses', 'Structured educational content provided in the form of online courses, tutorials, and learning modules', 'class="fa-regular fa-file-zipper"');
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Documents', 'General-purpose documents, including reports, essays, manuals, and forms', 'class="fa-regular fa-file-word"');
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Books', 'Long-form written content covering various topics, typically published in book format', 'class="fa-regular fa-file-lines"');
-
