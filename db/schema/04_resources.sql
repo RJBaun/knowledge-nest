@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS resources CASCADE;
 
 -- Created by Victoria Lane
 -- Created on March 11, 2024
--- Purpose: DB table to store user data
+-- Purpose: DB table to store resources data
 
 CREATE TABLE resources (
   id SERIAL PRIMARY KEY NOT NULL,
