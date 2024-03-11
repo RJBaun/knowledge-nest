@@ -4,15 +4,6 @@
 
 const db = require('../connection');
 
-/*
-Required Queries
- - X Show all resources
- - X Given id, show a specific resource
- - X Given all resource fields, add new resource in resources
- - X Given all resource fields, update resource in resources
- - Update resource field 'is_archived' to true (archive resource)
-*/
-
 /**
  * Get all resources data.
  * @returns {Promise<[{}]>} Promise to resources.
@@ -73,14 +64,31 @@ const updateResource = (resource) => {
     SET name=$1, url=$2, description=$3, owner_id=$4, category_id=$5, resource_type_id=$6, string=$7
     WHERE id=$8 RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id, resource.date_added, resource.id])
     .then(data => {
-      return;
+      return data.rows[0];
     })
     .catch(err => {
       return null;
+    });
+};
+
+/**
+ * Archive resource in the database.
+ * @param {string} id Resource id.
+ * @returns {Promise<{}>} A promise to the resource.
+ */
+const archiveResource = (id) => {
+  return db
+    .query(`UPDATE resources
+    SET is_archived=true
+    WHERE id=$1 RETURNING *;`, [id])
+    .then(data => {
+      return data.rows[0];
     })
+    .catch(err => {
+      return null;
+    });
 };
 
 
 
-
-module.exports = { getResources, getResourceById, addNewResource, updateResource };
+module.exports = { getResources, getResourceById, addNewResource, updateResource, archiveResource };
