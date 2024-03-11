@@ -41,7 +41,7 @@ deleteUser = (userObj) => {
     });
 };;
 
-getUserResources = userObj => {
+getResourcesByUsers = userObj => {
   const { id } = userObj;
   return db.query('SELECT * FROM resources WHERE owner_id = $1 UNION SELECT resources.* FROM resources JOIN likes ON resources.id = likes.resource_id WHERE liker_id = $1', [id])
     .then(data => {
@@ -49,4 +49,4 @@ getUserResources = userObj => {
     });
 };
 
-module.exports = { getUsers, getUserByID, createNewUser, editUserProfile, deleteUser, getUserResources };
+module.exports = { getUsers, getUserByID, createNewUser, editUserProfile, deleteUser, getResourcesByUsers };
