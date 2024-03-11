@@ -16,3 +16,23 @@ body {
     rgba(163, 208, 219, 1) 100%
   );
 }
+
+nav {
+  width: 100vw;
+  position: fixed;
+  top: 0;
+
+}
+
+.navbar {
+  position:fixed;
+}
+
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
+.me-auto {
+  margin-right: 0 !important;
+}
+
