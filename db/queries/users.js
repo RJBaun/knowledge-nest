@@ -1,5 +1,13 @@
+// Created by Rylan Baun
+// Created on March 11, 2024
+// Purpose: User-related queries for JS routes.
+
 const db = require('../connection');
 
+/**
+ * Get all users data.
+ * @returns {Promise<[{}]>} Promise to users.
+ */
 const getUsers = () => {
   return db.query('SELECT * FROM users;')
     .then(data => {
@@ -7,14 +15,24 @@ const getUsers = () => {
     });
 };
 
-getUserByID = (userID) => {
+/**
+ * Get specific user data.
+ * @param {integer} userID
+ * @returns {Promise<[{}]>} Promise to users.
+ */
+const getUserByID = (userID) => {
   return db.query('SELECT * FROM users WHERE id = $1', [userID])
     .then(data => {
       return data.rows[0]
     });
 };
 
-createNewUser = (userObj) => {
+/**
+ * Insert new user to the database.
+ * @param {{username: string, email:string, password:string, date_created: string}} userObj
+ * @returns {Promise<[{}]>} Promise to users.
+ */
+const createNewUser = (userObj) => {
   const { username, email, password, date_created } = userObj;
   return db.query('INSERT INTO users (username, email, password, date_created) VALUES ($1, $2, $3, $4);', [username, email, password, date_created])
     .then(data => {
@@ -22,7 +40,12 @@ createNewUser = (userObj) => {
     });
 };
 
-editUserProfile = (userObj) => {
+/**
+ * Update a users profile in the database.
+ * @param {{id:integer, username:string, email:string}} userObj
+ * @returns {Promise<[{}]>} Promise to users.
+ */
+const editUserProfile = (userObj) => {
   const { id, username, email } = userObj;
   return db.query('UPDATE users SET username = $2, email = $2 WHERE id = $1', [id, username, email])
     .then(data => {
@@ -30,7 +53,12 @@ editUserProfile = (userObj) => {
     });
 };
 
-deleteUser = (userObj) => {
+/**
+ * Delete a user from the database and archive all owned resources.
+ * @param {{id:integer}} userObj
+ * @returns {Promise<[{}]>} Promise to users.
+ */
+const deleteUser = (userObj) => {
   const { id } = userObj;
   return db.query('UPDATE users SET is_deleted = true WHERE id = $1', [id])
     .then(data => {
@@ -41,7 +69,12 @@ deleteUser = (userObj) => {
     });
 };;
 
-getResourcesByUsers = userObj => {
+/**
+ * Get all resources associated with a user in the database.
+ * @param {{id:integer}} userObj
+ * @returns {Promise<[{}]>} Promise to users.
+ */
+const getResourcesByUsers = (userObj) => {
   const { id } = userObj;
   return db.query('SELECT * FROM resources WHERE owner_id = $1 UNION SELECT resources.* FROM resources JOIN likes ON resources.id = likes.resource_id WHERE liker_id = $1', [id])
     .then(data => {
