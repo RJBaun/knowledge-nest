@@ -7,4 +7,4 @@ const getUsers = () => {
     });
 };
 
-module.exports = { getUsers, loadIcon };
+module.exports = { getUsers };
