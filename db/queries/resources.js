@@ -89,6 +89,23 @@ const archiveResource = (id) => {
     });
 };
 
+/**
+ * Get # of queries, based on criteria
+ * @param {number} limit (optional) max number of entries to return, default 10.
+ * @return {Promise<[{}]>} A promise to resources
+ */
+const getRecentResources = (limit = 10) => {
+  return db
+    .query(`SELECT * FROM resources
+    ORDER BY date_added DESC
+    LIMIT $1`, [limit])
+    .then(data => {
+      return data.rows;
+    })
+    .catch(err => {
+      console.log(err.message);
+      return null;
+    });
+};
 
-
-module.exports = { getResources, getResourceById, addNewResource, updateResource, archiveResource };
+module.exports = { getResources, getResourceById, addNewResource, updateResource, archiveResource, getRecentResources };
