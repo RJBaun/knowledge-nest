@@ -1,6 +1,6 @@
 // Created by Victoria Lane
 // Created on March 11, 2024
-// Purpose: Resource-related queries for JS routes.
+// Purpose: Likes-related queries for JS routes.
 
 const db = require('../connection');
 
