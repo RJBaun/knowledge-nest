@@ -1,5 +1,5 @@
 -- Drop and recreate resources table
-DROP TABLE IF EXISTS resources CASCADE;
+DROP TABLE IF EXISTS likes CASCADE;
 
 -- Created by Victoria Lane
 -- Created on March 11, 2024
