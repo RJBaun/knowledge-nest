@@ -8,8 +8,8 @@ const db = require('../connection');
 Required Queries
  - X Show all resources
  - X Given id, show a specific resource
- - Given all resource fields, add new resource in resources
- - Given all resource fields, update resource in resources
+ - X Given all resource fields, add new resource in resources
+ - X Given all resource fields, update resource in resources
  - Update resource field 'is_archived' to true (archive resource)
 */
 
@@ -52,11 +52,28 @@ const getResourceById = (id) => {
  */
 const addNewResource = (resource) => {
   return db
-  .query(`INSERT INTO resources (name, url, description, owner_id, category_id, resource_type_id, date_added)
-  )
+    .query(`INSERT INTO resources (name, url, description, owner_id, category_id, resource_type_id, date_added)
   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id, resource.date_added])
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+/**
+ * Update single resource in the database.
+ * @param {{id: string, name: string, url: string, description: string, owner_id: string, category_id: string, resource_type_id: string, date_added: string}} resource
+ * @returns {Promise<{}>} A promise to the resource.
+ */
+const updateResource = (resource) => {
+  return db
+    .query(`UPDATE resources
+    SET name=$1, url=$2, description=$3, owner_id=$4, category_id=$5, resource_type_id=$6, string=$7
+    WHERE id=$8 RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id, resource.date_added, resource.id])
+    .then(data => {
+      return;
     })
     .catch(err => {
       return null;
@@ -64,4 +81,6 @@ const addNewResource = (resource) => {
 };
 
 
-module.exports = { getResources, getResourceById, addNewResource };
+
+
+module.exports = { getResources, getResourceById, addNewResource, updateResource };
