@@ -14,3 +14,4 @@ INSERT INTO resource_types (name, description, icon_link) VALUES ('Templates & A
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Courses', 'Structured educational content provided in the form of online courses, tutorials, and learning modules', 'class="fa-regular fa-file-zipper"');
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Documents', 'General-purpose documents, including reports, essays, manuals, and forms', 'class="fa-regular fa-file-word"');
 INSERT INTO resource_types (name, description, icon_link) VALUES ('Books', 'Long-form written content covering various topics, typically published in book format', 'class="fa-regular fa-file-lines"');
+INSERT INTO resource_types (name, description, icon_link) VALUES ('Other', 'Resources that do not fall into any specific category or belong to multiple categories', 'class="fa-solid fa-question"');
