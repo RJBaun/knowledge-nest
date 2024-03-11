@@ -24,7 +24,16 @@ const getResources = () => {
   });
 }
 
-
+/**
+ * Get all resources data
+ * @returns Promise which returns object of single row from resources table
+ */
+const getResourceById = (id) => {
+  return db.query('SELECT * FROM resources WHERE id=$1;', [id])
+  .then(data => {
+    return data.rows[0];
+  });
+}
 
 
 
