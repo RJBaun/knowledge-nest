@@ -6,13 +6,15 @@ const db = require('../connection');
 
 /**
  * Get average rating for a specific resource in the database.
- * @param {string} resourceID
+ * @param {string} resourceID the ID of a specific resource
  * @returns {Promise<{}>} Promise to users.
  */
 const getAverageRatingByResource = (resourceID) => {
-  return db.query('SELECT avg(rating) FROM ratings WHERE resource_id = $1;', [resourceID])
+  return db
+    .query(`SELECT avg(rating) FROM ratings
+    WHERE resource_id = $1;`, [resourceID])
     .then(data => {
-      return data.rows[0]
+      return data.rows[0];
     });
 };
 
@@ -23,9 +25,12 @@ const getAverageRatingByResource = (resourceID) => {
  */
 const addNewRating = (ratingObj) => {
   const { rater_id, resource_id, rating, date } = ratingObj;
-  return db.query('INSERT INTO ratings (rater_id, resource_id, rating, date) VALUES ($1, $2, $3, $4) RETURNING *;', [rater_id, resource_id, rating, date])
+  return db
+    .query(`INSERT INTO ratings (rater_id, resource_id, rating, date)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *;`, [rater_id, resource_id, rating, date])
     .then(data => {
-      return data.rows[0]
+      return data.rows[0];
     });
 };
 
