@@ -7,7 +7,7 @@ const db = require('../connection');
 /**
  * Get average rating for a specific resource in the database.
  * @param {string} resourceID the ID of a specific resource
- * @returns {Promise<{}>} Promise to users.
+ * @returns {Promise<{}|null>} Promise to users.
  */
 const getAverageRatingByResource = (resourceID) => {
   return db
@@ -24,7 +24,7 @@ const getAverageRatingByResource = (resourceID) => {
 /**
  * Insert new rating into the database.
  * @param {{rater_id:string, resource_id:string, rating:string, date:string}} ratingObj
- * @returns {Promise<{}>} Promise to users.
+ * @returns {Promise<{}|null>} Promise to users.
  */
 const createNewRating = (ratingObj) => {
   const { rater_id, resource_id, rating, date } = ratingObj;
