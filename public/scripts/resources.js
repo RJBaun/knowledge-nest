@@ -8,17 +8,21 @@ const collapseNavBar = () => {
 };
 
 // clear all sections in main container
-const emptyMain = (displaySection) => {
-  $("#all-resources").empty().css('display', 'none');
-  $("#recent-resources").empty().css('display', 'none');
-  $("#new-resource-form").css('display', 'none');
-  $(`${displaySection}`).css('display', 'block');
+const pageCleanup = () => {
+  collapseNavBar();
+  $("#all-resources").empty();
+  $("#recent-resources").empty();
+  $('#section-registration-page').empty();
+  $('#section-login-page').empty();
+  $('#section-user-resources').empty();
+  $('#section-add-new-resource').empty();
+  $('#section-user-profile').empty();
 };
 
 // generates resource card and returns it given a resource object
 const createResourceMarkup = (resource) => {
   const $resource = $(`
-  <article class="card" style="width: 90vw;">
+  <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
   <section class="card-body">
     <h5 class="card-title">${resource.name}</h5>
@@ -49,8 +53,7 @@ $(() => {
       url: '/api/resources'
     })
     .done((response) => {
-      emptyMain("#all-resources");
-      collapseNavBar();
+      pageCleanup();
       renderResources(response);
     })
     .catch((err) => {
@@ -69,12 +72,12 @@ const newResourceFormMarkup = () => {
     <input type="url" class="form-control" id="url-field" placeholder="URL">
   </article>
   <article class="mb-3">
-    <label for="title-field" class="form-label" style="display: none">Resource Title</label>
-    <input type="title" class="form-control" id="title-field" placeholder="Title">
+    <label for="name-field" class="form-label" style="display: none">Resource Title</label>
+    <input type="text" class="form-control" id="name-field" placeholder="Title">
   </article>
   <article class="mb-3">
     <label for="description-field" class="form-label" style="display: none">Resource Description</label>
-    <input type="url" class="form-control" id="url-field" placeholder="Description">
+    <input type="text" class="form-control" id="description-field" placeholder="Description">
   </article>
   <select class="form-select" id="category-dropdown">
     <option selected>Category</option>
@@ -82,7 +85,7 @@ const newResourceFormMarkup = () => {
   <select class="form-select" id="resource_type-dropdown">
     <option selected>Resource Type</option>
   </select>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary" id="submit-new-resource">Submit</button>
 </form>
   `)
   return $resourceForm;
@@ -118,10 +121,10 @@ const resourceTypeMarkup = (resource_type) => {
   return $resource_type;
 };
 
-//Listener for "Add Resource"
+//Listener for "Add Resource" that displays creation form
 $(() => {
   $('#show-new-resource-form').on('click', () => {
-    emptyMain('#new-resource-form');
+    pageCleanup();
     $('#new-resource-form').append(newResourceFormMarkup());
     $.ajax({
       method: 'GET',
@@ -131,9 +134,42 @@ $(() => {
       showCategoryOptions(response);
       showResourceTypeOptions(response);
     })
-
+    .catch((err) => {
+      console.log('err:', err);
+    })
   });
 });
 
+// Listener for new resource form submission
+$(() => {
+  $('#new-resource-form').submit(function(event) {
+    event.preventDefault();
+    const resource = {
+      url: $('#url-field').val(),
+      name: $('#name-field').val(),
+      description: $('#description-field').val(),
+      category_id: $('#category-dropdown').val(),
+      resource_type_id: $('#resource_type-dropdown').val(),
+      owner_id: 1
+    };
+    $.ajax({
+      method: 'POST',
+      url: 'api/resources/',
+      data: resource
+    })
+    .done((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log('err:', err);
+    })
+  });
+});
 
+// Load new page on resource click
+$(() => {
+  $resource.find('.resource-link').on('click', () => {
+    console.log('clicked')
+  })
+})
 

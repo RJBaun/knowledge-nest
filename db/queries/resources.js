@@ -42,13 +42,14 @@ const getResourceById = (id) => {
 
 /**
  * Add new resource to the database.
- * @param {{name: string, url: string, description: string, owner_id: string, category_id: string, resource_type_id: string, date_added: string}} resource
+ * @param {{name: string, url: string, description: string, owner_id: string, category_id: string, resource_type_id: string}} resource
  * @returns {Promise<{}|null>} A promise to the resource.
  */
 const createNewResource = (resource) => {
+  console.log(resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id)
   return db
-    .query(`INSERT INTO resources (name, url, description, owner_id, category_id, resource_type_id, date_added)
-  VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id, resource.date_added])
+    .query(`INSERT INTO resources (name, url, description, owner_id, category_id, resource_type_id)
+  VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id])
     .then(data => {
       return data.rows[0];
     })
