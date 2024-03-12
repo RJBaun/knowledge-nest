@@ -10,7 +10,9 @@ const db = require('../connection');
  */
 const getResources = () => {
   return db
-    .query('SELECT * FROM resources;')
+    .query(`SELECT resources.*, icon_link, categories.name AS category_name FROM resources
+    JOIN resource_types ON resource_types.id = resources.resource_type_id
+    JOIN categories ON categories.id = resources.category_id;`)
     .then(data => {
       return data.rows;
     })
