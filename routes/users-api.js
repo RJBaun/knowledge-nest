@@ -21,4 +21,18 @@ router.get('/', (req, res) => {
     });
 });
 
+// Save new user data to users table, return new user data.
+router.post('/', (req, res) => {
+  userQueries.createNewUser(req)
+    .then(user => {
+      console.log(user);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
 module.exports = router;
+
