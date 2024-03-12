@@ -9,9 +9,10 @@ const db = require('../connection');
  * @returns {Promise<[{}]>} Promise to users.
  */
 const getAllResourceTypes = () => {
-  return db.query('SELECT name FROM resource_types')
+  return db
+    .query('SELECT name FROM resource_types')
     .then(data => {
-      return data.rows
+      return data.rows;
     });
 };
 
