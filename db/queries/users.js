@@ -22,7 +22,7 @@ const getUsers = () => {
 };
 
 /**
- * Get a specific user's data.
+ * Get a specific user's data by id.
  * @param {string} userId ID of a specific user
  * @returns {Promise<{}|null>} Promise to users.
  */
@@ -30,6 +30,23 @@ const getUserById = (userId) => {
   return db
     .query(`SELECT * FROM users
     WHERE id = $1;`, [userId])
+    .then(data => {
+      return data.rows[0];
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+/**
+ * Get a specific user's data by email.
+ * @param {string} email email of a specific user
+ * @returns {Promise<{}|null>} Promise to users.
+ */
+const getUserByEmail = (email) => {
+  return db
+    .query(`SELECT * FROM users
+    WHERE email = $1;`, [email])
     .then(data => {
       return data.rows[0];
     })
@@ -140,4 +157,4 @@ const getLikedResources = (userId) => {
     });
 };
 
-module.exports = { getUsers, getUserById, createNewUser, updateUserProfile, deleteUser, getOwnedResources, getLikedResources };
+module.exports = { getUsers, getUserById, createNewUser, updateUserProfile, deleteUser, getOwnedResources, getLikedResources, getUserByEmail };
