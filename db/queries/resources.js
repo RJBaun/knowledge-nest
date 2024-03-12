@@ -6,7 +6,7 @@ const db = require('../connection');
 
 /**
  * Get all resources data.
- * @returns {Promise<[{}]>} Promise to resources.
+ * @returns {Promise<[{}]|null>} Promise to resources.
  */
 const getResources = () => {
   return db
@@ -15,7 +15,6 @@ const getResources = () => {
       return data.rows;
     })
     .catch(err => {
-      console.log(err.message);
       return null;
     });
 };
@@ -23,7 +22,7 @@ const getResources = () => {
 /**
  * Get resources data
  * @param {string} id The id of the user.
- * @returns {Promise<{}>} Promise to the resource.
+ * @returns {Promise<{}|null>} Promise to the resource.
  */
 const getResourceById = (id) => {
   return db
@@ -39,9 +38,9 @@ const getResourceById = (id) => {
 /**
  * Add new resource to the database.
  * @param {{name: string, url: string, description: string, owner_id: string, category_id: string, resource_type_id: string, date_added: string}} resource
- * @returns {Promise<{}>} A promise to the resource.
+ * @returns {Promise<{}|null>} A promise to the resource.
  */
-const addNewResource = (resource) => {
+const createNewResource = (resource) => {
   return db
     .query(`INSERT INTO resources (name, url, description, owner_id, category_id, resource_type_id, date_added)
   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id, resource.date_added])
@@ -56,7 +55,7 @@ const addNewResource = (resource) => {
 /**
  * Update single resource in the database.
  * @param {{id: string, name: string, url: string, description: string, owner_id: string, category_id: string, resource_type_id: string, date_added: string}} resource
- * @returns {Promise<{}>} A promise to the resource.
+ * @returns {Promise<{}|null>} A promise to the resource.
  */
 const updateResource = (resource) => {
   return db
@@ -74,7 +73,7 @@ const updateResource = (resource) => {
 /**
  * Archive resource in the database.
  * @param {string} id Resource id.
- * @returns {Promise<{}>} A promise to the resource.
+ * @returns {Promise<{}|null>} A promise to the resource.
  */
 const archiveResource = (id) => {
   return db
@@ -92,7 +91,7 @@ const archiveResource = (id) => {
 /**
  * Get # of queries, based on criteria
  * @param {number} limit (optional) max number of entries to return, default 10.
- * @return {Promise<[{}]>} A promise to resources
+ * @return {Promise<[{}]|null>} A promise to resources
  */
 const getRecentResources = (limit = 10) => {
   return db
@@ -103,9 +102,8 @@ const getRecentResources = (limit = 10) => {
       return data.rows;
     })
     .catch(err => {
-      console.log(err.message);
       return null;
     });
 };
 
-module.exports = { getResources, getResourceById, addNewResource, updateResource, archiveResource, getRecentResources };
+module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources };
