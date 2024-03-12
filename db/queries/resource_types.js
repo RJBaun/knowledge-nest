@@ -19,4 +19,19 @@ const getAllResourceTypes = () => {
     });
 };
 
-module.exports = { getAllResourceTypes };
+/**
+ * Get all resource_types names from database.
+ * @returns {Promise<{} | null>} Promise to users.
+ */
+const getResourceIdByName = (name) => {
+  return db
+    .query('SELECT id FROM resource_types WHERE name = $1;', [name])
+    .then(data => {
+      return data.rows[0];
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+module.exports = { getAllResourceTypes, getResourceIdByName };

@@ -12,7 +12,10 @@
 const express = require('express');
 const router  = express.Router();
 const resourceQueries = require('../db/queries/resources');
+const categoryQueries = require('../db/queries/categories');
+const resource_typeQueries = require('../db/queries/resource_types');
 
+//Route for all resources
 router.get('/', (req, res) => {
   resourceQueries.getResources()
     .then(resources => {
@@ -24,5 +27,55 @@ router.get('/', (req, res) => {
         .json({ error: err.message });
     });
 });
+
+// Route for New Resource form
+router.get('/new', (req, res) => {
+  response = {};
+  categoryQueries.getCategories()
+    .then(categories => {
+      response.categories = categories;
+      return resource_typeQueries.getAllResourceTypes();
+    })
+    .then(resource_types => {
+      response.resource_types = resource_types;
+      res.send(response);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
+router.post('/', (req, res) => {
+  const resource = req.body;
+  categoryQueries.getCategoryIdByName(req.body.category_id)
+    .then((category_id) => {
+      resource.category_id = category_id.id.toString();
+      return resource_typeQueries.getResourceIdByName(req.body.resource_type_id);
+    })
+    .then((resource_type_id) => {
+      resource.resource_type_id = resource_type_id.id.toString();
+      return resourceQueries.createNewResource(resource);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send("Error creating resource: " + err.message);
+    });
+});
+
+router.get('/:id', (req, res) => {
+  resourceQueries.getResourceById(req.params.id)
+  .then((resource) => {
+    res.send({ resource });
+  })
+  .catch(err => {
+    res
+      .status(500)
+      .json({ error: err.message });
+  });
+})
 
 module.exports = router;

@@ -13,6 +13,6 @@ CREATE TABLE resources (
   owner_id INTEGER REFERENCES users(id),
   category_id INTEGER REFERENCES categories(id),
   resource_type_id INTEGER REFERENCES resource_types(id),
-  date_added TIMESTAMP,
+  date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_archived BOOLEAN DEFAULT false
 );
