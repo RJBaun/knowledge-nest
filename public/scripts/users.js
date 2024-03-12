@@ -68,6 +68,18 @@ $(() => {
 
 
 // From Registration Page, on 'register-button' click, save new user data to users table. Redirect to user resources page.
+$(() => {
+  $('#section-registration-page').on('submit', function(event) {
+    event.preventDefault();
+    const userData = {
+      username: $('#register-username').val(),
+      email: $('#register-email').val(),
+      password: $('#register-password').val()
+    };
+    console.log(userData);
+    //ajaxPOST
+  });
+});
 
 
 
@@ -173,15 +185,3 @@ const clearAllMainSections = () => {
 
 
 
-$(() => {
-  $('#section-registration-page').on('submit', function(event) {
-    event.preventDefault();
-    const userData = {
-      username: $('#register-username').val(),
-      email: $('#register-email').val(),
-      password: $('#register-password').val()
-    };
-    console.log(userData);
-    //ajaxPOST
-  });
-});
