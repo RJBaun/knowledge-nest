@@ -5,7 +5,7 @@
 const db = require('../connection');
 /**
  * Get all categories.
- * @returns {Promise<[{}]>} Promise to categories.
+ * @returns {Promise<[{}]|null>} Promise to categories.
  */
 const getCategories = () => {
   return db.query('SELECT * FROM categories;')
