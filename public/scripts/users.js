@@ -27,32 +27,87 @@ $(() => {
 });
 
 
-// On 'user-registration' nav button click, load registration page.
 
-$('#user-register').on('click', () => {
-  // COLLAPSE nav bar
-  // EMPTY all sections
-  $('#example-stuff').empty();
-  $(registrationPageMarkup()).appendTo('#section-registration-page');
+
+
+
+
+
+
+
+
+
+
+// On 'user-registration' nav button click, load registration page.
+$(() => {
+  $('#user-register').on('click', () => {
+    // COLLAPSE nav bar
+    // EMPTY all sections
+    clearAllMainSections();
+    $(registrationPageMarkup()).appendTo('#section-registration-page');
+  });
 });
 
 // On 'user-login' nav button click, load login page.
-$('#user-login').on('click', () => {
-  // COLLAPSE nav bar
-  // EMPTY all sections
-  $('#example-stuff').empty();
-  $(loginPageMarkup()).appendTo('#section-login-page');
+$(() => {
+  $('#user-login').on('click', () => {
+    // COLLAPSE nav bar
+    // EMPTY all sections
+    clearAllMainSections();
+    $(loginPageMarkup()).appendTo('#section-login-page');
+  });
 });
 
 // On 'user-logout' nav button click, logout user (clear cookies) and redirect to main page.
-$('#user-logout').on('click', () => {
-  // clear cookies
+$(() => {
+  $('#user-logout').on('click', () => {
+    clearAllMainSections();
+    // clear cookies
+  });
 });
 
 
+// From Registration Page, on 'register-button' click, save new user data to users table. Redirect to user resources page.
 
 
 
+
+// const userData = {
+//   username: $('#register-username').val(),
+//   email: $('#register-email').val(),
+//   password: $('#register-password').val()
+// };
+// $.ajax({
+//   method: 'POST',
+//   url: '/api/users',
+//   data: userData,
+//   dataType: 'json'
+// })
+//   .done((response) => {
+//     console.log('registration complete', response);
+//     // SAVE COOKIE userid
+//     // EMPTY all sections
+//     // LOAD user resources page for signed-in-user
+//   });
+//   });
+// });
+
+
+
+// // From Login Page, on 'login-button' click, log in user. Redirect to user resources page.
+// $(() => {
+//   $('#login-button').on('click', () => {
+//     $.ajax({
+//       method: 'POST',
+//       url: '/api/users/login'
+//     })
+//       .done((response) => {
+//         // SAVE COOKIE userid
+//         // EMPTY all sections
+//         // LOAD user profile page for signed-in-user
+//       });
+//   });
+// });
 
 
 
@@ -65,19 +120,19 @@ $('#user-logout').on('click', () => {
  * @returns {string}
  */
 const registrationPageMarkup = () => {
-  const registrationPage = `<form>
-  <h2> Register </h2>
+  const registrationPage = `<form id="registration-form" method="POST">
+  <h2> Hello </h2>
   <div class="mb-3">
-    <label for="username" class="form-label">Username</label>
-    <input type="text" class="form-control" id="username">
+    <label for="register-username" class="form-label">Username</label>
+    <input type="text" name="username" class="form-control" id="register-username">
   </div>
   <div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input type="email" class="form-control" id="email">
+    <label for="register-email" class="form-label">Email</label>
+    <input type="email" name="email" class="form-control" id="register-email">
   </div>
   <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input type="password" class="form-control" id="password">
+    <label for="register-password" class="form-label">Password</label>
+    <input type="password" name="password" class="form-control" id="register-password">
   </div>
   <button id="register-button" type="submit" class="btn btn-primary">Register</button>
 </form>`;
@@ -103,3 +158,30 @@ const loginPageMarkup = () => {
 </form>`;
   return loginPage;
 };
+
+
+
+
+
+// CLEAR ALL SECTIONS
+
+const clearAllMainSections = () => {
+  $('#example-stuff').empty();
+  $('#section-registration-page').empty();
+  $('#section-login-page').empty();
+};
+
+
+
+$(() => {
+  $('#section-registration-page').on('submit', function(event) {
+    event.preventDefault();
+    const userData = {
+      username: $('#register-username').val(),
+      email: $('#register-email').val(),
+      password: $('#register-password').val()
+    };
+    console.log(userData);
+    //ajaxPOST
+  });
+});
