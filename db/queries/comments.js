@@ -24,7 +24,7 @@ const getCommentsByResourceId = (resourceId) => {
 /**
  * Add a comment to a specific resource in the database.
  * @param {{commenter_id: string, resource_id: string, message: string, post_date: string}} commentObj
- * @returns {Promise<{}>} Promise to comments.
+ * @returns {Promise<{}|null>} Promise to comments.
  */
 const createNewComment = (commentObj) => {
   const { commenter_id, resource_id, message, post_date } = commentObj;
