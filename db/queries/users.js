@@ -38,7 +38,7 @@ const getUserById = (userId) => {
 
 /**
  * Add a new user to the database.
- * @param {{username: string, email: string, password: string, date_created: string}} userObj
+ * @param {{username: string, email: string, password: string}} userObj
  * @returns {Promise<{}|null>} Promise to users.
  */
 const createNewUser = (userObj) => {
