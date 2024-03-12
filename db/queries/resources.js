@@ -10,7 +10,12 @@ const db = require('../connection');
 */
 const getResources = () => {
   return db
-    .query('SELECT * FROM resources;')
+    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    JOIN resource_types ON resource_types.id = resources.resource_type_id
+    JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN likes ON resources.id = likes.resource_id
+    LEFT JOIN ratings ON resources.id = ratings.resource_id
+    GROUP BY resources.id, resource_types.icon_link, categories.name;`)
     .then(data => {
       return data.rows;
     })
