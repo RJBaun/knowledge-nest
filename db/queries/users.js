@@ -3,6 +3,8 @@
 // Purpose: User-related queries for JS routes.
 
 const db = require('../connection');
+const bcrypt = require('bcryptjs');
+
 
 /**
  * Get all users data.
@@ -20,7 +22,7 @@ const getUsers = () => {
 };
 
 /**
- * Get a specific user's data.
+ * Get a specific user's data by id.
  * @param {string} userId ID of a specific user
  * @returns {Promise<{}|null>} Promise to users.
  */
@@ -37,16 +39,34 @@ const getUserById = (userId) => {
 };
 
 /**
+ * Get a specific user's data by email.
+ * @param {string} email email of a specific user
+ * @returns {Promise<{}|null>} Promise to users.
+ */
+const getUserByEmail = (email) => {
+  return db
+    .query(`SELECT * FROM users
+    WHERE email = $1;`, [email])
+    .then(data => {
+      return data.rows[0];
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+/**
  * Add a new user to the database.
- * @param {{username: string, email: string, password: string, date_created: string}} userObj
+ * @param {{username: string, email: string, password: string}} userObj
  * @returns {Promise<{}|null>} Promise to users.
  */
 const createNewUser = (userObj) => {
-  const { username, email, password, date_created } = userObj;
+  const { username, email, password } = userObj;
+  const hashedpass = bcrypt.hashSync(password,10);
   return db
-    .query(`INSERT INTO users (username, email, password, date_created)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;`, [username, email, password, date_created])
+    .query(`INSERT INTO users (username, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING *;`, [username, email, hashedpass])
     .then(data => {
       return data.rows[0];
     })
@@ -137,4 +157,4 @@ const getLikedResources = (userId) => {
     });
 };
 
-module.exports = { getUsers, getUserById, createNewUser, updateUserProfile, deleteUser, getOwnedResources, getLikedResources };
+module.exports = { getUsers, getUserById, createNewUser, updateUserProfile, deleteUser, getOwnedResources, getLikedResources, getUserByEmail };

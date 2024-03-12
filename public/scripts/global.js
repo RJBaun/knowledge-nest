@@ -2,7 +2,7 @@
 
 
 const pageCleanup = () => {
-  collapseNavBar();
+  $("#navbarTogglerDemo02").collapse('hide')
 
   $("#all-resources").empty();
   $("#recent-resources").empty();
