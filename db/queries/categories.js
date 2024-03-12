@@ -10,8 +10,11 @@ const db = require('../connection');
 const getCategories = () => {
   return db.query('SELECT * FROM categories;')
     .then(data => {
-      return data.rows
+      return data.rows;
+    })
+    .catch(err => {
+      return null;
     });
 };
 
-module.exports = { getCategories }
+module.exports = { getCategories };
