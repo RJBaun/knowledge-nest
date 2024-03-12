@@ -42,11 +42,11 @@ const getUserById = (userId) => {
  * @returns {Promise<{}|null>} Promise to users.
  */
 const createNewUser = (userObj) => {
-  const { username, email, password, date_created } = userObj;
+  const { username, email, password } = userObj;
   return db
-    .query(`INSERT INTO users (username, email, password, date_created)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;`, [username, email, password, date_created])
+    .query(`INSERT INTO users (username, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING *;`, [username, email, password])
     .then(data => {
       return data.rows[0];
     })
