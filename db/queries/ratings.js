@@ -11,7 +11,7 @@ const db = require('../connection');
  */
 const getAverageRatingByResource = (resourceID) => {
   return db
-    .query(`SELECT avg(rating) FROM ratings
+    .query(`SELECT round(avg(rating),1) FROM ratings
     WHERE resource_id = $1;`, [resourceID])
     .then(data => {
       return data.rows[0];
