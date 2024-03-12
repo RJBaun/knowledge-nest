@@ -50,7 +50,7 @@ router.post('/login', (req, res) => {
         res.json({ user });
       } else {
         // passwords do not match
-        res.json(null)
+        res.json(null);
       }
     })
     .catch(err => {
@@ -65,7 +65,24 @@ router.get('/logout', (req, res) => {
   // delete cookies
   req.session = null;
   res.json(null);
-})
+});
+
+
+router.get('/id', (req, res) => {
+  const user_id = req.session.user_id;
+  userQueries.getUserById(user_id)
+    .then(user => {
+      if (!user) {
+        res.json(null);
+      } else {
+        res.json({ user });
+      }
+    })
+    .catch(err => {
+      res.json(null);
+    });
+
+});
 
 module.exports = router;
 

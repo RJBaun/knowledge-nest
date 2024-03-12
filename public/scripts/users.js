@@ -37,11 +37,31 @@ $(() => {
       method: 'GET',
       url: 'api/users/logout'
     })
-    // .done(() => {
-    //   location.reload(true);
-    // })
+      .done(() => {
+        pageCleanup();
+      });
   });
 });
+
+// On 'user-profile' nav button click, load user profile page.
+$(() => {
+  $('#user-profile').on('click', () => {
+    pageCleanup();
+
+    $.ajax({
+      method: 'GET',
+      url: 'api/users/id'
+    })
+      .done(response => {
+        if (response === null) {
+          console.log('user not logged in');
+        } else {
+          $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+        }
+      });
+  });
+});
+
 
 
 // From Registration Page, on 'register-button' click, save new user data to users table. Redirect to user resources page.
@@ -144,6 +164,31 @@ const loginPageMarkup = () => {
   return loginPage;
 };
 
+/**
+ * Login page HTML
+ * @returns {string}
+ */
+const userProfileMarkup = (user) => {
+  const userProfile = `
+  <h2>Profile</h2>
+  <div class="mb-3 row">
+    <label for="static-username" class="col-sm-2 col-form-label">Username:</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="static-username" value="${user.username}">
+    </div>
+  <div class="mb-3 row">
+    <label for="static-email" class="col-sm-2 col-form-label">Email:</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="static-email" value="${user.email}">
+    </div>
+  </div>
+  <div class="buttons">
+    <button type="button" class="btn btn-success">Edit</button>
+    <button type="button" class="btn btn-danger">Delete</button>
+  </div>
+  `;
+  return userProfile;
+};
 
 
 
