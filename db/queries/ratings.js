@@ -15,6 +15,9 @@ const getAverageRatingByResource = (resourceID) => {
     WHERE resource_id = $1;`, [resourceID])
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
     });
 };
 
@@ -31,6 +34,9 @@ const createNewRating = (ratingObj) => {
     RETURNING *;`, [rater_id, resource_id, rating, date])
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
     });
 };
 
