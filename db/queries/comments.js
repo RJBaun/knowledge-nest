@@ -7,7 +7,7 @@ const db = require('../connection');
 /**
  * Get all comments for a specific resource in the database.
  * @param {string} resourceId The ID of a specific resource.
- * @returns {Promise<[{}]>} Promise to comments.
+ * @returns {Promise<[{}] | null>} Promise to comments.
  */
 const getCommentsByResourceId = (resourceId) => {
   return db
@@ -15,6 +15,9 @@ const getCommentsByResourceId = (resourceId) => {
     WHERE resource_id = $1;`, [resourceId])
     .then(data => {
       return data.rows;
+    })
+    .catch(err => {
+      return null;
     });
 };
 
@@ -31,6 +34,9 @@ const createNewComment = (commentObj) => {
     RETURNING *;`, [commenter_id, resource_id, message, post_date])
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
     });
 };
 
