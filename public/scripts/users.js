@@ -2,38 +2,9 @@
 // Created March 12, 2024
 // Purpose: Fetch user data and load user-related page sections.
 
-
-
 //////////////////////
 /// LISTENERS
 //////////////////////
-
-// On "Fetch Users" button click, all users are loaded
-$(() => {
-  $('#fetch-users').on('click', () => {
-    $.ajax({
-      method: 'GET',
-      url: '/api/users'
-    })
-      .done((response) => {
-        const $usersList = $('#users');
-        $usersList.empty();
-
-        for (const user of response.users) {
-          $(`<li class="user">`).text(user.username).appendTo($usersList);
-        }
-      });
-  });
-});
-
-
-
-
-
-
-
-
-
 
 
 
@@ -43,7 +14,7 @@ $(() => {
   $('#user-register').on('click', () => {
     // COLLAPSE nav bar
     // EMPTY all sections
-    clearAllMainSections();
+    pageCleanup();
     $(registrationPageMarkup()).appendTo('#section-registration-page');
   });
 });
@@ -53,7 +24,7 @@ $(() => {
   $('#user-login').on('click', () => {
     // COLLAPSE nav bar
     // EMPTY all sections
-    clearAllMainSections();
+    pageCleanup();
     $(loginPageMarkup()).appendTo('#section-login-page');
   });
 });
@@ -177,11 +148,14 @@ const loginPageMarkup = () => {
 
 // CLEAR ALL SECTIONS
 
-const clearAllMainSections = () => {
-  $('#example-stuff').empty();
+const pageCleanup = () => {
+  collapseNavBar();
+
+  $("#all-resources").empty();
+  $("#recent-resources").empty();
   $('#section-registration-page').empty();
   $('#section-login-page').empty();
+  $('#section-user-resources').empty();
+  $('#section-add-new-resource').empty();
+  $('#section-user-profile').empty();
 };
-
-
-
