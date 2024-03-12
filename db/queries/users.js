@@ -75,6 +75,10 @@ const updateUserProfile = (userObj) => {
     });
 };
 
+///////////////////////////////////
+/// From Victoria, Mar 12: I don't think this function will work as expected.
+/// Might need to write it something like -> return promise.all(function that 'deletes' user, function that 'archives' resources).then(returns user obj).catch(return null)
+
 /**
  * Delete a user from the database and archive all owned resources.
  * @param {string} userId The ID of a specific user
