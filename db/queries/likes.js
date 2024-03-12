@@ -10,12 +10,15 @@ const db = require('../connection');
  * @param {string} resource_id ID of resource that was liked.
  * @returns {Promise<{}>} Promise to the like.
  */
-const addLike = (liker_id, resource_id) => {
+const createLike = (liker_id, resource_id) => {
   return db
     .query(`INSERT INTO likes (liker_id, resource_id)
   VALUES (${liker_id}, ${resource_id}) RETURNING *;`)
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
     });
 };
 
@@ -26,14 +29,17 @@ const addLike = (liker_id, resource_id) => {
  */
 const countLikes = (resource_id) => {
   return db
-  .query(`SELECT count(likes.*) FROM LIKES
+    .query(`SELECT count(likes.*) FROM LIKES
   RIGHT OUTER JOIN resources ON resource_id = resources.id
   WHERE resources.id = ${resource_id}
   GROUP BY resources.id;
   `)
-  .then(data => {
-    return data.rows[0]
-  })
-}
+    .then(data => {
+      return data.rows[0];
+    })
+    .catch(err => {
+      return null;
+    });
+};
 
-module.exports = { addLike, countLikes }
+module.exports = { createLike, countLikes };
