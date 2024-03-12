@@ -14,3 +14,5 @@ const getAllResourceTypes = () => {
       return data.rows
     });
 };
+
+module.exports = { getAllResourceTypes };
