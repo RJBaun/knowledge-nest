@@ -10,7 +10,8 @@ const db = require('../connection');
  * @returns {Promise<[{}]>} Promise to comments.
  */
 const getCommentsByResourceId = (resourceId) => {
-  return db.query(`SELECT * FROM comments
+  return db
+    .query(`SELECT * FROM comments
     WHERE resource_id = $1;`, [resourceId])
     .then(data => {
       return data.rows;
@@ -24,7 +25,8 @@ const getCommentsByResourceId = (resourceId) => {
  */
 const createNewComment = (commentObj) => {
   const { commenter_id, resource_id, message, post_date } = commentObj;
-  return db.query(`INSERT INTO comments (commenter_id, resource_id, message, post_date)
+  return db
+    .query(`INSERT INTO comments (commenter_id, resource_id, message, post_date)
     VALUES ($1, $2, $3, $4)
     RETURNING *;`, [commenter_id, resource_id, message, post_date])
     .then(data => {
