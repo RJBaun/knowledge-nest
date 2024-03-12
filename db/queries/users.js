@@ -6,20 +6,23 @@ const db = require('../connection');
 
 /**
  * Get all users data.
- * @returns {Promise<[{}]>} Promise to users.
+ * @returns {Promise<[{}]|null>} Promise to users.
  */
 const getUsers = () => {
   return db
     .query('SELECT * FROM users;')
     .then(data => {
       return data.rows;
+    })
+    .catch(err => {
+      return null;
     });
 };
 
 /**
  * Get a specific user's data.
  * @param {string} userId ID of a specific user
- * @returns {Promise<{}>} Promise to users.
+ * @returns {Promise<{}|null>} Promise to users.
  */
 const getUserById = (userId) => {
   return db
@@ -36,7 +39,7 @@ const getUserById = (userId) => {
 /**
  * Add a new user to the database.
  * @param {{username: string, email: string, password: string, date_created: string}} userObj
- * @returns {Promise<{}>} Promise to users.
+ * @returns {Promise<{}|null>} Promise to users.
  */
 const createNewUser = (userObj) => {
   const { username, email, password, date_created } = userObj;
@@ -46,15 +49,18 @@ const createNewUser = (userObj) => {
     RETURNING *;`, [username, email, password, date_created])
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
     });
 };
 
 /**
  * Update a user's profile in the database.
  * @param {{id: string, username: string, email: string}} userObj
- * @returns {Promise<{}>} Promise to users.
+ * @returns {Promise<{}|null>} Promise to users.
  */
-const editUserProfile = (userObj) => {
+const updateUserProfile = (userObj) => {
   const { id, username, email } = userObj;
   return db
     .query(`UPDATE users
@@ -63,6 +69,9 @@ const editUserProfile = (userObj) => {
     RETURNING *;`, [id, username, email])
     .then(data => {
       return data.rows[0];
+    })
+    .catch(err => {
+      return null;
     });
 };
 
@@ -85,14 +94,14 @@ const deleteUser = (userId) => {
         .query(`UPDATE resources
         SET is_archived = true
         WHERE owner_id = $1
-        RETURNING *;`, [userId])
+        RETURNING *;`, [userId]);
     });
 };
 
 /**
  * Get all owned resources associated with a user in the database.
  * @param {string} userId The ID of a specific user
- * @returns {Promise<[{}]>} Promise to users.
+ * @returns {Promise<[{}]|null>} Promise to users.
  */
 const getOwnedResources = (userId) => {
   return db
@@ -100,13 +109,16 @@ const getOwnedResources = (userId) => {
     WHERE owner_id = $1;`, [userId])
     .then(data => {
       return data.rows;
+    })
+    .catch(err => {
+      return null;
     });
 };
 
 /**
  * Get all liked resources associated with a user in the database.
  * @param {string} userId The ID of a specific user
- * @returns {Promise<[{}]>} Promise to user.
+ * @returns {Promise<[{}]|null>} Promise to user.
  */
 const getLikedResources = (userId) => {
   return db
@@ -115,7 +127,10 @@ const getLikedResources = (userId) => {
     WHERE likes.liker_id = $1;`, [userId])
     .then(data => {
       return data.rows;
+    })
+    .catch(err => {
+      return null;
     });
 };
 
-module.exports = { getUsers, getUserById, createNewUser, editUserProfile, deleteUser, getOwnedResources, getLikedResources };
+module.exports = { getUsers, getUserById, createNewUser, updateUserProfile, deleteUser, getOwnedResources, getLikedResources };
