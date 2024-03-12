@@ -6,13 +6,16 @@ const db = require('../connection');
 
 /**
  * Get all resource_types names from database.
- * @returns {Promise<[{}]>} Promise to users.
+ * @returns {Promise<[{}] | null>} Promise to users.
  */
 const getAllResourceTypes = () => {
   return db
-    .query('SELECT name FROM resource_types')
+    .query('SELECT * FROM resource_types')
     .then(data => {
       return data.rows;
+    })
+    .catch(err => {
+      return null;
     });
 };
 
