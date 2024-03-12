@@ -32,8 +32,14 @@ $(() => {
 // On 'user-logout' nav button click, logout user (clear cookies) and redirect to main page.
 $(() => {
   $('#user-logout').on('click', () => {
-    clearAllMainSections();
-    // clear cookies
+    // pageCleanup();
+    $.ajax({
+      method: 'GET',
+      url: 'api/users/logout'
+    })
+    // .done(() => {
+    //   location.reload(true);
+    // })
   });
 });
 

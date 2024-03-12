@@ -36,6 +36,7 @@ router.post('/', (req, res) => {
     });
 });
 
+// Checks if login details match users table, then logs in user if match.
 router.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -44,35 +45,27 @@ router.post('/login', (req, res) => {
     .then(user => {
 
       if (bcrypt.compareSync(password, user.password)) {
-        // console.log('passwords match');
+        // passwords match
         req.session.user_id = user.id;
         res.json({ user });
       } else {
-        // console.log('passwords do not match');
+        // passwords do not match
         res.json(null)
       }
     })
     .catch(err => {
+      // email does not exist in users database
       res.json('email');
     });
-
-
-
-  // console.log('user', user);
-  // bcrypt.compare(password, user.password, (err, res) => {
-  //   if (err) {
-  //     console.log('err password compare');
-  //   }
-  //   if (res) {
-  //     console.log('passwords match');
-  //   } else {
-  //     console.log('passwords do not match');
-  //   }
-
-  // console.log('user',user);
-  // // req.session.user_id = user.id;
-
 });
+
+
+// Logs user out.
+router.get('/logout', (req, res) => {
+  // delete cookies
+  req.session = null;
+  res.json(null);
+})
 
 module.exports = router;
 
