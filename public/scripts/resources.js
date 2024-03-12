@@ -8,7 +8,7 @@ const collapseNavBar = () => {
 };
 
 // clear all sections in main container
-const pageCleanup = () => {
+const pageCleanup1 = () => {
   collapseNavBar();
   $("#all-resources").empty();
   $("#recent-resources").empty();
@@ -53,8 +53,11 @@ $(() => {
       url: '/api/resources'
     })
     .done((response) => {
-      pageCleanup();
+      pageCleanup1();
       renderResources(response);
+      $('.resource-link').on('click', function() {
+        console.log('clicked');
+      });
     })
     .catch((err) => {
       console.log('err:', err);
@@ -124,8 +127,8 @@ const resourceTypeMarkup = (resource_type) => {
 //Listener for "Add Resource" that displays creation form
 $(() => {
   $('#show-new-resource-form').on('click', () => {
-    pageCleanup();
-    $('#new-resource-form').append(newResourceFormMarkup());
+    pageCleanup1();
+    $('#section-add-new-resource').append(newResourceFormMarkup());
     $.ajax({
       method: 'GET',
       url: '/api/resources/new'
@@ -142,7 +145,7 @@ $(() => {
 
 // Listener for new resource form submission
 $(() => {
-  $('#new-resource-form').submit(function(event) {
+  $('#section-add-new-resource').submit(function(event) {
     event.preventDefault();
     const resource = {
       url: $('#url-field').val(),
@@ -166,10 +169,5 @@ $(() => {
   });
 });
 
-// Load new page on resource click
-$(() => {
-  $resource.find('.resource-link').on('click', () => {
-    console.log('clicked')
-  })
-})
+
 
