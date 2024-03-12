@@ -23,7 +23,7 @@ const getAverageRatingByResource = (resourceID) => {
  * @param {{rater_id:string, resource_id:string, rating:string, date:string}} ratingObj
  * @returns {Promise<{}>} Promise to users.
  */
-const addNewRating = (ratingObj) => {
+const createNewRating = (ratingObj) => {
   const { rater_id, resource_id, rating, date } = ratingObj;
   return db
     .query(`INSERT INTO ratings (rater_id, resource_id, rating, date)
@@ -34,4 +34,4 @@ const addNewRating = (ratingObj) => {
     });
 };
 
-module.exports = { getAverageRatingByResource, addNewRating };
+module.exports = { getAverageRatingByResource, createNewRating };
