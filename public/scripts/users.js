@@ -107,6 +107,15 @@ $(() => {
           console.log('email does not exist');
         } else {
           console.log('logged in', response);
+
+          $.ajax({
+            method: 'GET',
+            url: 'api/users/id'
+          })
+            .done(response => {
+              pageCleanup();
+              $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+            });
         }
         // LOAD user profile page for signed-in-user
       });
