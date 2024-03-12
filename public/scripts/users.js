@@ -41,39 +41,25 @@ $(() => {
 // From Registration Page, on 'register-button' click, save new user data to users table. Redirect to user resources page.
 $(() => {
   $('#section-registration-page').on('submit', function(event) {
-    event.preventDefault();
     const userData = {
       username: $('#register-username').val(),
       email: $('#register-email').val(),
       password: $('#register-password').val()
     };
-    console.log(userData);
-    //ajaxPOST
+    $.ajax({
+      method: 'POST',
+      url: '/api/users',
+      data: userData
+    })
+    .done((response) => {
+      const id = response.user.id;
+      // LOAD user resources page for signed-in-user
+    });
+
+
+    event.preventDefault();
   });
 });
-
-
-
-
-// const userData = {
-//   username: $('#register-username').val(),
-//   email: $('#register-email').val(),
-//   password: $('#register-password').val()
-// };
-// $.ajax({
-//   method: 'POST',
-//   url: '/api/users',
-//   data: userData,
-//   dataType: 'json'
-// })
-//   .done((response) => {
-//     console.log('registration complete', response);
-//     // SAVE COOKIE userid
-//     // EMPTY all sections
-//     // LOAD user resources page for signed-in-user
-//   });
-//   });
-// });
 
 
 
@@ -149,7 +135,7 @@ const loginPageMarkup = () => {
 // CLEAR ALL SECTIONS
 
 const pageCleanup = () => {
-  collapseNavBar();
+  $("#navbarTogglerDemo02").collapse('hide')
 
   $("#all-resources").empty();
   $("#recent-resources").empty();

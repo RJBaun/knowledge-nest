@@ -6,7 +6,7 @@
  */
 
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 const userQueries = require('../db/queries/users');
 
 router.get('/', (req, res) => {
@@ -23,9 +23,10 @@ router.get('/', (req, res) => {
 
 // Save new user data to users table, return new user data.
 router.post('/', (req, res) => {
-  userQueries.createNewUser(req)
+  userQueries.createNewUser(req.body)
     .then(user => {
-      console.log(user);
+      req.session.user_id = user.id;
+      res.json({ user });
     })
     .catch(err => {
       res
