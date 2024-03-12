@@ -3,6 +3,8 @@
 // Purpose: User-related queries for JS routes.
 
 const db = require('../connection');
+const bcrypt = require('bcryptjs');
+
 
 /**
  * Get all users data.
@@ -43,10 +45,11 @@ const getUserById = (userId) => {
  */
 const createNewUser = (userObj) => {
   const { username, email, password } = userObj;
+  const hashedpass = bcrypt.hashSync(password,10);
   return db
     .query(`INSERT INTO users (username, email, password)
     VALUES ($1, $2, $3)
-    RETURNING *;`, [username, email, password])
+    RETURNING *;`, [username, email, hashedpass])
     .then(data => {
       return data.rows[0];
     })
