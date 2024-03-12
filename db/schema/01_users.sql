@@ -10,6 +10,6 @@ CREATE TABLE users (
   username VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  date_created TIMESTAMP,
+  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_deleted BOOLEAN DEFAULT false
 );
