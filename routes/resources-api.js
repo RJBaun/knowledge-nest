@@ -1,3 +1,10 @@
+/*
+ * All routes for User Data are defined here
+ * Since this file is loaded in server.js into api/resources,
+ *   these routes are mounted onto /api/users
+ * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
+ */
+
 // Created by Rylan Baun
 // Created on March 11, 2024
 // Purpose: All Routes relating to resources are defined here
