@@ -1,4 +1,6 @@
 // Client facing scripts here
+
+// On "Fetch Users" button click, all users are loaded
 $(() => {
   $('#fetch-users').on('click', () => {
     $.ajax({
@@ -10,8 +12,10 @@ $(() => {
       $usersList.empty();
 
       for(const user of response.users) {
-        $(`<li class="user">`).text(user.name).appendTo($usersList);
+        $(`<li class="user">`).text(user.username).appendTo($usersList);
       }
     });
   });
 });
+
+

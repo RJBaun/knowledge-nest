@@ -6,7 +6,7 @@ const db = require('../connection');
 
 /**
  * Get all resources data.
- * @returns {Promise<[{}]>} Promise to resources.
+ * @returns {Promise<{}>} Promise to resources.
  */
 const getResources = () => {
   return db
