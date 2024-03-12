@@ -7,7 +7,7 @@ const db = require('../connection');
 /**
  * Get all resources data.
  * @returns {Promise<[{}]|null>} Promise to resources.
- */
+*/
 const getResources = () => {
   return db
     .query('SELECT * FROM resources;')
