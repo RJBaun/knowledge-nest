@@ -12,11 +12,34 @@
 const express = require('express');
 const router  = express.Router();
 const resourceQueries = require('../db/queries/resources');
+const categoryQueries = require('../db/queries/categories');
+const resource_typeQueries = require('../db/queries/resource_types');
 
+//Route for all resources
 router.get('/', (req, res) => {
   resourceQueries.getResources()
     .then(resources => {
       res.send({ resources });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
+// Route for New Resource form
+router.get('/new', (req, res) => {
+  response = {};
+  categoryQueries.getCategories()
+    .then(categories => {
+      response.categories = categories;
+      return resource_typeQueries.getAllResourceTypes();
+    })
+    .then(resource_types => {
+      response.resource_types = resource_types;
+      console.log(response);
+      res.send(response);
     })
     .catch(err => {
       res
