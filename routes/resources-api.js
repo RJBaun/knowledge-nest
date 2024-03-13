@@ -122,7 +122,6 @@ router.get('/:id/delete', (req, res) => {
 
 //Route for updating existing resource
 router.post('/:id', (req, res) => {
-
     const resource = req.body;
     categoryQueries.getCategoryIdByName(req.body.category_id)
       .then((category_id) => {
@@ -140,5 +139,18 @@ router.post('/:id', (req, res) => {
         res.status(500).send("Error creating resource: " + err.message);
       });
 });
+
+//Route for Archiving/Deleting a resource
+router.post('/:id/delete', (req, res) => {
+  console.log(req.params.id)
+  resourceQueries.archiveResource(req.params.id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send("Error creating resource: " + err.message);
+    });
+});
+
 
 module.exports = router;
