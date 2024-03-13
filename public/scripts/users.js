@@ -6,6 +6,10 @@
 /// LISTENERS
 //////////////////////
 
+////////////////////
+// Nav Bar Buttons
+///////////////////
+
 // On 'user-registration' nav button click, load registration page.
 $(() => {
   $('#user-register').on('click', () => {
@@ -60,6 +64,9 @@ $(() => {
 });
 
 
+///////////////////////
+// Registration Page
+//////////////////////
 
 // From Registration Page, on 'register-button' click, save new user data to users table. Redirect to user resources page.
 $(() => {
@@ -90,6 +97,9 @@ $(() => {
   });
 });
 
+////////////////////
+// Login Page
+///////////////////
 
 // From Login Page, on 'login-button' click, log in user. Redirect to user resources page.
 $(() => {
@@ -126,6 +136,29 @@ $(() => {
 });
 
 
+//////////////////////
+// User Profile Page
+/////////////////////
+
+// From User Profile Page, on 'user-update-button' click, redirect to edit user profile page.
+$(() => {
+  $('#section-user-profile').on('click', '#user-edit-button', () => {
+    $.ajax({
+      method: 'GET',
+      url: 'api/users/id'
+    })
+      .done(response => {
+        pageCleanup();
+        $(editUserProfileMarkup(response.user)).appendTo('#section-user-profile');
+      });
+  });
+});
+
+// From User Profile Page, on 'user-delete-button' click, redirect to edit user profile page.
+
+
+
+
 
 ///////////////////////////
 /// HTML FUNCTIONS
@@ -137,7 +170,7 @@ $(() => {
  */
 const registrationPageMarkup = () => {
   const registrationPage = `<form id="registration-form" method="POST">
-  <h2> Hello </h2>
+  <h2> Registration </h2>
   <div class="mb-3">
     <label for="register-username" class="form-label">Username</label>
     <input type="text" name="username" class="form-control" id="register-username">
@@ -176,7 +209,8 @@ const loginPageMarkup = () => {
 };
 
 /**
- * Login page HTML
+ * User profile page HTML
+ * @param {{}} user
  * @returns {string}
  */
 const userProfileMarkup = (user) => {
@@ -194,18 +228,46 @@ const userProfileMarkup = (user) => {
     </div>
   </div>
   <div class="buttons">
-    <button type="button" class="btn btn-success">Edit</button>
-    <button type="button" class="btn btn-danger">Delete</button>
+    <button id="user-edit-button" type="button" class="btn btn-success">Edit</button>
+    <button id="user-delete-button" type="button" class="btn btn-danger">Delete</button>
   </div>
   `;
   return userProfile;
 };
 
+/**
+ * Edit user profile page HTML
+ * @param {{}} user
+ * @returns {string}
+ */
+const editUserProfileMarkup = (user) => {
+  const editUserProfile = `
+<h2>Update Profile</h2>
+<div class="mb-3 row">
+  <label for="updated-username" class="col-sm-2 col-form-label">Username:</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="updated-username" value="${user.username}">
+  </div>
+<div class="mb-3 row">
+  <label for="updated-email" class="col-sm-2 col-form-label">Email:</label>
+  <div class="col-sm-10">
+    <input type="email" class="form-control" id="updated-email" value="${user.email}">
+  </div>
+</div>
+<div class="buttons">
+  <button type="button" class="btn btn-success">Update</button>
+  <button type="button" class="btn btn-danger">Cancel</button>
+</div>
+`;
+  return editUserProfile;
+};
+
+
+
 
 
 
 // CLEAR ALL SECTIONS
-
 const pageCleanup = () => {
   $("#navbarTogglerDemo02").collapse('hide');
 
