@@ -172,17 +172,17 @@ const $commentForm = $(`
 `);
 
 // Creates markup to render edit resource page when called from single resource page
-const editResourceFormMarkup = (resourceId) => {
+const editResourceFormMarkup = (resource) => {
   const $editResourceForm = $(`
   <form>
   <h2>Update Your Resource</h2>
   <article class="mb-3">
     <label for="name-field" class="form-label" style="display: none">Resource Title</label>
-    <input type="text" class="form-control" id="name-field" placeholder="Title">
+    <input type="text" class="form-control" id="name-field" placeholder="${resource.name}">
   </article>
   <article class="mb-3">
     <label for="description-field" class="form-label" style="display: none">Resource Description</label>
-    <input type="text" class="form-control" id="description-field" placeholder="Description">
+    <input type="text" class="form-control" id="description-field" placeholder="${resource.description}">
   </article>
   <select class="form-select" id="category-dropdown">
     <option selected>Category</option>
@@ -190,7 +190,7 @@ const editResourceFormMarkup = (resourceId) => {
   <select class="form-select" id="resource_type-dropdown">
     <option selected>Resource Type</option>
   </select>
-  <span id="${resourceId}" style="display: none;"></span>
+  <span id="${resource.id}" style="display: none;"></span>
   <button type="submit" class="btn btn-primary" id="edit-resource">Submit</button>
   <button type="submit" class="btn btn-primary" id="back-to-resource">Cancel</button>
 </form>
@@ -404,12 +404,12 @@ $(() => {
   $(document).on('click', '#edit-resource-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     pageCleanup();
-    $('#section-edit-resource').append(editResourceFormMarkup(resourceId));
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}/edit`,
     })
-      .done((response) => {
+    .done((response) => {
+        $('#section-edit-resource').append(editResourceFormMarkup(response.resource));
         showCategoryOptions(response);
         showResourceTypeOptions(response);
       })

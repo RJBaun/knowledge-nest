@@ -91,7 +91,11 @@ router.get('/:id', (req, res) => {
 // Route for rendering edit resource form
 router.get('/:id/edit', (req, res) => {
   response = {};
-  categoryQueries.getCategories()
+  resourceQueries.getResourceById(req.params.id)
+    .then((resource) => {
+    response.resource = resource;
+    return categoryQueries.getCategories()
+    })
     .then(categories => {
       response.categories = categories;
       return resource_typeQueries.getAllResourceTypes();
