@@ -138,6 +138,8 @@ $(() => {
 
 //////////////////////
 // User Profile Page
+//   - Edit Page
+//   - Delete Page
 /////////////////////
 
 // From User Profile Page, on 'user-update-button' click, redirect to edit user profile page.
@@ -154,15 +156,29 @@ $(() => {
   });
 });
 
-// From User Profile Page, on 'user-delete-button' click, redirect to edit user profile page.
-
-
+// From User Profile Page, on 'user-delete-button' click, redirect to delete user profile page.
 $(() => {
   $('#section-user-profile').on('click', '#user-delete-button', () => {
     pageCleanup();
     $(deleteUserProfileMarkup()).appendTo('#section-user-profile');
   });
 });
+
+
+// From User Profile Page (Edit and Delete Pages), on 'cancel-button' click, redirect to user profile page.
+$(() => {
+  $('#section-user-profile').on('click', '#cancel-button', () => {
+    $.ajax({
+      method: 'GET',
+      url: 'api/users/id'
+    })
+      .done(response => {
+        pageCleanup();
+        $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+      });
+  });
+});
+
 
 
 ///////////////////////////
