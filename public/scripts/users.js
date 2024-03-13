@@ -157,7 +157,12 @@ $(() => {
 // From User Profile Page, on 'user-delete-button' click, redirect to edit user profile page.
 
 
-
+$(() => {
+  $('#section-user-profile').on('click', '#user-delete-button', () => {
+    pageCleanup();
+    $(deleteUserProfileMarkup()).appendTo('#section-user-profile');
+  });
+});
 
 
 ///////////////////////////
@@ -255,13 +260,29 @@ const editUserProfileMarkup = (user) => {
   </div>
 </div>
 <div class="buttons">
-  <button type="button" class="btn btn-success">Update</button>
-  <button type="button" class="btn btn-danger">Cancel</button>
+  <button id="update-button" type="button" class="btn btn-success">Update</button>
+  <button id="cancel-button" type="button" class="btn btn-danger">Cancel</button>
 </div>
 `;
   return editUserProfile;
 };
 
+/**
+ * Delete user profile page HTML
+ * @returns {string}
+ */
+const deleteUserProfileMarkup = () => {
+  const deleteUserProfile = `
+  <div class="buttons">
+  <h2>Are you sure you want to delete your account?</h2>
+  <p>If you delete your account, you will <strong>immediately</strong> lose all your saved and liked resources.</p>
+  <p>You will need to create a new account to sign in again.</p>
+  <button id="delete-button" type="button" class="btn btn-danger">Yes - DELETE</button>
+  <button id="cancel-button" type="button" class="btn btn-success">Nevermind, I want to keep my account</button>
+</div>
+`;
+  return deleteUserProfile;
+};
 
 
 
