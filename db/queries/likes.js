@@ -42,8 +42,12 @@ const countLikes = (resource_id) => {
     });
 };
 
-// Check if row exists
-
+/**
+ * Checks if unique like for resource from user (liker) exists.
+ * @param {string} liker_id
+ * @param {string} resource_id
+ * @returns {Promise{}|null} Promise to the like.
+ */
 const findLikeByLikerIdAndResourceId = (liker_id, resource_id) => {
   return db
   .query(`SELECT * FROM likes
