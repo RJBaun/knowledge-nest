@@ -250,11 +250,11 @@ const loginPageMarkup = () => {
   const loginPage = `<form id="login-form" method="POST">
   <h2> Login </h2>
   <div class="mb-3">
-    <label for="email" class="form-label">Email</label>
+    <label for="login-email" class="form-label">Email</label>
     <input type="email" name="email" class="form-control" id="login-email">
   </div>
   <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
+    <label for="login-password" class="form-label">Password</label>
     <input type="password" name="password" class="form-control" id="login-password">
   </div>
   <button id="login-button" type="submit" class="btn btn-primary">Login</button>
