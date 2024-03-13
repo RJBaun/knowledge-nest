@@ -132,6 +132,7 @@ const singleResourceMarkup = (resource) => {
   <section id="single-resource" class="card-body">
     <h4 class="card-title">${resource.name}</h4>
     <h6 class="card-owner">@${resource.owner_name}</h6>
+    <span>${timeago.format(resource.date_added)}</span>
     <p class="card-text">${resource.description}</p>
     <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
     <span>
