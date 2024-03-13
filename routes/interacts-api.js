@@ -77,7 +77,6 @@ router.post('/rate', (req, res) => {
       } else {
         ratingQueries.createNewRating(ratingObj)
           .then(savedRating => {
-            console.log('rating saved', savedRating);
             res.send(rating);
           });
       }

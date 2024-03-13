@@ -392,22 +392,107 @@ $(() => {
 
 $(() => {
   $('#section-single-resource').on('click', '#2-star', function() {
-    console.log('rating is 2 star');
+    const rating = 2;
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const ratingData = { rating, resourceId };
+    console.log('rating is', rating);
+    $.ajax({
+      method: 'POST',
+      url: 'api/interacts/rate',
+      data: ratingData
+    })
+      .done((response) => {
+        if (response.status === 401) {
+          console.log('responded', response);
+        } else {
+          $.ajax({
+            method: 'GET',
+            url: `api/resources/${resourceId}`,
+          })
+            .done((response) => {
+              renderResourcePage(response);
+            });
+        }
+      });
   });
 });
+
 $(() => {
   $('#section-single-resource').on('click', '#3-star', function() {
-    console.log('rating is 3 star');
+    const rating = 3;
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const ratingData = { rating, resourceId };
+    console.log('rating is', rating);
+    $.ajax({
+      method: 'POST',
+      url: 'api/interacts/rate',
+      data: ratingData
+    })
+      .done((response) => {
+        if (response.status === 401) {
+          console.log('responded', response);
+        } else {
+          $.ajax({
+            method: 'GET',
+            url: `api/resources/${resourceId}`,
+          })
+            .done((response) => {
+              renderResourcePage(response);
+            });
+        }
+      });
   });
 });
 $(() => {
   $('#section-single-resource').on('click', '#4-star', function() {
-    console.log('rating is 4 star');
+    const rating = 4;
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const ratingData = { rating, resourceId };
+    console.log('rating is', rating);
+    $.ajax({
+      method: 'POST',
+      url: 'api/interacts/rate',
+      data: ratingData
+    })
+      .done((response) => {
+        if (response.status === 401) {
+          console.log('responded', response);
+        } else {
+          $.ajax({
+            method: 'GET',
+            url: `api/resources/${resourceId}`,
+          })
+            .done((response) => {
+              renderResourcePage(response);
+            });
+        }
+      });
   });
 });
 $(() => {
   $('#section-single-resource').on('click', '#5-star', function() {
-    console.log('rating is 5 star');
+    const rating = 5;
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const ratingData = { rating, resourceId };
+    console.log('rating is', rating);
+    $.ajax({
+      method: 'POST',
+      url: 'api/interacts/rate',
+      data: ratingData
+    })
+      .done((response) => {
+        if (response.status === 401) {
+          console.log('responded', response);
+        } else {
+          $.ajax({
+            method: 'GET',
+            url: `api/resources/${resourceId}`,
+          })
+            .done((response) => {
+              renderResourcePage(response);
+            });
+        }
+      });
   });
 });
 
