@@ -42,6 +42,11 @@ const renderComments = (comments) => {
 
 // generates resource card and returns it to be rendered, given a resource object input
 const createResourceMarkup = (resource) => {
+  if(!resource.avg_rating) {
+    resource_ratings = "No Ratings Yet"
+  } else {
+    resource_ratings = `${resource.avg_rating}`
+  }
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
@@ -50,8 +55,16 @@ const createResourceMarkup = (resource) => {
     <p class="card-text">${resource.description}</p>
     <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
     <footer class="resource-footer">
-      <span class="resource-category">#${resource.category_name}</span>
-      <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource.avg_rating}/5.0 Stars</span>
+    <div class="resource-category">#${resource.category_name}</div>
+    <div class="likes">
+      <p>${resource.count_likes}</p>
+      <i class="fa-solid fa-heart"></i>
+    </div>
+    <div class="ratings">
+      <p>${resource_ratings}</p>
+      <i class="fa-solid fa-star"></i>
+    </div>
+
     </footer>
   </section>
 </article>
@@ -110,7 +123,7 @@ const singleResourceMarkup = (resource) => {
   if(!resource.avg_rating) {
     resource_ratings = "No Ratings Yet"
   } else {
-    resource_ratings = `${resource.avg_rating} / 5 Stars`
+    resource_ratings = `${resource.avg_rating}`
   }
   const $singleResource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
@@ -122,10 +135,14 @@ const singleResourceMarkup = (resource) => {
     <span>
     <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
     <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
-    </span>
-    <footer class="resource-footer">
-      <span class="resource-category">#${resource.category_name}</span>
-      <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource_ratings}</span>
+      <div class="likes">
+      <p>${resource.count_likes}</p>
+      <i class="fa-solid fa-heart"></i>
+    </div>
+    <div class="ratings">
+      <p>${resource_ratings}</p>
+      <i class="fa-solid fa-star"></i>
+    </div>
     </footer>
   </section>
   </article>
