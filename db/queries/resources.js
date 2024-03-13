@@ -103,6 +103,24 @@ const archiveResource = (id) => {
 };
 
 /**
+ * Archive resource in the database by owner_id.
+ * @param {string} ownerId
+ * @returns {Promise<{}|null>} A promise to the resource.
+ */
+const archiveResourceByOwnerId = (ownerId) => {
+  return db
+    .query(`UPDATE resources
+    SET is_archived=true
+    WHERE owner_id=$1;`, [ownerId])
+    .then(() => {
+      return;
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+/**
  * Get # of queries, based on criteria
  * @param {number} limit (optional) max number of entries to return, default 10.
  * @return {Promise<[{}]|null>} A promise to resources
@@ -120,4 +138,4 @@ const getRecentResources = (limit = 10) => {
     });
 };
 
-module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources };
+module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId };

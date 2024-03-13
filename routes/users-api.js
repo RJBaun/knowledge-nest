@@ -8,6 +8,7 @@
 const express = require('express');
 const router = express.Router();
 const userQueries = require('../db/queries/users');
+const resourceQueries = require('../db/queries/resources');
 const bcrypt = require('bcryptjs');
 
 router.get('/', (req, res) => {
@@ -81,8 +82,40 @@ router.get('/id', (req, res) => {
     .catch(err => {
       res.json(null);
     });
-
 });
+
+router.post('/id/edit', (req, res) => {
+  const id = req.session.user_id;
+  const { username, email } = req.body;
+  const userData = { id, username, email };
+  console.log('before',userData);
+  userQueries.updateUserProfile(userData)
+    .then(user => {
+      console.log('after',user);
+      res.json({ user });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
+router.post('/id/delete', (req, res) => {
+  const id = req.session.user_id;
+  userQueries.deleteUser(id)
+    .then(user => {
+      console.log('deleted api side', user);
+      resourceQueries.archiveResourceByOwnerId(user.id)
+      req.session = null;
+      res.json({ user });
+    })
+    .catch(err => {
+      console.log(err);
+    })
+});
+
+
 
 module.exports = router;
 

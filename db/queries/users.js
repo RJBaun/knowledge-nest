@@ -46,7 +46,8 @@ const getUserById = (userId) => {
 const getUserByEmail = (email) => {
   return db
     .query(`SELECT * FROM users
-    WHERE email = $1;`, [email])
+    WHERE email = $1
+    AND is_deleted = false;`, [email])
     .then(data => {
       return data.rows[0];
     })
@@ -113,13 +114,13 @@ const deleteUser = (userId) => {
     .then(data => {
       return data.rows[0];
     })
-    .then(() => {
-      return db
-        .query(`UPDATE resources
-        SET is_archived = true
-        WHERE owner_id = $1
-        RETURNING *;`, [userId]);
-    });
+    // .then(() => {
+    //   return db
+    //     .query(`UPDATE resources
+    //     SET is_archived = true
+    //     WHERE owner_id = $1
+    //     RETURNING *;`, [userId]);
+    // });
 };
 
 /**
