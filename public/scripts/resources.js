@@ -7,26 +7,6 @@
 ///// Helper Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Collapses NavBar when called
-const collapseNavBar = () => {
-  $("#navbarTogglerDemo02").collapse('hide');
-};
-
-// clear all sections in main container
-const pageCleanup1 = () => {
-  collapseNavBar();
-  $("#all-resources").empty();
-  $("#recent-resources").empty();
-  $('#section-registration-page').empty();
-  $('#section-login-page').empty();
-  $('#section-user-resources').empty();
-  $('#section-add-new-resource').empty();
-  $('#section-user-profile').empty();
-  $('#section-single-resource').empty();
-  $('#section-edit-resource').empty();
-  $('#section-delete-resource').empty();
-};
-
 // renders all resources on the webpage
 const renderResources = (response) => {
   response.resources.forEach (resource => {
@@ -228,7 +208,7 @@ $(() => {
       url: '/api/resources'
     })
     .done((response) => {
-      pageCleanup1();
+      pageCleanup();
       renderResources(response);
       $('.resource-link').on('click', function() {
       });
@@ -242,7 +222,7 @@ $(() => {
 //Listener for "Add Resource" that displays creation form when clicked from the nav bar
 $(() => {
   $('#show-new-resource-form').on('click', () => {
-    pageCleanup1();
+    pageCleanup();
     $('#section-add-new-resource').append(newResourceFormMarkup());
     $.ajax({
       method: 'GET',
@@ -281,7 +261,7 @@ $(() => {
         url: `api/resources/${data.id}`,
       })
       .done((response) => {
-        pageCleanup1();
+        pageCleanup();
         $('#section-single-resource').append(singleResourceMarkup(response.resource));
         $('#section-single-resource').append($commentForm)
         renderComments(response.comments);
@@ -302,7 +282,7 @@ $(() => {
       url: `api/resources/${resourceId}`,
     })
     .done((response) => {
-      pageCleanup1();
+      pageCleanup();
       $('#section-single-resource').append(singleResourceMarkup(response.resource));
       $('#section-single-resource').append($commentForm)
       renderComments(response.comments);
@@ -314,7 +294,7 @@ $(() => {
 $(() => {
   $(document).on('click', '#edit-resource-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    pageCleanup1();
+    pageCleanup();
     $('#section-edit-resource').append(editResourceFormMarkup(resourceId));
     $.ajax({
       method: 'GET',
@@ -353,7 +333,7 @@ $(() => {
         url: `api/resources/${data.id}`,
       })
       .done((response) => {
-        pageCleanup1();
+        pageCleanup();
         $('#section-single-resource').append(singleResourceMarkup(response.resource));
         $('#section-single-resource').append($commentForm)
         renderComments(response.comments);
@@ -369,7 +349,7 @@ $(() => {
 $(() => {
   $(document).on('click', '#delete-resource-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    pageCleanup1();
+    pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}/delete`,
@@ -388,7 +368,7 @@ $(() => {
   $(document).on('click', '#confirm-delete-resource', function() {
     const resourceId = $(this).siblings('span').attr('id');
     console.log(resourceId)
-    pageCleanup1();
+    pageCleanup();
     $.ajax({
       method: 'POST',
       url: `api/resources/${resourceId}/delete`
@@ -409,13 +389,13 @@ $(() => {
   $(document).on('click', '#cancel-delete-resource', function() {
     const resourceId = $(this).siblings('span').attr('id');
     console.log(resourceId)
-    pageCleanup1();
+    pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
     })
     .done((response) => {
-      pageCleanup1();
+      pageCleanup();
       $('#section-single-resource').append(singleResourceMarkup(response.resource));
       $('#section-single-resource').append($commentForm)
       renderComments(response.comments);

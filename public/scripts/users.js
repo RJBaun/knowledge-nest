@@ -336,20 +336,3 @@ const deleteUserProfileMarkup = () => {
 `;
   return deleteUserProfile;
 };
-
-
-
-
-
-// CLEAR ALL SECTIONS
-const pageCleanup = () => {
-  $("#navbarTogglerDemo02").collapse('hide');
-
-  $("#all-resources").empty();
-  $("#recent-resources").empty();
-  $('#section-registration-page').empty();
-  $('#section-login-page').empty();
-  $('#section-user-resources').empty();
-  $('#section-add-new-resource').empty();
-  $('#section-user-profile').empty();
-};
