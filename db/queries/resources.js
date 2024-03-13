@@ -15,6 +15,7 @@ const getResources = () => {
     JOIN categories ON categories.id = resources.category_id
     LEFT JOIN likes ON resources.id = likes.resource_id
     LEFT JOIN ratings ON resources.id = ratings.resource_id
+    WHERE resources.is_archived = false
     GROUP BY resources.id, resource_types.icon_link, categories.name
     ORDER BY date_added;`)
     .then(data => {

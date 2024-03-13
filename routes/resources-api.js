@@ -107,6 +107,19 @@ router.get('/:id/edit', (req, res) => {
     });
 });
 
+// Route for rendering delete resource form
+router.get('/:id/delete', (req, res) => {
+  resourceQueries.getResourceById(req.params.id)
+    .then(resource => {
+      res.send(resource);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
 //Route for updating existing resource
 router.post('/:id', (req, res) => {
 
