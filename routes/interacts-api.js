@@ -15,18 +15,35 @@ const router = express.Router();
 const likeQueries = require('../db/queries/likes');
 
 
-// Save like to likes table
+/////////////////////////////////////
+// POST - from click on 'like' button
+//   -- Checks if user:
+//      -- is logged in (if not, returns message back to user)
+//      -- has liked the resource (if so, returns status 401)
+//   -- Then saves like to likes table
+
 router.post('/like', (req, res) => {
   const likerId = req.session.user_id;
   const resourceId = req.body.resourceId;
-  console.log('likerID', likerId, 'resourceID', resourceId);
+
+  // if user not logged in, cannot like resource
   if (likerId === undefined) {
+    res.status(401);
     res.send("Log in to 'like' a resource.");
   }
-  likeQueries.createNewLike(likerId, resourceId)
+
+  // if user has already liked resource, cannot like again
+  likeQueries.findLikeByLikerIdAndResourceId(likerId, resourceId)
     .then(like => {
-      console.log(like);
-      res.send(like);
+      if (like !== null) {
+        res.status(401);
+        res.send('You cannot like a resource more than once.');
+      } else {
+        likeQueries.createNewLike(likerId, resourceId)
+          .then(like => {
+            res.send(like);
+          });
+      }
     })
     .catch(err => {
       res.status(500);

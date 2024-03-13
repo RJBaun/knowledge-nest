@@ -40,7 +40,7 @@ const renderResourcePage = (response) => {
   $('#section-single-resource').append(singleResourceMarkup(response.resource));
   $('#section-single-resource').append($commentForm);
   renderComments(response.comments);
-}
+};
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,22 +316,24 @@ $(() => {
 $(() => {
   $('#section-single-resource').on('click', '#like-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    const likeData = { resourceId: resourceId }
-    console.log('resource liked. Id is', resourceId);
+    const likeData = { resourceId: resourceId };
     $.ajax({
       method: 'POST',
       url: 'api/interacts/like',
       data: likeData
     })
       .done((response) => {
-        console.log('responded', response);
-        $.ajax({
+        if(response.status === 401) {
+          console.log('responded', response); 
+        } else {
+           $.ajax({
           method: 'GET',
           url: `api/resources/${resourceId}`,
         })
           .done((response) => {
             renderResourcePage(response);
           });
+        }
       });
   });
 });
