@@ -25,15 +25,15 @@ const getCommentsByResourceId = (resourceId) => {
 
 /**
  * Add a comment to a specific resource in the database.
- * @param {{commenter_id: string, resource_id: string, message: string, post_date: string}} commentObj
+ * @param {{commenter_id: string, resource_id: string, message: string}} commentObj
  * @returns {Promise<{}|null>} Promise to comments.
  */
 const createNewComment = (commentObj) => {
-  const { commenter_id, resource_id, message, post_date } = commentObj;
+  const { commenter_id, resource_id, message} = commentObj;
   return db
-    .query(`INSERT INTO comments (commenter_id, resource_id, message, post_date)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;`, [commenter_id, resource_id, message, post_date])
+    .query(`INSERT INTO comments (commenter_id, resource_id, message)
+    VALUES ($1, $2, $3)
+    RETURNING *;`, [commenter_id, resource_id, message])
     .then(data => {
       return data.rows[0];
     })

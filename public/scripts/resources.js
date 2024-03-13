@@ -30,9 +30,9 @@ const showResourceTypeOptions = (response) => {
 
 // Renders comments for a single resource
 const renderComments = (comments) => {
-  comments.forEach ((comment) => {
-    $('#section-single-resource').append(commentMarkup(comment))
-  })
+  comments.forEach((comment) => {
+    $('#section-single-resource').append(commentMarkup(comment));
+  });
 };
 
 const renderResourcePage = (response) => {
@@ -45,7 +45,7 @@ const renderResourcePage = (response) => {
 // checks if ratings exist, returns correct value depending
 const checkRatingsExist = (avg_rating) => {
   let resource_ratings;
-  if(!avg_rating) {
+  if (!avg_rating) {
     resource_ratings = "No Ratings Yet";
   } else {
     resource_ratings = `${avg_rating} / 5 Stars`;
@@ -59,7 +59,7 @@ const checkRatingsExist = (avg_rating) => {
 
 // generates resource card and returns it to be rendered, given a resource object input
 const createResourceMarkup = (resource) => {
-  const resource_ratings = checkRatingsExist(resource.avg_rating)
+  const resource_ratings = checkRatingsExist(resource.avg_rating);
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
@@ -174,12 +174,12 @@ const commentMarkup = (comment) => {
 
 // HTML to render the form for a new comment submission
 const $commentForm = $(`
-  <form id="new-comment-form">
-    <h5>Write A New Comment</h5>
-    <section>
-      <input type="text" class="new-comment" id="new-comment-message" placeholder="New Comment"></input>
-      <button type="button" class="btn btn-primary btn-sm">Post Comment</button>
-    </section>
+  <form id="new-comment-form" method="POST">
+    <h2>Write A New Comment</h2>
+    <label for="new-comment-message" class="form-label"></label>
+    <textarea name="text" class="new-comment" id="new-comment-message" placeholder="New Comment"></textarea>
+    <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+  </form>
 `);
 
 // Creates markup to render edit resource page when called from single resource page
@@ -188,15 +188,15 @@ const editResourceFormMarkup = (resource) => {
   <form>
   <h2>Update Your Resource</h2>
   <article class="mb-3">
-    <label for="name-field" class="form-label" style="display: none">Resource Title</label>
-    <input type="text" class="form-control" id="name-field" placeholder="${resource.name}">
+    <label for="name-field" class="form-label" style="display: none"></label>
+    <input type="text" class="form-control" id="name-field" value="${resource.name}">
   </article>
   <article class="mb-3">
-    <label for="description-field" class="form-label" style="display: none">Resource Description</label>
-    <input type="text" class="form-control" id="description-field" placeholder="${resource.description}">
+    <label for="description-field" class="form-label" style="display: none"></label>
+    <input type="text" class="form-control" id="description-field" value="${resource.description}">
   </article>
   <select class="form-select" id="category-dropdown">
-    <option selected>Category</option>
+    <option selected>${resource.category_name}</option>
   </select>
   <select class="form-select" id="resource_type-dropdown">
     <option selected>Resource Type</option>
@@ -345,6 +345,43 @@ $(() => {
             });
         }
       });
+  });
+});
+
+// On single resource page - on submission of comment form, save comment and update page
+
+$(() => {
+  $('#section-single-resource').on('submit', '#new-comment-form', function(event) {
+    const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
+    const newComment = $(this).serializeArray();
+    const commentLength = $(this)[0][0].value.trim().length;
+    console.log('commentLength', commentLength);
+    const commentData = { resourceId, newComment };
+    
+    if (commentLength === 0) {
+      //add logic for error message to user
+    } else {
+      $.ajax({
+        method: 'POST',
+        url: 'api/interacts/comment',
+        data: commentData
+      })
+        .done((response) => {
+          if (response.status === 401) {
+            console.log('responded 401', response);
+          } else {
+            console.log('responded', response);
+            $.ajax({
+              method: 'GET',
+              url: `api/resources/${resourceId}`,
+            })
+              .done((response) => {
+                renderResourcePage(response);
+              });
+          }
+        });
+    }
+    event.preventDefault();
   });
 });
 
@@ -503,7 +540,7 @@ $(() => {
       method: 'GET',
       url: `api/resources/${resourceId}/edit`,
     })
-    .done((response) => {
+      .done((response) => {
         $('#section-edit-resource').append(editResourceFormMarkup(response.resource));
         showCategoryOptions(response);
         showResourceTypeOptions(response);
