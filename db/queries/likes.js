@@ -50,18 +50,18 @@ const countLikes = (resource_id) => {
  */
 const findLikeByLikerIdAndResourceId = (liker_id, resource_id) => {
   return db
-  .query(`SELECT * FROM likes
+    .query(`SELECT * FROM likes
   WHERE liker_id = $1
   AND resource_id = $2;`, [liker_id, resource_id])
-  .then(data => {
-    console.log(data.rows[0]);
-    if(data.rows[0]) {
-      return data.rows[0];
-    } else {
-      return null;
-    }
-  })
+    .then(data => {
+      console.log(data.rows[0]);
+      if (data.rows[0]) {
+        return data.rows[0];
+      } else {
+        return null;
+      }
+    });
 
-}
+};
 
 module.exports = { createNewLike, countLikes, findLikeByLikerIdAndResourceId };
