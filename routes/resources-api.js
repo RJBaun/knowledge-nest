@@ -48,6 +48,7 @@ router.get('/new', (req, res) => {
     });
 });
 
+// Route for submitting new resource
 router.post('/', (req, res) => {
   const resource = req.body;
   categoryQueries.getCategoryIdByName(req.body.category_id)
@@ -67,6 +68,8 @@ router.post('/', (req, res) => {
     });
 });
 
+
+// Route to render a single resource
 router.get('/:id', (req, res) => {
   response = {};
   resourceQueries.getResourceById(req.params.id)
@@ -84,5 +87,70 @@ router.get('/:id', (req, res) => {
       .json({ error: err.message });
   });
 });
+
+// Route for rendering edit resource form
+router.get('/:id/edit', (req, res) => {
+  response = {};
+  categoryQueries.getCategories()
+    .then(categories => {
+      response.categories = categories;
+      return resource_typeQueries.getAllResourceTypes();
+    })
+    .then(resource_types => {
+      response.resource_types = resource_types;
+      res.send(response);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
+// Route for rendering delete resource form
+router.get('/:id/delete', (req, res) => {
+  resourceQueries.getResourceById(req.params.id)
+    .then(resource => {
+      res.send(resource);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
+
+//Route for updating existing resource
+router.post('/:id', (req, res) => {
+    const resource = req.body;
+    categoryQueries.getCategoryIdByName(req.body.category_id)
+      .then((category_id) => {
+        resource.category_id = category_id.id.toString();
+        return resource_typeQueries.getResourceIdByName(req.body.resource_type_id);
+      })
+      .then((resource_type_id) => {
+        resource.resource_type_id = resource_type_id.id.toString();
+        return resourceQueries.updateResource(resource);
+      })
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send("Error creating resource: " + err.message);
+      });
+});
+
+//Route for Archiving/Deleting a resource
+router.post('/:id/delete', (req, res) => {
+  console.log(req.params.id)
+  resourceQueries.archiveResource(req.params.id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send("Error creating resource: " + err.message);
+    });
+});
+
 
 module.exports = router;
