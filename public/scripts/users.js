@@ -6,9 +6,6 @@
 /// LISTENERS
 //////////////////////
 
-
-
-
 // On 'user-registration' nav button click, load registration page.
 $(() => {
   $('#user-register').on('click', () => {
@@ -77,9 +74,15 @@ $(() => {
       url: '/api/users',
       data: userData
     })
-      .done((response) => {
-        const id = response.user.id;
-        // LOAD user resources page for signed-in-user
+      .done(() => {
+        $.ajax({
+          method: 'GET',
+          url: 'api/users/id'
+        })
+          .done(response => {
+            pageCleanup();
+            $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+          });
       });
 
 
@@ -117,7 +120,6 @@ $(() => {
               $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
             });
         }
-        // LOAD user profile page for signed-in-user
       });
     event.preventDefault();
   });
