@@ -68,14 +68,15 @@ const createNewResource = (resource) => {
 
 /**
  * Update single resource in the database.
- * @param {{id: string, name: string, url: string, description: string, owner_id: string, category_id: string, resource_type_id: string, date_added: string}} resource
+ * @param {{id: string, name: string, description: string, category_id: string, resource_type_id: string}} resource
  * @returns {Promise<{}|null>} A promise to the resource.
  */
 const updateResource = (resource) => {
+  console.log(resource)
   return db
     .query(`UPDATE resources
-    SET name=$1, url=$2, description=$3, owner_id=$4, category_id=$5, resource_type_id=$6, string=$7
-    WHERE id=$8 RETURNING *;`, [resource.name, resource.url, resource.description, resource.owner_id, resource.category_id, resource.resource_type_id, resource.date_added, resource.id])
+    SET name=$1, description=$2, category_id=$3, resource_type_id=$4
+    WHERE id=$5 RETURNING *;`, [resource.name, resource.description, resource.category_id, resource.resource_type_id, resource.id])
     .then(data => {
       return data.rows[0];
     })

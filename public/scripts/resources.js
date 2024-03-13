@@ -19,6 +19,7 @@ const pageCleanup1 = () => {
   $('#section-add-new-resource').empty();
   $('#section-user-profile').empty();
   $('#section-single-resource').empty();
+  $('#section-edit-resource').empty();
 };
 
 // generates resource card and returns it given a resource object
@@ -58,7 +59,6 @@ $(() => {
       pageCleanup1();
       renderResources(response);
       $('.resource-link').on('click', function() {
-        console.log('clicked');
       });
     })
     .catch((err) => {
@@ -163,7 +163,16 @@ $(() => {
       data: resource
     })
     .done((data) => {
-      console.log(data);
+      $.ajax({
+        method: 'GET',
+        url: `api/resources/${data.id}`,
+      })
+      .done((response) => {
+        pageCleanup1();
+        $('#section-single-resource').append(renderSingleResource(response.resource));
+        $('#section-single-resource').append($commentForm)
+        renderComments(response.comments);
+      });
     })
     .catch((err) => {
       console.log('err:', err);
@@ -247,13 +256,84 @@ $(() => {
   });
 });
 
+// Render edit resource page when called
+const editResourceFormMarkup = (resourceId) => {
+  const $resourceForm = $(`
+  <form>
+  <h2>Update Your Resource</h2>
+  <article class="mb-3">
+    <label for="name-field" class="form-label" style="display: none">Resource Title</label>
+    <input type="text" class="form-control" id="name-field" placeholder="Title">
+  </article>
+  <article class="mb-3">
+    <label for="description-field" class="form-label" style="display: none">Resource Description</label>
+    <input type="text" class="form-control" id="description-field" placeholder="Description">
+  </article>
+  <select class="form-select" id="category-dropdown">
+    <option selected>Category</option>
+  </select>
+  <select class="form-select" id="resource_type-dropdown">
+    <option selected>Resource Type</option>
+  </select>
+  <span id="${resourceId}" style="display: none;"></span>
+    <button type="submit" class="btn btn-primary" id="submit-new-resource">Submit</button>
+</form>
+  `)
+  return $resourceForm;
+}
+
 // listener for edit resources page
 $(() => {
   $(document).on('click', '#edit-resource-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    console.log(resourceId)
+    pageCleanup1();
+    $('#section-edit-resource').append(editResourceFormMarkup(resourceId));
+    $.ajax({
+      method: 'GET',
+      url: `api/resources/${resourceId}/edit`,
+    })
+    .done((response) => {
+      showCategoryOptions(response);
+      showResourceTypeOptions(response);
+    })
+    .catch((err) => {
+      console.log('err:', err);
+    });
   });
 });
 
-
+//Listener fo subitting resource edits using method-override to PUT
+$(() => {
+  $(document).on('submit', '#section-edit-resource', function(event) {
+    event.preventDefault();
+    const resourceId = $(this).find('span').attr('id');
+    const resource = {
+      name: $('#name-field').val(),
+      description: $('#description-field').val(),
+      category_id: $('#category-dropdown').val(),
+      resource_type_id: $('#resource_type-dropdown').val(),
+      id: resourceId
+    };
+    $.ajax({
+      method: 'POST',
+      url: 'api/resources/:id',
+      data: resource
+    })
+    .done((data) => {
+      $.ajax({
+        method: 'GET',
+        url: `api/resources/${data.id}`,
+      })
+      .done((response) => {
+        pageCleanup1();
+        $('#section-single-resource').append(renderSingleResource(response.resource));
+        $('#section-single-resource').append($commentForm)
+        renderComments(response.comments);
+      });
+    })
+    .catch((err) => {
+      console.log('err:', err);
+    })
+  });
+});
 

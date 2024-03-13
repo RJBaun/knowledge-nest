@@ -16,7 +16,6 @@ const getCommentsByResourceId = (resourceId) => {
     WHERE resource_id = $1
     ORDER BY comments.post_date DESC;`, [resourceId])
     .then(data => {
-      console.log(data.rows)
       return data.rows;
     })
     .catch(err => {
