@@ -198,6 +198,21 @@ $(() => {
   });
 });
 
+// From Delete User Profile Page, on form submit, update user data and redirect to user profile.
+$(() => {
+  $('#section-user-profile').on('submit', '#delete-profile-form', (event) => {
+    $.ajax({
+      method: 'POST',
+      url: 'api/users/id/delete'
+    })
+      .done(response => {
+        pageCleanup();
+        console.log('deleted',response);
+        // $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+      });
+    event.preventDefault();
+  });
+});
 
 ///////////////////////////
 /// HTML FUNCTIONS
@@ -309,13 +324,15 @@ const editUserProfileMarkup = (user) => {
  */
 const deleteUserProfileMarkup = () => {
   const deleteUserProfile = `
+  <form id="delete-profile-form" method="POST">
   <div class="buttons">
   <h2>Are you sure you want to delete your account?</h2>
   <p>If you delete your account, you will <strong>immediately</strong> lose all your saved and liked resources.</p>
   <p>You will need to create a new account to sign in again.</p>
-  <button id="delete-button" type="button" class="btn btn-danger">Yes - DELETE</button>
+  <button id="delete-button" type="submit" class="btn btn-danger">Yes - DELETE</button>
   <button id="cancel-button" type="button" class="btn btn-success">Nevermind, I want to keep my account</button>
 </div>
+</form>
 `;
   return deleteUserProfile;
 };
