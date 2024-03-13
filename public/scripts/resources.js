@@ -1,6 +1,7 @@
 // Created by Rylan Baun
 // Created March 11, 2024
-// Purpose: Render all resources
+// Purpose: Render all resource related pages
+
 
 // Collapses NavBar when called
 const collapseNavBar = () => {
@@ -17,6 +18,7 @@ const pageCleanup1 = () => {
   $('#section-user-resources').empty();
   $('#section-add-new-resource').empty();
   $('#section-user-profile').empty();
+  $('#section-single-resource').empty();
 };
 
 // generates resource card and returns it given a resource object
@@ -24,7 +26,7 @@ const createResourceMarkup = (resource) => {
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
-  <section class="card-body">
+  <section id="resource-link" class="card-body">
     <h5 class="card-title">${resource.name}</h5>
     <p class="card-text">${resource.description}</p>
     <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
@@ -166,6 +168,90 @@ $(() => {
     .catch((err) => {
       console.log('err:', err);
     })
+  });
+});
+
+//Renders a single resource when the listener calls it
+const renderSingleResource = (resource) => {
+  let resource_ratings;
+  if(!resource.avg_rating) {
+    resource_ratings = "No Ratings Yet"
+  } else {
+    resource_ratings = `${resource.avg_rating} / 5 Stars`
+  }
+  const $singleResource = $(`
+  <article id="resource-${resource.id}" class="card" style="width: 90vw;">
+  <i class=${resource.icon_link}></i>
+  <section id="single-resource" class="card-body">
+    <h5 class="card-title">${resource.name}</h5>
+    <p class="card-text">${resource.description}</p>
+    <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
+    <span>
+    <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
+    <button type="button" class="btn btn-primary btn-sm">Delete Resource</button>
+    </span>
+    <footer class="resource-footer">
+      <span class="resource-category">#${resource.category_name}</span>
+      <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource_ratings}</span>
+    </footer>
+  </section>
+  </article>
+  `)
+  return $singleResource;
+};
+
+// Creates markup for each comment under a single resource
+const commentMarkup = (comment) => {
+  const $comment = $(`
+  <section class="comment">
+  <p class="comment-message">${comment.message}</p>
+  <footer>Posted By: ${comment.commenter_name} Date Posted: ${comment.post_date}</footer>
+  </section>
+  `);
+  return $comment;
+};
+
+
+// Renders comments for a single resource
+const renderComments = (comments) => {
+  comments.forEach ((comment) => {
+    $('#section-single-resource').append(commentMarkup(comment))
+  })
+};
+
+// HTML to render new comment form
+const $commentForm = $(`
+  <form id="new-comment-form">
+    <h5>Write A New Comment</h5>
+    <section>
+      <input type="text" class="new-comment" id="new-comment-message" placeholder="New Comment"></input>
+      <button type="button" class="btn btn-primary btn-sm">Post Comment</button>
+    </section>
+`);
+
+// Load new page on resource click
+//// Resources are dynamically rendered so the listener works for any element with a resource-link ID within the document
+$(() => {
+  $(document).on('click', '#resource-link', function() {
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    $.ajax({
+      method: 'GET',
+      url: `api/resources/${resourceId}`,
+    })
+    .done((response) => {
+      pageCleanup1();
+      $('#section-single-resource').append(renderSingleResource(response.resource));
+      $('#section-single-resource').append($commentForm)
+      renderComments(response.comments);
+    });
+  });
+});
+
+// listener for edit resources page
+$(() => {
+  $(document).on('click', '#edit-resource-button', function() {
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    console.log(resourceId)
   });
 });
 
