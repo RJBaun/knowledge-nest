@@ -11,5 +11,8 @@ const pageCleanup = () => {
   $('#section-user-resources').empty();
   $('#section-add-new-resource').empty();
   $('#section-user-profile').empty();
+  $('#section-single-resource').empty();
+  $('#section-edit-resource').empty();
+  $('#section-delete-resource').empty();
 };
 
