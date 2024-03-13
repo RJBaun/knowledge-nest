@@ -26,8 +26,55 @@ const getResources = () => {
     });
 };
 
+
 /**
- * Get resources data
+ * Get all owned resources data for a specific user
+ * @returns {Promise<[{}]|null>} Promise to resources.
+*/
+const getResourcesByUser = (id) => {
+  return db
+    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    JOIN resource_types ON resource_types.id = resources.resource_type_id
+    JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN likes ON resources.id = likes.resource_id
+    LEFT JOIN ratings ON resources.id = ratings.resource_id
+    WHERE resources.is_archived = false
+    AND owner_id = $1
+    GROUP BY resources.id, resource_types.icon_link, categories.name
+    ORDER BY date_added;`, [id])
+    .then(data => {
+      return data.rows;
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+/**
+ * Get all liked resources data for a specific user
+ * @returns {Promise<[{}]|null>} Promise to resources.
+*/
+const getResourcesByLiker = (id) => {
+  return db
+    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    JOIN resource_types ON resource_types.id = resources.resource_type_id
+    JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN likes ON resources.id = likes.resource_id
+    LEFT JOIN ratings ON resources.id = ratings.resource_id
+    WHERE resources.is_archived = false
+    AND liker_id = $1
+    GROUP BY resources.id, resource_types.icon_link, categories.name
+    ORDER BY date_added;`, [id])
+    .then(data => {
+      return data.rows;
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+/**
+ * Get resource's data
  * @param {string} id The id of the user.
  * @returns {Promise<{}|null>} Promise to the resource.
  */
@@ -140,4 +187,4 @@ const getRecentResources = (limit = 10) => {
     });
 };
 
-module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId };
+module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker };

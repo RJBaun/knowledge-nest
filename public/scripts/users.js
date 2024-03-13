@@ -63,6 +63,25 @@ $(() => {
   });
 });
 
+// ON 'My Resources' nav button click, load users owned and saved resources
+$(() => {
+  $('#user-resources').on('click', () => {
+    pageCleanup();
+    $.ajax({
+      method: 'GET',
+      url: 'api/users/resources'
+    })
+    .done((data) => {
+      console.log(data)
+      $('#section-user-resources').append(userResourcesMarkup())
+      const ownedResources = resourcesMarkup(data.ownedResources)
+      $('#owned-resources-tab-pane').prepend(ownedResources)
+      const likedResources = resourcesMarkup(data.likedResources)
+      $('#liked-resources-tab-pane').prepend(likedResources)
+    })
+  });
+});
+
 
 ///////////////////////
 // Registration Page
@@ -335,4 +354,60 @@ const deleteUserProfileMarkup = () => {
 </form>
 `;
   return deleteUserProfile;
+};
+
+/**
+ * Users resources page HTML
+ * @returns {string}
+ */
+const userResourcesMarkup = () => {
+  const $userResources = $(`
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="owned-resources-tab" data-bs-toggle="tab" data-bs-target="#owned-resources-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">My Resources</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="liked-resources-tab" data-bs-toggle="tab" data-bs-target="#liked-resources-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Saved Resources</button>
+    </li>
+  </ul>
+  <section class="tab-content" id="myTabContent">
+    <article class="tab-pane fade show active" id="owned-resources-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+    </article>
+    <article class="tab-pane fade" id="liked-resources-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    </article>
+  </section>
+  `);
+  return $userResources;
+};
+
+/**
+ * Users owned resources HTML
+ * @returns {string}
+ */
+const resourcesMarkup = (resourcesArr) => {
+  let markup = ``;
+  resourcesArr.forEach((resource) => {
+    let resource_ratings;
+    if(!resource.avg_rating) {
+      resource_ratings = "No Ratings Yet"
+    } else {
+      resource_ratings = `${resource.avg_rating} / 5 Stars`
+    }
+    const singleResource = `
+    <article id="resource-${resource.id}" class="card" style="width: 90vw;">
+    <i class=${resource.icon_link}></i>
+    <section id="resource-link" class="card-body">
+      <h5 class="card-title">${resource.name}</h5>
+      <p class="card-text">${resource.description}</p>
+      <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
+      <footer class="resource-footer">
+        <span class="resource-category">#${resource.category_name}</span>
+        <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource.avg_rating}/5.0 Stars</span>
+      </footer>
+    </section>
+  </article>
+    `;
+    markup += singleResource;
+  });
+  return markup;
 };
