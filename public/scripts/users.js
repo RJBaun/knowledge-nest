@@ -164,7 +164,6 @@ $(() => {
   });
 });
 
-
 // From User Profile Page (Edit and Delete Pages), on 'cancel-button' click, redirect to user profile page.
 $(() => {
   $('#section-user-profile').on('click', '#cancel-button', () => {
@@ -179,6 +178,25 @@ $(() => {
   });
 });
 
+// From Edit User Profile Page, on form submit, update user data and redirect to user profile.
+$(() => {
+  $('#section-user-profile').on('submit', '#update-profile-form', (event) => {
+    const userData = {
+      email: $('#updated-email').val(),
+      username: $('#updated-username').val()
+    };
+    $.ajax({
+      method: 'POST',
+      url: 'api/users/id/edit',
+      data: userData
+    })
+      .done(response => {
+        pageCleanup();
+        $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+      });
+    event.preventDefault();
+  });
+});
 
 
 ///////////////////////////
@@ -263,6 +281,7 @@ const userProfileMarkup = (user) => {
  */
 const editUserProfileMarkup = (user) => {
   const editUserProfile = `
+  <form id="update-profile-form" method="POST">
 <h2>Update Profile</h2>
 <div class="mb-3 row">
   <label for="updated-username" class="col-sm-2 col-form-label">Username:</label>
@@ -276,9 +295,10 @@ const editUserProfileMarkup = (user) => {
   </div>
 </div>
 <div class="buttons">
-  <button id="update-button" type="button" class="btn btn-success">Update</button>
+  <button id="update-button" type="submit" class="btn btn-success">Update</button>
   <button id="cancel-button" type="button" class="btn btn-danger">Cancel</button>
 </div>
+</form>
 `;
   return editUserProfile;
 };
