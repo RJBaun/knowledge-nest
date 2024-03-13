@@ -148,8 +148,19 @@ const singleResourceMarkup = (resource) => {
     </div>
     <div class="ratings">
       <p>${resource_ratings}
-      <i id="rate-button" class="fa-solid fa-star"></i></p>
-    </div>
+      <i class="fa-solid fa-star"></i></p>
+      </div>
+      <div id="rating-stars" style="color: red">
+      <h3>Rate this resource!</h3>
+      <p>Red rating stars if user hasn't rated yet (else green)</p>
+      <ol>
+      <li><i id="1-star" class="fa-solid fa-star"></i></li>
+      <li><i id="2-star" class="fa-solid fa-star"></i></li>
+      <li><i id="3-star" class="fa-solid fa-star"></i></li>
+      <li><i id="4-star" class="fa-solid fa-star"></i></li>
+      <li><i id="5-star" class="fa-solid fa-star"></i></li>
+      </ol>
+      </div>
     </footer>
   </section>
   </article>
@@ -220,67 +231,8 @@ const deleteResourceFormMarkup = (resource) => {
 };
 
 
-// Star rating HTML
-// Modified from: https://codepen.io/ashdurham/pen/AVVGvP
-`      <span class="rating_stars rating_0">
-<span class='s' data-high='1'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
-<span class='s' data-high='2'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
-<span class='s' data-high='3'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
-<span class='s' data-high='4'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
-<span class='s' data-high='5'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
-<span class='r r1' data-rating='1' data-value='1'></span>
-<span class='r r2' data-rating='2' data-value='2'></span>
-<span class='r r3' data-rating='3' data-value='3'></span>
-<span class='r r4' data-rating='4' data-value='4'></span>
-<span class='r r5' data-rating='5' data-value='5'></span>
-</span>
 
-<div class="values" hidden>
-<div>
-  <label>Rating</label><input type="text" id="rating" value="0" />
-</div>
-<div>
-  <label>Rating Value</label><input type="text" name="rating" id="rating_val" value="0" />
-</div>
-</div>
 
-<div class="info" hidden>
-<p>The above textboxes should be hidden fields, but have been made textboxes to display the values when you click.</p>
-<p>The 'Rating' value can be used for class/id based changes to this if wanting to use a background sprite to manage the stars instead.</p>
-</div>`
-
-// Modified from: https://codepen.io/ashdurham/pen/AVVGvP
-$(() => {
-  $('.rating_stars span.r').hover(function() {
-              // get hovered value
-              var rating = $(this).data('rating');
-              var value = $(this).data('value');
-              $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_'+rating);
-              highlight_star(value);
-          }, function() {
-              // get hidden field value
-              var rating = $("#rating").val();
-              var value = $("#rating_val").val();
-              $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_'+rating);
-              highlight_star(value);
-          }).click(function() {
-              // Set hidden field value
-              var value = $(this).data('value');
-              $("#rating_val").val(value);
-              var rating = $(this).data('rating');
-              $("#rating").val(rating);
-
-              highlight_star(value);
-          });
-
-          var highlight_star = function(rating) {
-              $('.rating_stars span.s').each(function() {
-                  var high = $(this).data('high');
-                  $(this).removeClass('active-high');
-                  if (rating >= high) $(this).addClass('active-high');
-              });
-          }
-  });
 
 
 
@@ -387,20 +339,78 @@ $(() => {
       data: likeData
     })
       .done((response) => {
-        if(response.status === 401) {
+        if (response.status === 401) {
           console.log('responded', response);
         } else {
-           $.ajax({
-          method: 'GET',
-          url: `api/resources/${resourceId}`,
-        })
-          .done((response) => {
-            renderResourcePage(response);
-          });
+          $.ajax({
+            method: 'GET',
+            url: `api/resources/${resourceId}`,
+          })
+            .done((response) => {
+              renderResourcePage(response);
+            });
         }
       });
   });
 });
+
+
+// On single resource page - on click on star to save rating and update page
+
+$(() => {
+  $('#section-single-resource').on('click', '#rating-stars', function() {
+    $('#rating-stars').css('color', 'green');
+  });
+});
+
+$(() => {
+  $('#section-single-resource').on('click', '#1-star', function() {
+    const rating = 1;
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const ratingData = { rating, resourceId };
+    console.log('rating is', rating);
+    $.ajax({
+      method: 'POST',
+      url: 'api/interacts/rate',
+      data: ratingData
+    })
+      .done((response) => {
+        if (response.status === 401) {
+          console.log('responded', response);
+        } else {
+          $.ajax({
+            method: 'GET',
+            url: `api/resources/${resourceId}`,
+          })
+            .done((response) => {
+              renderResourcePage(response);
+            });
+        }
+      });
+  });
+});
+
+$(() => {
+  $('#section-single-resource').on('click', '#2-star', function() {
+    console.log('rating is 2 star');
+  });
+});
+$(() => {
+  $('#section-single-resource').on('click', '#3-star', function() {
+    console.log('rating is 3 star');
+  });
+});
+$(() => {
+  $('#section-single-resource').on('click', '#4-star', function() {
+    console.log('rating is 4 star');
+  });
+});
+$(() => {
+  $('#section-single-resource').on('click', '#5-star', function() {
+    console.log('rating is 5 star');
+  });
+});
+
 
 
 

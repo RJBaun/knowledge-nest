@@ -23,15 +23,15 @@ const getAverageRatingByResource = (resourceID) => {
 
 /**
  * Insert new rating into the database.
- * @param {{rater_id:string, resource_id:string, rating:string, date:string}} ratingObj
+ * @param {{rater_id:string, resource_id:string, rating:string }} ratingObj
  * @returns {Promise<{}|null>} Promise to users.
  */
 const createNewRating = (ratingObj) => {
-  const { rater_id, resource_id, rating, date } = ratingObj;
+  const { rater_id, resource_id, rating } = ratingObj;
   return db
-    .query(`INSERT INTO ratings (rater_id, resource_id, rating, date)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;`, [rater_id, resource_id, rating, date])
+    .query(`INSERT INTO ratings (rater_id, resource_id, rating)
+    VALUES ($1, $2, $3)
+    RETURNING *;`, [rater_id, resource_id, rating])
     .then(data => {
       return data.rows[0];
     })
@@ -40,4 +40,28 @@ const createNewRating = (ratingObj) => {
     });
 };
 
-module.exports = { getAverageRatingByResource, createNewRating };
+
+/**
+ * Checks if unique rating for resource from user (rater) exists.
+ * @param {number} rater_id
+ * @param {number} resource_id
+ * @returns {Promise{}|null} Promise to the like.
+ */
+const findRatingByRaterIdAndResourceId = (ratingObj) => {
+  const { rater_id, resource_id } = ratingObj;
+
+  return db
+    .query(`SELECT * FROM ratings
+  WHERE rater_id = $1
+  AND resource_id = $2;`, [rater_id, resource_id])
+    .then(data => {
+      if (data.rows[0]) {
+        return data.rows[0];
+      } else {
+        return null;
+      }
+    });
+
+};
+
+module.exports = { getAverageRatingByResource, createNewRating, findRatingByRaterIdAndResourceId };
