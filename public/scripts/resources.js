@@ -30,9 +30,9 @@ const showResourceTypeOptions = (response) => {
 
 // Renders comments for a single resource
 const renderComments = (comments) => {
-  comments.forEach ((comment) => {
-    $('#section-single-resource').append(commentMarkup(comment))
-  })
+  comments.forEach((comment) => {
+    $('#section-single-resource').append(commentMarkup(comment));
+  });
 };
 
 const renderResourcePage = (response) => {
@@ -45,7 +45,7 @@ const renderResourcePage = (response) => {
 // checks if ratings exist, returns correct value depending
 const checkRatingsExist = (avg_rating) => {
   let resource_ratings;
-  if(!avg_rating) {
+  if (!avg_rating) {
     resource_ratings = "No Ratings Yet";
   } else {
     resource_ratings = `${avg_rating} / 5 Stars`;
@@ -59,14 +59,15 @@ const checkRatingsExist = (avg_rating) => {
 
 // generates resource card and returns it to be rendered, given a resource object input
 const createResourceMarkup = (resource) => {
-  const resource_ratings = checkRatingsExist(resource.avg_rating)
+  const resource_ratings = checkRatingsExist(resource.avg_rating);
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
+  <a href="${resource.url}" target="_blank" class="btn btn-primary">Visit Resource</a>
   <section id="resource-link" class="card-body">
-    <h5 class="card-title">${resource.name}</h5>
+    <h4 class="card-title">${resource.name}</h4>
+    <h6 class="card-owner">@${resource.owner_name}</h6>
     <p class="card-text">${resource.description}</p>
-    <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
     <footer class="resource-footer">
       <span class="resource-category">#${resource.category_name}</span>
       <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource_ratings}</span>
@@ -129,13 +130,16 @@ const singleResourceMarkup = (resource) => {
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
   <section id="single-resource" class="card-body">
-    <h5 class="card-title">${resource.name}</h5>
+    <h4 class="card-title">${resource.name}</h4>
+    <h6 class="card-owner">@${resource.owner_name}</h6>
+    <span>${timeago.format(resource.date_added)}</span>
     <p class="card-text">${resource.description}</p>
     <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
     <span>
     <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
     <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
-      <div class="likes">
+    <footer>
+    <div class="likes">
       <p>${resource.count_likes}
       <i id="like-button" class="fa-solid fa-heart"></i></p>
     </div>
@@ -483,6 +487,7 @@ $(() => {
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
+            console.log(response)
               renderResourcePage(response);
             });
         }
@@ -503,7 +508,7 @@ $(() => {
       method: 'GET',
       url: `api/resources/${resourceId}/edit`,
     })
-    .done((response) => {
+      .done((response) => {
         $('#section-edit-resource').append(editResourceFormMarkup(response.resource));
         showCategoryOptions(response);
         showResourceTypeOptions(response);
