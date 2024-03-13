@@ -9,7 +9,7 @@ CREATE TABLE ratings (
   rater_id INTEGER REFERENCES users(id) NOT NULL,
   resource_id INTEGER REFERENCES resources(id) NOT NULL,
   rating SMALLINT NOT NULL,
-  date TIMESTAMP NOT NULL
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 

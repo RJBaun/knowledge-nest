@@ -9,6 +9,6 @@ CREATE TABLE comments (
   commenter_id INTEGER REFERENCES users(id) NOT NULL,
   resource_id INTEGER REFERENCES resources(id) NOT NULL,
   message TEXT NOT NULL,
-  post_date TIMESTAMP NOT NULL,
+  post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_deleted BOOLEAN NOT NULL DEFAULT false
 );

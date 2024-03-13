@@ -9,5 +9,5 @@ CREATE TABLE likes (
   id SERIAL PRIMARY KEY NOT NULL,
   liker_id INTEGER REFERENCES users(id),
   resource_id INTEGER REFERENCES resources(id),
-  date TIMESTAMP
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
