@@ -35,6 +35,17 @@ const renderComments = (comments) => {
   })
 };
 
+// checks if ratings exist, returns correct value depending
+const checkRatingsExist = (avg_rating) => {
+  let resource_ratings;
+  if(!avg_rating) {
+    resource_ratings = "No Ratings Yet";
+  } else {
+    resource_ratings = `${avg_rating} / 5 Stars`;
+  };
+  return resource_ratings;
+};
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Markups
@@ -42,6 +53,7 @@ const renderComments = (comments) => {
 
 // generates resource card and returns it to be rendered, given a resource object input
 const createResourceMarkup = (resource) => {
+  const resource_ratings = checkRatingsExist(resource.avg_rating)
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
@@ -51,7 +63,7 @@ const createResourceMarkup = (resource) => {
     <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
     <footer class="resource-footer">
       <span class="resource-category">#${resource.category_name}</span>
-      <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource.avg_rating}/5.0 Stars</span>
+      <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource_ratings}</span>
     </footer>
   </section>
 </article>
@@ -106,12 +118,7 @@ const resourceTypeMarkup = (resource_type) => {
 
 //creates markup for a single resource, called by submitting new resource, editting a resource, or clicking a resource
 const singleResourceMarkup = (resource) => {
-  let resource_ratings;
-  if(!resource.avg_rating) {
-    resource_ratings = "No Ratings Yet"
-  } else {
-    resource_ratings = `${resource.avg_rating} / 5 Stars`
-  }
+  const resource_ratings = checkRatingsExist(resource.avg_rating);
   const $singleResource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
