@@ -72,12 +72,9 @@ $(() => {
       url: 'api/users/resources'
     })
     .done((data) => {
-      console.log(data)
-      $('#section-user-resources').append(userResourcesMarkup())
-      const ownedResources = resourcesMarkup(data.ownedResources)
-      $('#owned-resources-tab-pane').prepend(ownedResources)
-      const likedResources = resourcesMarkup(data.likedResources)
-      $('#liked-resources-tab-pane').prepend(likedResources)
+      $('#section-user-resources').append(userResourcesMarkup());
+      renderUserResources("#owned-resources-tab-pane", data.ownedResources);
+      renderUserResources("#liked-resources-tab-pane", data.likedResources);
     })
   });
 });
@@ -380,34 +377,9 @@ const userResourcesMarkup = () => {
   return $userResources;
 };
 
-/**
- * Users owned resources HTML
- * @returns {string}
- */
-const resourcesMarkup = (resourcesArr) => {
-  let markup = ``;
-  resourcesArr.forEach((resource) => {
-    let resource_ratings;
-    if(!resource.avg_rating) {
-      resource_ratings = "No Ratings Yet"
-    } else {
-      resource_ratings = `${resource.avg_rating} / 5 Stars`
-    }
-    const singleResource = `
-    <article id="resource-${resource.id}" class="card" style="width: 90vw;">
-    <i class=${resource.icon_link}></i>
-    <section id="resource-link" class="card-body">
-      <h5 class="card-title">${resource.name}</h5>
-      <p class="card-text">${resource.description}</p>
-      <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
-      <footer class="resource-footer">
-        <span class="resource-category">#${resource.category_name}</span>
-        <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource.avg_rating}/5.0 Stars</span>
-      </footer>
-    </section>
-  </article>
-    `;
-    markup += singleResource;
-  });
-  return markup;
+// renders all owned resources on the users resource page
+const renderUserResources = (destination, resourceArr) => {
+  resourceArr.forEach (resource => {
+    $(destination).prepend(createResourceMarkup(resource));
+  })
 };
