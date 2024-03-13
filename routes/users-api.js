@@ -1,4 +1,4 @@
-/*
+1/*
  * All routes for User Data are defined here
  * Since this file is loaded in server.js into api/users,
  *   these routes are mounted onto /api/users
@@ -115,7 +115,29 @@ router.post('/id/delete', (req, res) => {
     })
 });
 
-
+// Checks if user is logged in, renders their liked and saved resources
+router.get('/resources', (req, res) => {
+  const id = req.session.user_id;
+  if(id) {
+    const response = {};
+    resourceQueries.getResourcesByUser(id)
+    .then((resources) => {
+      response.ownedResources = resources;
+      return resourceQueries.getResourcesByLiker(id);
+    })
+    .then((likedResources) => {
+      response.likedResources = likedResources;
+      res.send(response)
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+  } else {
+    res.status(404).send("must be logged in")
+  }
+})
 
 module.exports = router;
 
