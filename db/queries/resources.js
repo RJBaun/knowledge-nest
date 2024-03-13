@@ -15,7 +15,8 @@ const getResources = () => {
     JOIN categories ON categories.id = resources.category_id
     LEFT JOIN likes ON resources.id = likes.resource_id
     LEFT JOIN ratings ON resources.id = ratings.resource_id
-    GROUP BY resources.id, resource_types.icon_link, categories.name;`)
+    GROUP BY resources.id, resource_types.icon_link, categories.name
+    ORDER BY date_added;`)
     .then(data => {
       return data.rows;
     })
@@ -31,7 +32,14 @@ const getResources = () => {
  */
 const getResourceById = (id) => {
   return db
-    .query('SELECT * FROM resources WHERE id=$1;', [id])
+    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    JOIN resource_types ON resource_types.id = resources.resource_type_id
+    JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN likes ON resources.id = likes.resource_id
+    LEFT JOIN ratings ON resources.id = ratings.resource_id
+    WHERE resources.id=$1
+    GROUP BY resources.id,
+    resources.name, resources.url, resources.description, resources.owner_id, resources.category_id, resources.resource_type_id, resources.date_added, resource_types.icon_link, categories.name;`, [id])
     .then(data => {
       return data.rows[0];
     })

@@ -11,9 +11,12 @@ const db = require('../connection');
  */
 const getCommentsByResourceId = (resourceId) => {
   return db
-    .query(`SELECT * FROM comments
-    WHERE resource_id = $1;`, [resourceId])
+    .query(`SELECT comments.*, users.username AS commenter_name FROM comments
+    JOIN users ON comments.commenter_id = users.id
+    WHERE resource_id = $1
+    ORDER BY comments.post_date DESC;`, [resourceId])
     .then(data => {
+      console.log(data.rows)
       return data.rows;
     })
     .catch(err => {

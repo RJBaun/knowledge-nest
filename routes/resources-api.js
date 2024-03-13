@@ -14,6 +14,7 @@ const router  = express.Router();
 const resourceQueries = require('../db/queries/resources');
 const categoryQueries = require('../db/queries/categories');
 const resource_typeQueries = require('../db/queries/resource_types');
+const commentQueries = require('../db/queries/comments');
 
 //Route for all resources
 router.get('/', (req, res) => {
@@ -67,15 +68,21 @@ router.post('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+  response = {};
   resourceQueries.getResourceById(req.params.id)
   .then((resource) => {
-    res.send({ resource });
+    response.resource = resource;
+    return commentQueries.getCommentsByResourceId(req.params.id)
+  })
+  .then((comments) => {
+    response.comments = comments;
+    res.send(response);
   })
   .catch(err => {
     res
       .status(500)
       .json({ error: err.message });
   });
-})
+});
 
 module.exports = router;
