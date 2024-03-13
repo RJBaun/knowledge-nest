@@ -220,6 +220,70 @@ const deleteResourceFormMarkup = (resource) => {
 };
 
 
+// Star rating HTML
+// Modified from: https://codepen.io/ashdurham/pen/AVVGvP
+`      <span class="rating_stars rating_0">
+<span class='s' data-high='1'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+<span class='s' data-high='2'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+<span class='s' data-high='3'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+<span class='s' data-high='4'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+<span class='s' data-high='5'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+<span class='r r1' data-rating='1' data-value='1'></span>
+<span class='r r2' data-rating='2' data-value='2'></span>
+<span class='r r3' data-rating='3' data-value='3'></span>
+<span class='r r4' data-rating='4' data-value='4'></span>
+<span class='r r5' data-rating='5' data-value='5'></span>
+</span>
+
+<div class="values" hidden>
+<div>
+  <label>Rating</label><input type="text" id="rating" value="0" />
+</div>
+<div>
+  <label>Rating Value</label><input type="text" name="rating" id="rating_val" value="0" />
+</div>
+</div>
+
+<div class="info" hidden>
+<p>The above textboxes should be hidden fields, but have been made textboxes to display the values when you click.</p>
+<p>The 'Rating' value can be used for class/id based changes to this if wanting to use a background sprite to manage the stars instead.</p>
+</div>`
+
+// Modified from: https://codepen.io/ashdurham/pen/AVVGvP
+$(() => {
+  $('.rating_stars span.r').hover(function() {
+              // get hovered value
+              var rating = $(this).data('rating');
+              var value = $(this).data('value');
+              $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_'+rating);
+              highlight_star(value);
+          }, function() {
+              // get hidden field value
+              var rating = $("#rating").val();
+              var value = $("#rating_val").val();
+              $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_'+rating);
+              highlight_star(value);
+          }).click(function() {
+              // Set hidden field value
+              var value = $(this).data('value');
+              $("#rating_val").val(value);
+              var rating = $(this).data('rating');
+              $("#rating").val(rating);
+
+              highlight_star(value);
+          });
+
+          var highlight_star = function(rating) {
+              $('.rating_stars span.s').each(function() {
+                  var high = $(this).data('high');
+                  $(this).removeClass('active-high');
+                  if (rating >= high) $(this).addClass('active-high');
+              });
+          }
+  });
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Listeners
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +388,7 @@ $(() => {
     })
       .done((response) => {
         if(response.status === 401) {
-          console.log('responded', response); 
+          console.log('responded', response);
         } else {
            $.ajax({
           method: 'GET',
