@@ -13,7 +13,8 @@ const db = require('../connection');
 const createNewLike = (liker_id, resource_id) => {
   return db
     .query(`INSERT INTO likes (liker_id, resource_id)
-  VALUES (${liker_id}, ${resource_id}) RETURNING *;`)
+  VALUES ($1, $2)
+  RETURNING *;`, [liker_id, resource_id])
     .then(data => {
       return data.rows[0];
     })
@@ -31,9 +32,8 @@ const countLikes = (resource_id) => {
   return db
     .query(`SELECT count(likes.*) FROM LIKES
   RIGHT OUTER JOIN resources ON resource_id = resources.id
-  WHERE resources.id = ${resource_id}
-  GROUP BY resources.id;
-  `)
+  WHERE resources.id = $1
+  GROUP BY resources.id;`, [resource_id])
     .then(data => {
       return data.rows[0];
     })
