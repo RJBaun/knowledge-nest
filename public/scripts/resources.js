@@ -9,31 +9,38 @@
 
 // renders all resources on the webpage
 const renderResources = (response) => {
-  response.resources.forEach (resource => {
+  response.resources.forEach(resource => {
     $("#all-resources").prepend(createResourceMarkup(resource));
-  })
+  });
 };
 
 //Adds categories to the dropdown
 const showCategoryOptions = (response) => {
-  response.categories.forEach (category => {
+  response.categories.forEach(category => {
     $("#category-dropdown").append(categoryMarkup(category));
-  })
+  });
 };
 
 //Adds resource_types to the dropdown
 const showResourceTypeOptions = (response) => {
-  response.resource_types.forEach (resource_type => {
+  response.resource_types.forEach(resource_type => {
     $("#resource_type-dropdown").append(resourceTypeMarkup(resource_type));
-  })
+  });
 };
 
 // Renders comments for a single resource
 const renderComments = (comments) => {
-  comments.forEach ((comment) => {
-    $('#section-single-resource').append(commentMarkup(comment))
-  })
+  comments.forEach((comment) => {
+    $('#section-single-resource').append(commentMarkup(comment));
+  });
 };
+
+const renderResourcePage = (response) => {
+  pageCleanup();
+  $('#section-single-resource').append(singleResourceMarkup(response.resource));
+  $('#section-single-resource').append($commentForm);
+  renderComments(response.comments);
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,10 +49,10 @@ const renderComments = (comments) => {
 
 // generates resource card and returns it to be rendered, given a resource object input
 const createResourceMarkup = (resource) => {
-  if(!resource.avg_rating) {
-    resource_ratings = "No Ratings Yet"
+  if (!resource.avg_rating) {
+    resource_ratings = "No Ratings Yet";
   } else {
-    resource_ratings = `${resource.avg_rating}`
+    resource_ratings = `${resource.avg_rating}`;
   }
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
@@ -120,10 +127,10 @@ const resourceTypeMarkup = (resource_type) => {
 //creates markup for a single resource, called by submitting new resource, editting a resource, or clicking a resource
 const singleResourceMarkup = (resource) => {
   let resource_ratings;
-  if(!resource.avg_rating) {
-    resource_ratings = "No Ratings Yet"
+  if (!resource.avg_rating) {
+    resource_ratings = "No Ratings Yet";
   } else {
-    resource_ratings = `${resource.avg_rating}`
+    resource_ratings = `${resource.avg_rating}`;
   }
   const $singleResource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
@@ -136,17 +143,17 @@ const singleResourceMarkup = (resource) => {
     <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
     <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
       <div class="likes">
-      <p>${resource.count_likes}</p>
-      <i class="fa-solid fa-heart"></i>
+      <p>${resource.count_likes}
+      <i id="like-button" class="fa-solid fa-heart"></i></p>
     </div>
     <div class="ratings">
-      <p>${resource_ratings}</p>
-      <i class="fa-solid fa-star"></i>
+      <p>${resource_ratings}
+      <i id="rate-button" class="fa-solid fa-star"></i></p>
     </div>
     </footer>
   </section>
   </article>
-  `)
+  `);
   return $singleResource;
 };
 
@@ -224,15 +231,15 @@ $(() => {
       method: 'GET',
       url: '/api/resources'
     })
-    .done((response) => {
-      pageCleanup();
-      renderResources(response);
-      $('.resource-link').on('click', function() {
+      .done((response) => {
+        pageCleanup();
+        renderResources(response);
+        $('.resource-link').on('click', function() {
+        });
+      })
+      .catch((err) => {
+        console.log('err:', err);
       });
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    })
   });
 });
 
@@ -245,13 +252,13 @@ $(() => {
       method: 'GET',
       url: '/api/resources/new'
     })
-    .done((response) => {
-      showCategoryOptions(response);
-      showResourceTypeOptions(response);
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    })
+      .done((response) => {
+        showCategoryOptions(response);
+        showResourceTypeOptions(response);
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
   });
 });
 
@@ -272,21 +279,21 @@ $(() => {
       url: 'api/resources/',
       data: resource
     })
-    .done((data) => {
-      $.ajax({
-        method: 'GET',
-        url: `api/resources/${data.id}`,
+      .done((data) => {
+        $.ajax({
+          method: 'GET',
+          url: `api/resources/${data.id}`,
+        })
+          .done((response) => {
+            pageCleanup();
+            $('#section-single-resource').append(singleResourceMarkup(response.resource));
+            $('#section-single-resource').append($commentForm);
+            renderComments(response.comments);
+          });
       })
-      .done((response) => {
-        pageCleanup();
-        $('#section-single-resource').append(singleResourceMarkup(response.resource));
-        $('#section-single-resource').append($commentForm)
-        renderComments(response.comments);
+      .catch((err) => {
+        console.log('err:', err);
       });
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    })
   });
 });
 
@@ -298,14 +305,39 @@ $(() => {
       method: 'GET',
       url: `api/resources/${resourceId}`,
     })
-    .done((response) => {
-      pageCleanup();
-      $('#section-single-resource').append(singleResourceMarkup(response.resource));
-      $('#section-single-resource').append($commentForm)
-      renderComments(response.comments);
-    });
+      .done((response) => {
+        renderResourcePage(response);
+      });
   });
 });
+
+// On single resource page - on click of heart icon, save like and update page
+
+$(() => {
+  $('#section-single-resource').on('click', '#like-button', function() {
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const likeData = { resourceId: resourceId }
+    console.log('resource liked. Id is', resourceId);
+    $.ajax({
+      method: 'POST',
+      url: 'api/interacts/like',
+      data: likeData
+    })
+      .done((response) => {
+        console.log('responded', response);
+        $.ajax({
+          method: 'GET',
+          url: `api/resources/${resourceId}`,
+        })
+          .done((response) => {
+            renderResourcePage(response);
+          });
+      });
+  });
+});
+
+
+
 
 // listener for displaying form to edit resource when selected from single resource page
 $(() => {
@@ -317,13 +349,13 @@ $(() => {
       method: 'GET',
       url: `api/resources/${resourceId}/edit`,
     })
-    .done((response) => {
-      showCategoryOptions(response);
-      showResourceTypeOptions(response);
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    });
+      .done((response) => {
+        showCategoryOptions(response);
+        showResourceTypeOptions(response);
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
   });
 });
 
@@ -344,21 +376,21 @@ $(() => {
       url: 'api/resources/:id',
       data: resource
     })
-    .done((data) => {
-      $.ajax({
-        method: 'GET',
-        url: `api/resources/${data.id}`,
+      .done((data) => {
+        $.ajax({
+          method: 'GET',
+          url: `api/resources/${data.id}`,
+        })
+          .done((response) => {
+            pageCleanup();
+            $('#section-single-resource').append(singleResourceMarkup(response.resource));
+            $('#section-single-resource').append($commentForm);
+            renderComments(response.comments);
+          });
       })
-      .done((response) => {
-        pageCleanup();
-        $('#section-single-resource').append(singleResourceMarkup(response.resource));
-        $('#section-single-resource').append($commentForm)
-        renderComments(response.comments);
+      .catch((err) => {
+        console.log('err:', err);
       });
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    })
   });
 });
 
@@ -371,33 +403,33 @@ $(() => {
       method: 'GET',
       url: `api/resources/${resourceId}/delete`,
     })
-    .done((resource) => {
-      $('#section-delete-resource').append(deleteResourceFormMarkup(resource));
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    });
+      .done((resource) => {
+        $('#section-delete-resource').append(deleteResourceFormMarkup(resource));
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
   });
-})
+});
 
 // Listener for deleting a resource once confirmed
 $(() => {
   $(document).on('click', '#confirm-delete-resource', function() {
     const resourceId = $(this).siblings('span').attr('id');
-    console.log(resourceId)
+    console.log(resourceId);
     pageCleanup();
     $.ajax({
       method: 'POST',
       url: `api/resources/${resourceId}/delete`
     })
-    .done((resource) => {
+      .done((resource) => {
 
-    //Redirect to users resources
-      console.log(resource);
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    });
+        //Redirect to users resources
+        console.log(resource);
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
   });
 });
 
@@ -405,20 +437,20 @@ $(() => {
 $(() => {
   $(document).on('click', '#cancel-delete-resource', function() {
     const resourceId = $(this).siblings('span').attr('id');
-    console.log(resourceId)
+    console.log(resourceId);
     pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
     })
-    .done((response) => {
-      pageCleanup();
-      $('#section-single-resource').append(singleResourceMarkup(response.resource));
-      $('#section-single-resource').append($commentForm)
-      renderComments(response.comments);
-    })
-    .catch((err) => {
-      console.log('err:', err);
-    });
+      .done((response) => {
+        pageCleanup();
+        $('#section-single-resource').append(singleResourceMarkup(response.resource));
+        $('#section-single-resource').append($commentForm);
+        renderComments(response.comments);
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
   });
 });

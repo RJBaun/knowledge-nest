@@ -1,7 +1,7 @@
 /*
- * All routes for User Data are defined here
+ * All routes for Resource Data are defined here
  * Since this file is loaded in server.js into api/resources,
- *   these routes are mounted onto /api/users
+ *   these routes are mounted onto /api/resources
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
