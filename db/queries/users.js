@@ -113,13 +113,13 @@ const deleteUser = (userId) => {
     .then(data => {
       return data.rows[0];
     })
-    .then(() => {
-      return db
-        .query(`UPDATE resources
-        SET is_archived = true
-        WHERE owner_id = $1
-        RETURNING *;`, [userId]);
-    });
+    // .then(() => {
+    //   return db
+    //     .query(`UPDATE resources
+    //     SET is_archived = true
+    //     WHERE owner_id = $1
+    //     RETURNING *;`, [userId]);
+    // });
 };
 
 /**
