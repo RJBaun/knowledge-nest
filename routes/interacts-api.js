@@ -14,6 +14,7 @@ const express = require('express');
 const router = express.Router();
 const likeQueries = require('../db/queries/likes');
 const ratingQueries = require('../db/queries/ratings');
+const commentQueries = require('../db/queries/comments');
 
 
 /////////////////////////////////////
@@ -86,5 +87,32 @@ router.post('/rate', (req, res) => {
     });
 });
 
+/////////////////////////////////////
+// POST - from click on 'rating-stars' star
+//   -- Checks if user:
+//      -- is logged in (if not, returns message back to user)
+//      -- has rated the resource (if so, returns status 401)
+//   -- Then saves rating to ratings table
+
+router.post('/comment', (req, res) => {
+  const resource_id = req.body.resourceId;
+  const message = req.body.newComment[0].value;
+  const commenter_id = req.session.user_id;
+  const commentObj = { resource_id, message, commenter_id };
+
+  // if user not logged in, cannot comment on resource
+  if (commenter_id === undefined) {
+    res.status(401).json("Log in to comment on this resource.");
+  }
+
+  commentQueries.createNewComment(commentObj)
+    .then(savedComment => {
+      console.log('saved comment', savedComment);
+      res.send(savedComment);
+    })
+    .catch(err => {
+      res.status(500).json({ error: err.message });
+    });
+});
 
 module.exports = router;
