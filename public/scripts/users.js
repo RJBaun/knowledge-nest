@@ -66,14 +66,13 @@ $(() => {
 // ON 'My Resources' nav button click, load users owned and saved resources
 $(() => {
   $('#user-resources').on('click', () => {
-    pageCleanup();
     $.ajax({
       method: 'GET',
       url: 'api/users/resources'
     })
     .done((data) => {
-      $('#section-user-resources').append('<h1>My Nest</h1>');
-      $('#section-user-resources').append(userResourcesMarkup());
+      pageCleanup();
+      $('#section-user-resources').append(myResourcesShellMarkup());
       renderUserResources("#owned-resources-tab-pane", data.ownedResources);
       renderUserResources("#liked-resources-tab-pane", data.likedResources);
     })
@@ -355,11 +354,12 @@ const deleteUserProfileMarkup = () => {
 };
 
 /**
- * Users resources page HTML
+ * My Resources page shell HTML
  * @returns {string}
  */
-const userResourcesMarkup = () => {
-  const $userResources = $(`
+const myResourcesShellMarkup = () => {
+  const $myResourcesShell = $(`
+  <h1>My Nest</h1>
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="owned-resources-tab" data-bs-toggle="tab" data-bs-target="#owned-resources-tab-pane" type="button" role="tab" aria-controls="owned-resources-tab-pane" aria-selected="true">My Resources</button>
@@ -375,12 +375,7 @@ const userResourcesMarkup = () => {
     </article>
   </section>
   `);
-  return $userResources;
+  return $myResourcesShell;
 };
 
-// renders all owned resources on the users resource page
-const renderUserResources = (destination, resourceArr) => {
-  resourceArr.forEach (resource => {
-    $(destination).prepend(createResourceMarkup(resource));
-  })
-};
+
