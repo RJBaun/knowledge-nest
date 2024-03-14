@@ -249,7 +249,7 @@ const registrationPageMarkup = () => {
     <label for="register-password" class="form-label">Password</label>
     <input type="password" name="password" class="form-control" id="register-password">
   </div>
-  <button id="register-button" type="submit" class="btn btn-primary">Register</button>
+  <button id="register-button" type="submit" class="btn btn-success">Register</button>
 </form>`;
   return registrationPage;
 };
@@ -269,7 +269,7 @@ const loginPageMarkup = () => {
     <label for="login-password" class="form-label">Password</label>
     <input type="password" name="password" class="form-control" id="login-password">
   </div>
-  <button id="login-button" type="submit" class="btn btn-primary">Login</button>
+  <button id="login-button" type="submit" class="btn btn-success">Login</button>
 </form>`;
   return loginPage;
 };

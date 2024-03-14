@@ -5,6 +5,8 @@ $accent-brown: #D9C5B2;
 $accent-gray: #7E7F83;
 $white: #FFFFFF;
 $black: #071013;
+$dark-red: #C90404;
+$light-red: #FF0000;
 
 /* Font variables */
 $logo-font-family: "Angkor", serif;
@@ -17,7 +19,7 @@ body {
   align-items: center;
   min-height: 100vh;
 
-  background: $white;
+  background: $accent-brown;
 }
 
 nav {
@@ -26,6 +28,7 @@ nav {
   top: 0;
   background-color: $primary-green;
   color: $white;
+  border-bottom: 1px solid $black;
 
   .hidden {
     display: none;
@@ -80,10 +83,40 @@ main {
 
   margin-top: 100px;
 
+  .btn-success {
+    background-color: $secondary-green;
+    border-color: $secondary-green;
+  }
 
-    .card {
-      margin-top: 2vh;
-      position: static;
+  .btn-success:hover {
+    background-color: $primary-green;
+  }
+
+  .btn-danger {
+    background-color: $dark-red;
+    border-color: $dark-red;
+  }
+
+  .btn-danger:hover {
+    background-color: $light-red;
+  }
+
+  .card {
+    margin-top: 2vh;
+    position: static;
+
+    .btn-primary {
+      background-color: $secondary-green;
+      border-color: $secondary-green;
     }
+
+
+    .btn-primary:hover {
+      background-color: $primary-green;
+    }
+
+
+
+  }
 
 }

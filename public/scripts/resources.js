@@ -184,8 +184,8 @@ const resourceTypeMarkup = (resource_type) => {
 const singleResourceAppendixMarkup = () => {
   const $singleResource = $(`
     <div id="modify-resource-buttons">
-    <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
-    <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
+    <button type="button" id="edit-resource-button" class="btn btn-success btn-sm">Edit Resource</button>
+    <button type="button" id="delete-resource-button" class="btn btn-danger btn-sm">Delete Resource</button>
     <section id="rating-stars" style="color: red">
     <h3>Rate this resource!</h3>
     <p>Red rating stars if user hasn't rated yet (else green)</p>
@@ -218,7 +218,7 @@ const $commentForm = $(`
     <h2>Write A New Comment</h2>
     <label for="new-comment-message" class="form-label"></label>
     <textarea name="text" class="new-comment" id="new-comment-message" placeholder="New Comment"></textarea>
-    <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+    <button type="submit" class="btn btn-success btn-sm">Post Comment</button>
   </form>
 `);
 
@@ -242,8 +242,8 @@ const editResourceFormMarkup = (resource) => {
     <option selected>${resource.resource_type_name}</option>
   </select>
   <span id="${resource.id}" style="display: none;"></span>
-  <button type="submit" class="btn btn-primary" id="edit-resource">Submit</button>
-  <button type="button" class="btn btn-primary" id="back-to-resource">Cancel</button>
+  <button type="submit" class="btn btn-success" id="edit-resource">Submit</button>
+  <button type="button" class="btn btn-danger" id="back-to-resource">Cancel</button>
 </form>
   `);
   return $editResourceForm;
