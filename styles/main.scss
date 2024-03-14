@@ -42,8 +42,16 @@ nav {
     }
   }
 
-  .nav-link {
-    color: $white;
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    padding-right: 15px;
+
+    .nav-link {
+      color: $white;
+    }
+
   }
 }
 
