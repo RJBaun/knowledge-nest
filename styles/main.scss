@@ -19,13 +19,12 @@ body {
 
 nav {
   width: 100vw;
-  position: fixed;
+  position: sticky;
   top: 0;
 
   .hidden {
     display: none;
   }
-
 }
 
 .navbar {
@@ -39,4 +38,17 @@ nav {
 .me-auto {
   margin-right: 0 !important;
 }
+
+main {
+
+  margin-top: 100px;
+
+
+    .card {
+      margin-top: 2vh;
+      position: static
+    }
+
+}
+
 
