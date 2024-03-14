@@ -73,8 +73,8 @@ $(() => {
     .done((data) => {
       pageCleanup();
       $('#section-user-resources').append(myResourcesShellMarkup());
-      renderUserResources("#owned-resources-tab-pane", data.ownedResources);
-      renderUserResources("#liked-resources-tab-pane", data.likedResources);
+      renderResources("#owned-resources-tab-pane", data.ownedResources);
+      renderResources("#liked-resources-tab-pane", data.likedResources);
     })
   });
 });

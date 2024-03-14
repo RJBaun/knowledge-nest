@@ -7,17 +7,32 @@
 ///// Helper Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// load All Resources Page
-const loadAllResources = (response) =>{
-  renderUserResources("#all-resources",response.resources);
-}
+// load many resources in All-Resources section
+const loadAllResources = (response) => {
+  renderResources("#all-resources", response.resources);
+};
+
+// load single resource in Single-Resource section
+const loadSingleResource = (response) => {
+  renderSingleResource('#section-single-resource', response.resource);
+  $('#section-single-resource').find('#resource-link').append(singleResourceAppendixMarkup())
+  renderComments('#section-single-resource', response.comments);
+};
 
 // renders all resources in array at destination
-const renderUserResources = (destination, resourceArr) => {
-  resourceArr.forEach (resource => {
-    $(destination).prepend(createResourceMarkup(resource));
-  })
+const renderResources = (destination, resourceArr) => {
+  resourceArr.forEach(resource => {
+    $(destination).prepend(resourceMarkup(resource));
+  });
 };
+
+// renders single resource at destination
+const renderSingleResource = (destination, resource) => {
+  $(destination).prepend(resourceMarkup(resource));
+  $(destination).append($commentForm);
+};
+
+
 
 //Adds categories to the dropdown
 const showCategoryOptions = (response) => {
@@ -33,10 +48,10 @@ const showResourceTypeOptions = (response) => {
   });
 };
 
-// Renders comments for a single resource
-const renderComments = (comments) => {
+// Renders comments for a single resource at destination
+const renderComments = (destination, comments) => {
   comments.forEach((comment) => {
-    $('#section-single-resource').append(commentMarkup(comment));
+    $(destination).append(commentMarkup(comment));
   });
 };
 
@@ -48,11 +63,11 @@ const checkUserRated = ((response) => {
     url: `api/users/rated/${resource_id}`,
   })
     .done((response) => {
-      if(response) {
+      if (response) {
         $('#rating-stars').addClass('hidden');
       }
     });
-})
+});
 
 // renders specific resource page
 const renderResourcePage = (response) => {
@@ -60,9 +75,7 @@ const renderResourcePage = (response) => {
   checkUserRated(response);
   // empty sections, load page
   pageCleanup();
-  $('#section-single-resource').append(singleResourceMarkup(response.resource));
-  $('#section-single-resource').append($commentForm);
-  renderComments(response.comments);
+  loadSingleResource(response);
 };
 
 // checks if ratings exist, returns correct value depending
@@ -81,19 +94,30 @@ const checkRatingsExist = (avg_rating) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // generates resource card and returns it to be rendered, given a resource object input
-const createResourceMarkup = (resource) => {
+const resourceMarkup = (resource) => {
   const resource_ratings = checkRatingsExist(resource.avg_rating);
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
-  <i class=${resource.icon_link}></i>
-  <a href="${resource.url}" target="_blank" class="btn btn-primary">Launch In New Tab</a>
+  <a href="${resource.url}" class="btn btn-primary">Launch In New Tab</a>
   <section id="resource-link" class="card-body">
-    <h4 class="card-title">${resource.name}</h4>
-    <h6 class="card-owner">@${resource.owner_name}</h6>
+  <aside>
+  <i class=${resource.icon_link}></i>
+  </aside>
+  <header>
+  <h2 class="card-title">${resource.name}</h2>
+  <h3 class="card-owner">@${resource.owner_name}</h3>
+  <p>${timeago.format(resource.date_added)}</p>
+  </header>
     <p class="card-text">${resource.description}</p>
-    <footer class="resource-footer">
-      <span class="resource-category">#${resource.category_name}</span>
-      <span class="resource-likes-and-ratings">${resource.count_likes} Likes ${resource_ratings}</span>
+    <footer>
+    <p class="resource-category">#${resource.category_name}</p>
+    <div class="likes">
+    <p>${resource.count_likes}<i id="like-button" class="fa-solid fa-heart"></i></p>
+    </div>
+    <div class="ratings">
+    <p>${resource_ratings}<i class="fa-solid fa-star"></i></p>
+    </div>
+    </div>
     </footer>
   </section>
 </article>
@@ -148,30 +172,12 @@ const resourceTypeMarkup = (resource_type) => {
 };
 
 //creates markup for a single resource, called by submitting new resource, editting a resource, or clicking a resource
-const singleResourceMarkup = (resource) => {
-  const resource_ratings = checkRatingsExist(resource.avg_rating);
+const singleResourceAppendixMarkup = () => {
   const $singleResource = $(`
-  <article id="resource-${resource.id}" class="card" style="width: 90vw;">
-  <section id="single-resource" class="card-body">
-  <i class=${resource.icon_link}></i>
-  <a href="${resource.url}" class="btn btn-primary">Launch In New Tab</a>
-    <h2 class="card-title">${resource.name}</h2>
-    <h3 class="card-owner">@${resource.owner_name}</h3>
-    <p>${timeago.format(resource.date_added)}</p>
-    <p class="card-text">${resource.description}</p>
-    <footer>
-    <div class="likes">
-    <p>${resource.count_likes}<i id="like-button" class="fa-solid fa-heart"></i></p>
-    </div>
-    <div class="ratings">
-    <p>${resource_ratings}<i class="fa-solid fa-star"></i></p>
-    </div>
-    </footer>
     <div id="modify-resource-buttons">
     <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
     <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
-    </div>
-    <div id="rating-stars" style="color: red">
+    <section id="rating-stars" style="color: red">
     <h3>Rate this resource!</h3>
     <p>Red rating stars if user hasn't rated yet (else green)</p>
     <ol>
@@ -181,9 +187,7 @@ const singleResourceMarkup = (resource) => {
     <li><i id="4-star" class="fa-solid fa-star"></i></li>
     <li><i id="5-star" class="fa-solid fa-star"></i></li>
     </ol>
-    </div>
-  </section>
-  </article>
+    </section>
   `);
   return $singleResource;
 };
@@ -308,8 +312,6 @@ $(() => {
       .done((response) => {
         pageCleanup();
         loadAllResources(response);
-        $('.resource-link').on('click', function() {
-        });
       })
       .catch((err) => {
         console.log('err:', err);
@@ -390,7 +392,21 @@ $(() => {
 
 // Listener for displaying a single resource when selected from all resources
 $(() => {
-  $(document).on('click', '#resource-link', function() {
+  $('#all-resources').on('click', '#resource-link', function() {
+    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    $.ajax({
+      method: 'GET',
+      url: `api/resources/${resourceId}`,
+    })
+      .done((response) => {
+        renderResourcePage(response);
+      });
+  });
+});
+
+// Listener for displaying a single resource when selected from My Resources or Liked Resources
+$(() => {
+  $('#section-user-resources').on('click', '#resource-link', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     $.ajax({
       method: 'GET',
@@ -528,7 +544,6 @@ $(() => {
       });
   });
 });
-
 $(() => {
   $('#section-single-resource').on('click', '#3-star', function() {
     const rating = 3;
@@ -581,7 +596,6 @@ $(() => {
       });
   });
 });
-
 $(() => {
   $('#section-single-resource').on('click', '#5-star', function() {
     const rating = 5;
@@ -602,17 +616,13 @@ $(() => {
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-            console.log(response)
+              console.log(response);
               renderResourcePage(response);
             });
         }
       });
   });
 });
-
-
-
-
 
 // listener for displaying form to edit resource when selected from single resource page
 $(() => {
@@ -666,7 +676,6 @@ $(() => {
       });
   });
 });
-
 
 //Listener for cancelling resource edits from edit resource page
 $(() => {
