@@ -64,6 +64,7 @@ router.get('/recent', (req, res) => {
 // Route for submitting new resource
 router.post('/', (req, res) => {
   const resource = req.body;
+  resource.owner_id = req.session.user_id;
   categoryQueries.getCategoryIdByName(req.body.category_id)
     .then((category_id) => {
       resource.category_id = category_id.id.toString();

@@ -40,7 +40,7 @@ const loadForm = (destination, markup, response) => {
 // renders all resources in array at destination
 const renderResources = (destination, resourceArr) => {
   resourceArr.forEach(resource => {
-    $(destination).prepend(resourceMarkup(resource));
+    $(destination).append(resourceMarkup(resource));
   });
 };
 
@@ -91,7 +91,7 @@ const checkRatingsExist = (avg_rating) => {
   if (!avg_rating) {
     resource_ratings = "No Ratings Yet";
   } else {
-    resource_ratings = `${avg_rating} / 5 Stars`;
+    resource_ratings = avg_rating;
   };
   return resource_ratings;
 };
@@ -241,7 +241,7 @@ const editResourceFormMarkup = (resource) => {
   </select>
   <span id="${resource.id}" style="display: none;"></span>
   <button type="submit" class="btn btn-primary" id="edit-resource">Submit</button>
-  <button type="submit" class="btn btn-primary" id="back-to-resource">Cancel</button>
+  <button type="button" class="btn btn-primary" id="back-to-resource">Cancel</button>
 </form>
   `);
   return $editResourceForm;
@@ -250,12 +250,11 @@ const editResourceFormMarkup = (resource) => {
 // Creates markup to render edit resource page when called from single resource page
 const deleteResourceFormMarkup = (resource) => {
   const $deleteResourceForm = $(`
-  <form>
+  <form id="delete-${resource.id}">
   <h2>Are You Sure?</h2>
   <p>Deleting <span class="resource name">${resource.name}</span> will permanently remove it from Your Resources<p>
-  <span id="${resource.id}" style="display: none;"></span>
     <button type="submit" class="btn btn-danger" id="confirm-delete-resource">Delete</button>
-    <button type="submit" class="btn btn-primary" id="cancel-delete-resource">Cancel</button>
+    <button type="button" class="btn btn-primary" id="cancel-delete-resource">Cancel</button>
 </form>
   `);
   return $deleteResourceForm;
@@ -321,10 +320,7 @@ $(() => {
       url: '/api/resources/new'
     })
       .done((response) => {
-        pageCleanup();
-        $('#section-add-new-resource').append(newResourceFormMarkup());
-        showCategoryOptions(response);
-        showResourceTypeOptions(response);
+        loadForm('#section-add-new-resource', newResourceFormMarkup, response)
       })
       .catch((err) => {
         console.log('err:', err);
@@ -341,8 +337,7 @@ $(() => {
       name: $('#name-field').val(),
       description: $('#description-field').val(),
       category_id: $('#category-dropdown').val(),
-      resource_type_id: $('#resource_type-dropdown').val(),
-      owner_id: 1
+      resource_type_id: $('#resource_type-dropdown').val()
     };
     $.ajax({
       method: 'POST',
@@ -440,7 +435,6 @@ $(() => {
     const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
     const newComment = $(this).serializeArray();
     const commentLength = $(this)[0][0].value.trim().length;
-    console.log('commentLength', commentLength);
     const commentData = { resourceId, newComment };
 
     if (commentLength === 0) {
@@ -453,9 +447,7 @@ $(() => {
       })
         .done((response) => {
           if (response.status === 401) {
-            console.log('responded 401', response);
           } else {
-            console.log('responded', response);
             $.ajax({
               method: 'GET',
               url: `api/resources/${resourceId}`,
@@ -473,12 +465,6 @@ $(() => {
 
 
 // On single resource page - on click on star to save rating and update page
-
-$(() => {
-  $('#section-single-resource').on('click', '#rating-stars', function() {
-    $('#rating-stars').css('color', 'green');
-  });
-});
 
 $(() => {
   $('#section-single-resource').on('click', '#1-star', function() {
@@ -715,7 +701,8 @@ $(() => {
 //Listener for canceling delete resource
 $(() => {
   $(document).on('click', '#cancel-delete-resource', function() {
-    const resourceId = $(this).siblings('span').attr('id');
+    const resourceId = $(this).closest('form').attr('id').split('-')[1];
+    console.log(resourceId);
     pageCleanup();
     $.ajax({
       method: 'GET',

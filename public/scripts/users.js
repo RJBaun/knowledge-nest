@@ -13,27 +13,20 @@
 // On 'user-registration' nav button click, load registration page.
 $(() => {
   $('#user-register').on('click', () => {
-    // COLLAPSE nav bar
-    // EMPTY all sections
-    pageCleanup();
-    $(registrationPageMarkup()).appendTo('#section-registration-page');
+    renderUserPage('#section-registration-page', registrationPageMarkup);
   });
 });
 
 // On 'user-login' nav button click, load login page.
 $(() => {
   $('#user-login').on('click', () => {
-    // COLLAPSE nav bar
-    // EMPTY all sections
-    pageCleanup();
-    $(loginPageMarkup()).appendTo('#section-login-page');
+    renderUserPage('#section-login-page', loginPageMarkup);
   });
 });
 
 // On 'user-logout' nav button click, logout user (clear cookies) and redirect to main page.
 $(() => {
   $('#user-logout').on('click', () => {
-    // pageCleanup();
     $.ajax({
       method: 'GET',
       url: 'api/users/logout'
@@ -47,7 +40,6 @@ $(() => {
 // On 'user-profile' nav button click, load user profile page.
 $(() => {
   $('#user-profile').on('click', () => {
-    pageCleanup();
 
     $.ajax({
       method: 'GET',
@@ -57,7 +49,7 @@ $(() => {
         if (response === null) {
           console.log('user not logged in');
         } else {
-          $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+          loadUserProfile(response.user);
         }
       });
   });
@@ -70,12 +62,12 @@ $(() => {
       method: 'GET',
       url: 'api/users/resources'
     })
-    .done((data) => {
-      pageCleanup();
-      $('#section-user-resources').append(myResourcesShellMarkup());
-      renderResources("#owned-resources-tab-pane", data.ownedResources);
-      renderResources("#liked-resources-tab-pane", data.likedResources);
-    })
+      .done((data) => {
+        pageCleanup();
+        $('#section-user-resources').append(myResourcesShellMarkup());
+        renderResources("#owned-resources-tab-pane", data.ownedResources);
+        renderResources("#liked-resources-tab-pane", data.likedResources);
+      });
   });
 });
 
@@ -103,12 +95,9 @@ $(() => {
           url: 'api/users/id'
         })
           .done(response => {
-            pageCleanup();
-            $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+            loadUserProfile(response.user);
           });
       });
-
-
     event.preventDefault();
   });
 });
@@ -135,15 +124,12 @@ $(() => {
         } else if (response === 'email') {
           console.log('email does not exist');
         } else {
-          console.log('logged in', response);
-
           $.ajax({
             method: 'GET',
             url: 'api/users/id'
           })
             .done(response => {
-              pageCleanup();
-              $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+              loadUserProfile(response.user);
             });
         }
       });
@@ -166,8 +152,7 @@ $(() => {
       url: 'api/users/id'
     })
       .done(response => {
-        pageCleanup();
-        $(editUserProfileMarkup(response.user)).appendTo('#section-user-profile');
+        renderUserPage('#section-user-profile', editUserProfileMarkup, response.user);
       });
   });
 });
@@ -175,8 +160,7 @@ $(() => {
 // From User Profile Page, on 'user-delete-button' click, redirect to delete user profile page.
 $(() => {
   $('#section-user-profile').on('click', '#user-delete-button', () => {
-    pageCleanup();
-    $(deleteUserProfileMarkup()).appendTo('#section-user-profile');
+    renderUserPage('#section-user-profile', deleteUserProfileMarkup);
   });
 });
 
@@ -188,8 +172,7 @@ $(() => {
       url: 'api/users/id'
     })
       .done(response => {
-        pageCleanup();
-        $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+        loadUserProfile(response.user);
       });
   });
 });
@@ -207,8 +190,7 @@ $(() => {
       data: userData
     })
       .done(response => {
-        pageCleanup();
-        $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+        loadUserProfile(response.user);
       });
     event.preventDefault();
   });
@@ -222,13 +204,27 @@ $(() => {
       url: 'api/users/id/delete'
     })
       .done(response => {
-        pageCleanup();
-        console.log('deleted',response);
-        // $(userProfileMarkup(response.user)).appendTo('#section-user-profile');
+        location.reload();
       });
     event.preventDefault();
   });
 });
+
+
+
+
+///////////////////////////
+/// HELPER FUNCTIONS
+///////////////////////////
+
+const loadUserProfile = (user) => {
+  renderUserPage('#section-user-profile', userProfileMarkup, user);
+};
+
+const renderUserPage = (destination, markup, response) => {
+  pageCleanup();
+  $(markup(response)).appendTo(destination);
+};
 
 ///////////////////////////
 /// HTML FUNCTIONS
