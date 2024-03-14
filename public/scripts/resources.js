@@ -337,8 +337,7 @@ $(() => {
       name: $('#name-field').val(),
       description: $('#description-field').val(),
       category_id: $('#category-dropdown').val(),
-      resource_type_id: $('#resource_type-dropdown').val(),
-      owner_id: 1
+      resource_type_id: $('#resource_type-dropdown').val()
     };
     $.ajax({
       method: 'POST',
