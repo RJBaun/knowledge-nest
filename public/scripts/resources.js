@@ -256,7 +256,7 @@ const deleteResourceFormMarkup = (resource) => {
   <h2>Are You Sure?</h2>
   <p>Deleting <span class="resource name">${resource.name}</span> will permanently remove it from Your Resources<p>
     <button type="submit" class="btn btn-danger" id="confirm-delete-resource">Delete</button>
-    <button type="button" class="btn btn-primary" id="cancel-delete-resource">Cancel</button>
+    <button type="button" class="btn btn-success" id="cancel-delete-resource">Cancel</button>
 </form>
   `);
   return $deleteResourceForm;
