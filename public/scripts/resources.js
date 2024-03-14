@@ -25,6 +25,7 @@ const loadHomepage = (response) => {
 const loadSingleResource = (response) => {
   pageCleanup();
   checkUserRated(response);
+  checkUserOwnsResource(response);
   renderSingleResource('#section-single-resource', response.resource);
   renderComments('#section-single-resource', response.comments);
 };
@@ -80,6 +81,21 @@ const checkUserRated = ((response) => {
   })
     .done((response) => {
       if (response) {
+        $('#rating-stars').addClass('hidden');
+      }
+    });
+});
+
+// check if user owns resource. If so, shows edit/delete resource buttons.
+const checkUserOwnsResource = ((response) => {
+  const resource_id = response.resource.id;
+  $.ajax({
+    method: 'GET',
+    url: `api/resources/owner/${resource_id}`,
+  })
+    .done((response) => {
+      if (response) {
+        $('#modify-resource-buttons').find('button').removeClass('hidden');
         $('#rating-stars').addClass('hidden');
       }
     });
@@ -184,8 +200,8 @@ const resourceTypeMarkup = (resource_type) => {
 const singleResourceAppendixMarkup = () => {
   const $singleResource = $(`
     <div id="modify-resource-buttons">
-    <button type="button" id="edit-resource-button" class="btn btn-success btn-sm">Edit Resource</button>
-    <button type="button" id="delete-resource-button" class="btn btn-danger btn-sm">Delete Resource</button>
+    <button type="button" id="edit-resource-button" class="btn btn-success btn-sm hidden">Edit Resource</button>
+    <button type="button" id="delete-resource-button" class="btn btn-danger btn-sm hidden">Delete Resource</button>
     </div>
     <section id="rating-stars">
     <h3>Rate this resource!</h3>
@@ -322,7 +338,7 @@ $(() => {
       url: '/api/resources/new'
     })
       .done((response) => {
-        loadForm('#section-add-new-resource', newResourceFormMarkup, response)
+        loadForm('#section-add-new-resource', newResourceFormMarkup, response);
       })
       .catch((err) => {
         console.log('err:', err);

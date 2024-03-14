@@ -59,6 +59,24 @@ const getResourcesByUser = (id) => {
 };
 
 /**
+ * Check if user own the resource.
+ * @returns {Promise<{}|null>} Promise to resources.
+*/
+const checkUserOwnsResource = (user_id, resource_id) => {
+  return db
+    .query(`SELECT * FROM resources
+    WHERE id = $2
+    AND owner_id = $1;`, [user_id, resource_id])
+    .then(data => {
+      return data.rows[0];
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+
+/**
  * Get all liked resources data for a specific user
  * @returns {Promise<[{}]|null>} Promise to resources.
 */
@@ -215,4 +233,4 @@ const getRecentResources = (limit = 10) => {
     });
 };
 
-module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker };
+module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker,checkUserOwnsResource };

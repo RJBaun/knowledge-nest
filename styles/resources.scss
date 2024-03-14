@@ -69,6 +69,10 @@ article {
   justify-content: space-around;
   margin: 10px;
 
+  .hidden {
+    display:none;
+  }
+
   button {
     width: 30vw;
     height: 4em;

@@ -10,7 +10,7 @@
 // Purpose: All Routes relating to resources are defined here
 
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 const resourceQueries = require('../db/queries/resources');
 const categoryQueries = require('../db/queries/categories');
 const resource_typeQueries = require('../db/queries/resource_types');
@@ -82,24 +82,49 @@ router.post('/', (req, res) => {
     });
 });
 
+//
+router.get('/owner/:id', (req, res) => {
+  const owner_id = req.session.user_id;
+  const resource_id = req.params.id;
+
+  // if user not logged, return null
+  if (!owner_id) {
+    console.log('user logged out');
+    res.send(null);
+  } else {
+    // check if user owns resource. If no, return null, else return true.
+    resourceQueries.checkUserOwnsResource(owner_id, resource_id)
+      .then((resource) => {
+        if (!resource) {
+          res.send(null);
+        }
+        else if (resource) {
+          console.log('response true',response);
+          res.send(true);
+        }
+
+      });
+  }
+});
+
 
 // Route to render a single resource
 router.get('/:id', (req, res) => {
   response = {};
   resourceQueries.getResourceById(req.params.id)
-  .then((resource) => {
-    response.resource = resource;
-    return commentQueries.getCommentsByResourceId(req.params.id)
-  })
-  .then((comments) => {
-    response.comments = comments;
-    res.send(response);
-  })
-  .catch(err => {
-    res
-      .status(500)
-      .json({ error: err.message });
-  });
+    .then((resource) => {
+      response.resource = resource;
+      return commentQueries.getCommentsByResourceId(req.params.id);
+    })
+    .then((comments) => {
+      response.comments = comments;
+      res.send(response);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
 });
 
 // Route for rendering edit resource form
@@ -107,8 +132,8 @@ router.get('/:id/edit', (req, res) => {
   response = {};
   resourceQueries.getResourceById(req.params.id)
     .then((resource) => {
-    response.resource = resource;
-    return categoryQueries.getCategories()
+      response.resource = resource;
+      return categoryQueries.getCategories();
     })
     .then(categories => {
       response.categories = categories;
@@ -140,27 +165,27 @@ router.get('/:id/delete', (req, res) => {
 
 //Route for updating existing resource
 router.post('/:id', (req, res) => {
-    const resource = req.body;
-    categoryQueries.getCategoryIdByName(req.body.category_id)
-      .then((category_id) => {
-        resource.category_id = category_id.id.toString();
-        return resource_typeQueries.getResourceIdByName(req.body.resource_type_id);
-      })
-      .then((resource_type_id) => {
-        resource.resource_type_id = resource_type_id.id.toString();
-        return resourceQueries.updateResource(resource);
-      })
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send("Error creating resource: " + err.message);
-      });
+  const resource = req.body;
+  categoryQueries.getCategoryIdByName(req.body.category_id)
+    .then((category_id) => {
+      resource.category_id = category_id.id.toString();
+      return resource_typeQueries.getResourceIdByName(req.body.resource_type_id);
+    })
+    .then((resource_type_id) => {
+      resource.resource_type_id = resource_type_id.id.toString();
+      return resourceQueries.updateResource(resource);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send("Error creating resource: " + err.message);
+    });
 });
 
 //Route for Archiving/Deleting a resource
 router.post('/:id/delete', (req, res) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   resourceQueries.archiveResource(req.params.id)
     .then((data) => {
       res.send(data);

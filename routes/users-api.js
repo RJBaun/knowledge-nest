@@ -155,7 +155,6 @@ router.get('/rated/:id', (req, res) => {
 
   // if user not logged, return null
   if (!rater_id) {
-    console.log('user logged out');
     res.send(null)
   } else {
       // check if user has rated resource. If no, return null, else return true.
@@ -164,11 +163,9 @@ router.get('/rated/:id', (req, res) => {
     console.log('rating is?', rating);
     // if rating is null, it doesn't exist and user can rate resource
     if (!rating) {
-      console.log('rating doesnt exist');
       res.send(null);
     }
     else if (rating) {
-      console.log('rating exists');
       res.send(true);
     }
   })
