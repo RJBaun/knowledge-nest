@@ -33,6 +33,7 @@ $(() => {
     })
       .done(() => {
         pageCleanup();
+        location.reload();
       });
   });
 });
