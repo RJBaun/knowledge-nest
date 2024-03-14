@@ -105,7 +105,7 @@ const resourceMarkup = (resource) => {
   const resource_ratings = checkRatingsExist(resource.avg_rating);
   const $resource = $(`
   <article id="resource-${resource.id}" class="card"">
-  <a href="${resource.url}" class="btn btn-primary">Launch In New Tab</a>
+  <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Launch In New Tab</a>
   <section id="resource-link" class="card-body">
   <aside>
   <i class=${resource.icon_link}></i>
