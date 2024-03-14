@@ -40,7 +40,7 @@ const loadForm = (destination, markup, response) => {
 // renders all resources in array at destination
 const renderResources = (destination, resourceArr) => {
   resourceArr.forEach(resource => {
-    $(destination).prepend(resourceMarkup(resource));
+    $(destination).append(resourceMarkup(resource));
   });
 };
 
@@ -337,8 +337,7 @@ $(() => {
       name: $('#name-field').val(),
       description: $('#description-field').val(),
       category_id: $('#category-dropdown').val(),
-      resource_type_id: $('#resource_type-dropdown').val(),
-      owner_id: 1
+      resource_type_id: $('#resource_type-dropdown').val()
     };
     $.ajax({
       method: 'POST',
