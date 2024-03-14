@@ -110,22 +110,24 @@ const resourceMarkup = (resource) => {
   <aside>
   <i class=${resource.icon_link}></i>
   </aside>
+  <div id="cardbody">
   <header>
   <h2 class="card-title">${resource.name}</h2>
+  <div>
   <h3 class="card-owner">@${resource.owner_name}</h3>
   <p>${timeago.format(resource.date_added)}</p>
+  </div>
   </header>
     <p class="card-text">${resource.description}</p>
     <footer>
     <p class="resource-category">#${resource.category_name}</p>
-    <div class="likes">
+
+    <div class="likes-ratings">
     <p>${resource.count_likes}<i id="like-button" class="fa-solid fa-heart"></i></p>
-    </div>
-    <div class="ratings">
     <p>${resource_ratings}<i class="fa-solid fa-star"></i></p>
     </div>
-    </div>
     </footer>
+    </div>
   </section>
 </article>
   `);

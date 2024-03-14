@@ -1,7 +1,70 @@
 .card {
   width: 90vw;
-  display: flex;
-  
+
+  section {
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-between;
+
+    aside {
+      width: 10vw;
+      margin: 1vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: clamp(0.5rem, 10vw, 20vw);
+      background-color: green
+    }
+
+
+
+    #cardbody {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 9;
+      // align-items: center;
+
+      header {
+        display: flex;
+        flex-direction: column;
+
+        .card-title {
+          align-self: center;
+        }
+      }
+
+
+
+      div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+    }
+
+    p {
+      padding: 1vw;
+    }
+
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-content:flex-end;
+
+      i {
+        padding:.25vw;
+      }
+
+
+
+
+    }
+  }
+
+
+
 
 }
 
@@ -9,6 +72,6 @@
 
 
 
-#rating-stars.hidden{
+#rating-stars.hidden {
   display: none
 }
