@@ -222,7 +222,10 @@ const commentMarkup = (comment) => {
   const $comment = $(`
   <section class="comment">
   <p class="comment-message">${comment.message}</p>
-  <footer>Posted By: ${comment.commenter_name} Date Posted: ${timeago.format(comment.post_date)}</footer>
+  <footer>
+  <span>${comment.commenter_name}</span>
+  <time>${timeago.format(comment.post_date)}</time>
+  </footer>
   </section>
   `);
   return $comment;
