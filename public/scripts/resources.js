@@ -9,14 +9,32 @@
 
 // load many resources in All-Resources section
 const loadAllResources = (response) => {
+  pageCleanup();
   renderResources("#all-resources", response.resources);
+  $('#all-resources').prepend($(`<h1>Grow Your Nest</h1>`));
+};
+
+// load homepage
+const loadHomepage = (response) => {
+  pageCleanup();
+  renderResources("#all-resources", response.resources);
+  $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
 };
 
 // load single resource in Single-Resource section
 const loadSingleResource = (response) => {
+  pageCleanup();
+  checkUserRated(response);
   renderSingleResource('#section-single-resource', response.resource);
-  $('#section-single-resource').find('#resource-link').append(singleResourceAppendixMarkup())
+  $('#section-single-resource').find('#resource-link').append(singleResourceAppendixMarkup());
   renderComments('#section-single-resource', response.comments);
+};
+
+const loadForm = (destination, markup, response) => {
+  pageCleanup();
+  $(destination).append(markup(response.resource));
+  showCategoryOptions(response);
+  showResourceTypeOptions(response);
 };
 
 // renders all resources in array at destination
@@ -31,8 +49,6 @@ const renderSingleResource = (destination, resource) => {
   $(destination).prepend(resourceMarkup(resource));
   $(destination).append($commentForm);
 };
-
-
 
 //Adds categories to the dropdown
 const showCategoryOptions = (response) => {
@@ -68,15 +84,6 @@ const checkUserRated = ((response) => {
       }
     });
 });
-
-// renders specific resource page
-const renderResourcePage = (response) => {
-  // Check if user has already rated resource, if yes hide 'rate this' section.
-  checkUserRated(response);
-  // empty sections, load page
-  pageCleanup();
-  loadSingleResource(response);
-};
 
 // checks if ratings exist, returns correct value depending
 const checkRatingsExist = (avg_rating) => {
@@ -240,7 +247,6 @@ const editResourceFormMarkup = (resource) => {
   return $editResourceForm;
 };
 
-
 // Creates markup to render edit resource page when called from single resource page
 const deleteResourceFormMarkup = (resource) => {
   const $deleteResourceForm = $(`
@@ -254,12 +260,6 @@ const deleteResourceFormMarkup = (resource) => {
   return $deleteResourceForm;
 };
 
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Listeners
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,16 +272,13 @@ $(() => {
       url: 'api/resources/recent',
     })
       .done((response) => {
-        pageCleanup();
-        loadAllResources(response);
-        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+        loadHomepage(response);
       })
       .catch((err) => {
         console.log('err:', err);
       });
   });
 });
-
 
 // 'Homepage' -- Load 10 most recent resources on first page load and full reload
 $(() => {
@@ -291,9 +288,7 @@ $(() => {
       url: 'api/resources/recent',
     })
       .done((response) => {
-        pageCleanup();
-        loadAllResources(response);
-        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+        loadHomepage(response);
       })
       .catch((err) => {
         console.log('err:', err);
@@ -309,7 +304,6 @@ $(() => {
       url: '/api/resources'
     })
       .done((response) => {
-        pageCleanup();
         loadAllResources(response);
       })
       .catch((err) => {
@@ -321,13 +315,13 @@ $(() => {
 //Listener for "Add Resource" that displays creation form when clicked from the nav bar
 $(() => {
   $('#show-new-resource-form').on('click', () => {
-    pageCleanup();
-    $('#section-add-new-resource').append(newResourceFormMarkup());
     $.ajax({
       method: 'GET',
       url: '/api/resources/new'
     })
       .done((response) => {
+        pageCleanup();
+        $('#section-add-new-resource').append(newResourceFormMarkup());
         showCategoryOptions(response);
         showResourceTypeOptions(response);
       })
@@ -360,7 +354,7 @@ $(() => {
           url: `api/resources/${data.id}`,
         })
           .done((response) => {
-            renderResourcePage(response)
+            loadSingleResource(response);
           });
       })
       .catch((err) => {
@@ -377,7 +371,6 @@ $(() => {
       url: `api/resources/recent`
     })
       .done((response) => {
-        pageCleanup();
         loadAllResources(response);
       })
       .catch((err) => {
@@ -395,7 +388,7 @@ $(() => {
       url: `api/resources/${resourceId}`,
     })
       .done((response) => {
-        renderResourcePage(response);
+        loadSingleResource(response);
       });
   });
 });
@@ -409,7 +402,7 @@ $(() => {
       url: `api/resources/${resourceId}`,
     })
       .done((response) => {
-        renderResourcePage(response);
+        loadSingleResource(response);
       });
   });
 });
@@ -427,14 +420,13 @@ $(() => {
     })
       .done((response) => {
         if (response.status === 401) {
-          console.log('responded', response);
         } else {
           $.ajax({
             method: 'GET',
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-              renderResourcePage(response);
+              loadSingleResource(response);
             });
         }
       });
@@ -469,7 +461,7 @@ $(() => {
             })
               .done((response) => {
                 $(this).trigger('reset');
-                renderResourcePage(response);
+                loadSingleResource(response);
               });
           }
         });
@@ -492,7 +484,6 @@ $(() => {
     const rating = 1;
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
-    console.log('rating is', rating);
     $.ajax({
       method: 'POST',
       url: 'api/interacts/rate',
@@ -500,14 +491,13 @@ $(() => {
     })
       .done((response) => {
         if (response.status === 401) {
-          console.log('responded', response);
         } else {
           $.ajax({
             method: 'GET',
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-              renderResourcePage(response);
+              loadSingleResource(response);
             });
         }
       });
@@ -519,7 +509,6 @@ $(() => {
     const rating = 2;
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
-    console.log('rating is', rating);
     $.ajax({
       method: 'POST',
       url: 'api/interacts/rate',
@@ -527,14 +516,13 @@ $(() => {
     })
       .done((response) => {
         if (response.status === 401) {
-          console.log('responded', response);
         } else {
           $.ajax({
             method: 'GET',
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-              renderResourcePage(response);
+              loadSingleResource(response);
             });
         }
       });
@@ -545,7 +533,6 @@ $(() => {
     const rating = 3;
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
-    console.log('rating is', rating);
     $.ajax({
       method: 'POST',
       url: 'api/interacts/rate',
@@ -553,14 +540,13 @@ $(() => {
     })
       .done((response) => {
         if (response.status === 401) {
-          console.log('responded', response);
         } else {
           $.ajax({
             method: 'GET',
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-              renderResourcePage(response);
+              loadSingleResource(response);
             });
         }
       });
@@ -571,7 +557,6 @@ $(() => {
     const rating = 4;
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
-    console.log('rating is', rating);
     $.ajax({
       method: 'POST',
       url: 'api/interacts/rate',
@@ -579,14 +564,13 @@ $(() => {
     })
       .done((response) => {
         if (response.status === 401) {
-          console.log('responded', response);
         } else {
           $.ajax({
             method: 'GET',
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-              renderResourcePage(response);
+              loadSingleResource(response);
             });
         }
       });
@@ -597,7 +581,6 @@ $(() => {
     const rating = 5;
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
-    console.log('rating is', rating);
     $.ajax({
       method: 'POST',
       url: 'api/interacts/rate',
@@ -605,15 +588,13 @@ $(() => {
     })
       .done((response) => {
         if (response.status === 401) {
-          console.log('responded', response);
         } else {
           $.ajax({
             method: 'GET',
             url: `api/resources/${resourceId}`,
           })
             .done((response) => {
-              console.log(response);
-              renderResourcePage(response);
+              loadSingleResource(response);
             });
         }
       });
@@ -624,15 +605,12 @@ $(() => {
 $(() => {
   $(document).on('click', '#edit-resource-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}/edit`,
     })
       .done((response) => {
-        $('#section-edit-resource').append(editResourceFormMarkup(response.resource));
-        showCategoryOptions(response);
-        showResourceTypeOptions(response);
+        loadForm('#section-edit-resource', editResourceFormMarkup, response);
       })
       .catch((err) => {
         console.log('err:', err);
@@ -663,8 +641,7 @@ $(() => {
           url: `api/resources/${data.id}`,
         })
           .done((response) => {
-            pageCleanup();
-            renderResourcePage(response);
+            loadSingleResource(response);
           });
       })
       .catch((err) => {
@@ -677,15 +654,12 @@ $(() => {
 $(() => {
   $(document).on('click', '#back-to-resource', function() {
     const resourceId = $(this).siblings('span').attr('id');
-    console.log(resourceId);
-    pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
     })
       .done((response) => {
-        pageCleanup();
-        renderResourcePage(response);
+        loadSingleResource(response);
       })
       .catch((err) => {
         console.log('err:', err);
@@ -697,12 +671,12 @@ $(() => {
 $(() => {
   $(document).on('click', '#delete-resource-button', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}/delete`,
     })
       .done((resource) => {
+        pageCleanup();
         $('#section-delete-resource').append(deleteResourceFormMarkup(resource));
       })
       .catch((err) => {
@@ -714,19 +688,25 @@ $(() => {
 // Listener for deleting a resource once confirmed
 $(() => {
   $(document).on('click', '#confirm-delete-resource', function() {
-    const resourceId = $(this).closest('form').attr('id').split('-')[1];
-    pageCleanup();
+    const resourceId = $(this).siblings('span').attr('id');
     $.ajax({
       method: 'POST',
       url: `api/resources/${resourceId}/delete`
     })
       .done((resource) => {
-
-        //Redirect to users resources
-        console.log(resource);
-      })
-      .catch((err) => {
-        console.log('err:', err);
+        $.ajax({
+          method: 'GET',
+          url: 'api/users/resources'
+        })
+          .done((response) => {
+            pageCleanup();
+            $('#section-user-resources').append(myResourcesShellMarkup());
+            renderResources("#owned-resources-tab-pane", response.ownedResources);
+            renderResources("#liked-resources-tab-pane", response.likedResources);
+          })
+          .catch((err) => {
+            console.log('err:', err);
+          });
       });
   });
 });
@@ -735,15 +715,14 @@ $(() => {
 $(() => {
   $(document).on('click', '#cancel-delete-resource', function() {
     const resourceId = $(this).closest('form').attr('id').split('-')[1];
-    console.log(resourceId)
+    console.log(resourceId);
     pageCleanup();
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
     })
       .done((response) => {
-        pageCleanup();
-        renderResourcePage(response);
+        loadSingleResource(response);
       })
       .catch((err) => {
         console.log('err:', err);
