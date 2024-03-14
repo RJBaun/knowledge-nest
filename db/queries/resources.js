@@ -40,14 +40,15 @@ const getResources = () => {
 */
 const getResourcesByUser = (id) => {
   return db
-    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating, users.username AS owner_name FROM resources
     JOIN resource_types ON resource_types.id = resources.resource_type_id
     JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN users ON resources.owner_id = users.id
     LEFT JOIN likes ON resources.id = likes.resource_id
     LEFT JOIN ratings ON resources.id = ratings.resource_id
     WHERE resources.is_archived = false
     AND owner_id = $1
-    GROUP BY resources.id, resource_types.icon_link, categories.name
+    GROUP BY resources.id, resource_types.icon_link, categories.name, users.username
     ORDER BY date_added DESC;`, [id])
     .then(data => {
       return data.rows;
@@ -63,14 +64,15 @@ const getResourcesByUser = (id) => {
 */
 const getResourcesByLiker = (id) => {
   return db
-    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    .query(`SELECT resources.*, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating, users.username AS owner_name FROM resources
     JOIN resource_types ON resource_types.id = resources.resource_type_id
     JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN users ON resources.owner_id = users.id
     LEFT JOIN likes ON resources.id = likes.resource_id
     LEFT JOIN ratings ON resources.id = ratings.resource_id
     WHERE resources.is_archived = false
     AND liker_id = $1
-    GROUP BY resources.id, resource_types.icon_link, categories.name
+    GROUP BY resources.id, resource_types.icon_link, categories.name, users.username
     ORDER BY date_added DESC;`, [id])
     .then(data => {
       return data.rows;
