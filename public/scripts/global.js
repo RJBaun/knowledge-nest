@@ -1,4 +1,6 @@
-
+// Created by Victoria Lane
+// Created March 12, 2024
+// Purpose: General helper functions
 
 
 const pageCleanup = () => {
@@ -32,40 +34,4 @@ const pageCleanup = () => {
       }
     });
 };
-
-// Placeholder until markup is updated - will 'load' homepage on nav bar logo click
-$(() => {
-  $('.navbar-brand').on('click', function() {
-    $.ajax({
-      method: 'GET',
-      url: 'api/resources/recent',
-    })
-      .done((response) => {
-        pageCleanup();
-        renderResources(response);
-        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
-      })
-      .catch((err) => {
-        console.log('err:', err);
-      });
-  });
-});
-
-$(() => {
-  $(document).ready(function() {
-    $.ajax({
-      method: 'GET',
-      url: 'api/resources/recent',
-    })
-      .done((response) => {
-        pageCleanup();
-        renderResources(response);
-        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
-      })
-      .catch((err) => {
-        console.log('err:', err);
-      });
-  });
-});
-
 
