@@ -1,9 +1,13 @@
-$primary-green: #036016;
-$secondary-green: #63C132;
+/* color variables */
+$primary-green: #63C132;
+$secondary-green: #036016;
 $accent-brown: #D9C5B2;
 $accent-gray: #7E7F83;
 $white: #FFFFFF;
 $black: #071013;
+
+/* Font variables */
+$logo-font-family: "Angkor", serif;
 
 
 body {
@@ -28,7 +32,7 @@ nav {
   }
 
   .navbar-brand {
-    font-family: "Angkor", serif;
+    font-family: $logo-font-family;
     font-weight: 400;
     font-style: normal;
     color: $white;
@@ -37,10 +41,23 @@ nav {
       font-size: 30px;
     }
   }
+
+  .nav-link {
+    color: $white;
+  }
 }
 
 .navbar {
   position:fixed;
+  color: $white;
+
+  .navbar-toggler {
+    border: 2px solid $white;
+  }
+
+  .fa-solid {
+    color: $white;
+  }
 }
 
 .navbar-collapse {
@@ -59,7 +76,6 @@ main {
     .card {
       margin-top: 2vh;
       position: static;
-      border: 3px solid $secondary-green;
     }
 
 }
