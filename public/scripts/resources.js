@@ -114,7 +114,8 @@ const newResourceFormMarkup = () => {
   <select class="form-select" id="resource_type-dropdown">
     <option selected>Resource Type</option>
   </select>
-  <button type="submit" class="btn btn-primary" id="submit-new-resource">Submit</button>
+  <button type="submit" class="btn btn-success" id="submit-new-resource">Submit</button>
+  <button type="button" class="btn btn-danger">Cancel</button>
 </form>
   `);
   return $resourceForm;
@@ -323,6 +324,8 @@ $(() => {
       });
   });
 });
+
+
 
 // Listener for displaying a single resource when selected from all resources
 $(() => {
