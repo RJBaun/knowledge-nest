@@ -84,7 +84,7 @@ const checkRatingsExist = (avg_rating) => {
   if (!avg_rating) {
     resource_ratings = "No Ratings Yet";
   } else {
-    resource_ratings = `${avg_rating} / 5 Stars`;
+    resource_ratings = avg_rating;
   };
   return resource_ratings;
 };
@@ -234,7 +234,7 @@ const editResourceFormMarkup = (resource) => {
   </select>
   <span id="${resource.id}" style="display: none;"></span>
   <button type="submit" class="btn btn-primary" id="edit-resource">Submit</button>
-  <button type="submit" class="btn btn-primary" id="back-to-resource">Cancel</button>
+  <button type="button" class="btn btn-primary" id="back-to-resource">Cancel</button>
 </form>
   `);
   return $editResourceForm;
@@ -244,12 +244,11 @@ const editResourceFormMarkup = (resource) => {
 // Creates markup to render edit resource page when called from single resource page
 const deleteResourceFormMarkup = (resource) => {
   const $deleteResourceForm = $(`
-  <form>
+  <form id="delete-${resource.id}">
   <h2>Are You Sure?</h2>
   <p>Deleting <span class="resource name">${resource.name}</span> will permanently remove it from Your Resources<p>
-  <span id="${resource.id}" style="display: none;"></span>
     <button type="submit" class="btn btn-danger" id="confirm-delete-resource">Delete</button>
-    <button type="submit" class="btn btn-primary" id="cancel-delete-resource">Cancel</button>
+    <button type="button" class="btn btn-primary" id="cancel-delete-resource">Cancel</button>
 </form>
   `);
   return $deleteResourceForm;
@@ -361,10 +360,7 @@ $(() => {
           url: `api/resources/${data.id}`,
         })
           .done((response) => {
-            pageCleanup();
-            $('#section-single-resource').append(singleResourceMarkup(response.resource));
-            $('#section-single-resource').append($commentForm);
-            renderComments(response.comments);
+            renderResourcePage(response)
           });
       })
       .catch((err) => {
@@ -718,8 +714,7 @@ $(() => {
 // Listener for deleting a resource once confirmed
 $(() => {
   $(document).on('click', '#confirm-delete-resource', function() {
-    const resourceId = $(this).siblings('span').attr('id');
-    console.log(resourceId);
+    const resourceId = $(this).closest('form').attr('id').split('-')[1];
     pageCleanup();
     $.ajax({
       method: 'POST',
@@ -739,7 +734,8 @@ $(() => {
 //Listener for canceling delete resource
 $(() => {
   $(document).on('click', '#cancel-delete-resource', function() {
-    const resourceId = $(this).siblings('span').attr('id');
+    const resourceId = $(this).closest('form').attr('id').split('-')[1];
+    console.log(resourceId)
     pageCleanup();
     $.ajax({
       method: 'GET',
