@@ -36,6 +36,19 @@ const renderComments = (comments) => {
 };
 
 const renderResourcePage = (response) => {
+  // Check if user has already rated resource, if yes hide 'rate this' section.
+  const resource_id = response.resource.id;
+  $.ajax({
+    method: 'GET',
+    url: `api/users/rated/${resource_id}`,
+  })
+    .done((response) => {
+      if(response) {
+        console.log('rating exists');
+        $('#rating-stars').addClass('hidden');
+      }
+    });
+  // empty sections, load page
   pageCleanup();
   $('#section-single-resource').append(singleResourceMarkup(response.resource));
   $('#section-single-resource').append($commentForm);
@@ -147,7 +160,7 @@ const singleResourceMarkup = (resource) => {
       <p>${resource_ratings}
       <i class="fa-solid fa-star"></i></p>
       </div>
-      <div id="rating-stars" style="color: red">
+    <div id="rating-stars" style="color: red">
       <h3>Rate this resource!</h3>
       <p>Red rating stars if user hasn't rated yet (else green)</p>
       <ol>
@@ -361,7 +374,7 @@ $(() => {
     const commentLength = $(this)[0][0].value.trim().length;
     console.log('commentLength', commentLength);
     const commentData = { resourceId, newComment };
-    
+
     if (commentLength === 0) {
       //add logic for error message to user
     } else {

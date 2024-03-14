@@ -9,6 +9,7 @@ const express = require('express');
 const router = express.Router();
 const userQueries = require('../db/queries/users');
 const resourceQueries = require('../db/queries/resources');
+const ratingQueries = require('../db/queries/ratings');
 const bcrypt = require('bcryptjs');
 
 router.get('/', (req, res) => {
@@ -70,7 +71,6 @@ router.get('/logout', (req, res) => {
 
 // Checks if user is logged in, returns true or false.
 router.get('/active', (req,res) => {
-  console.log('in active');
   const user_id = req.session.user_id;
   if (!user_id) {res.send(false)}
   if (user_id) {res.send(true)}
@@ -146,6 +146,38 @@ router.get('/resources', (req, res) => {
     res.status(404).send("must be logged in")
   }
 })
+
+// Checks if user is logged in and has rated this resource
+router.get('/rated/:id', (req, res) => {
+  const rater_id = req.session.user_id;
+  const resource_id = req.params.id;
+  const ratingObj = {rater_id, resource_id}
+
+  // if user not logged, return null
+  if (!rater_id) {
+    console.log('user logged out');
+    res.send(null)
+  } else {
+      // check if user has rated resource. If no, return null, else return true.
+  ratingQueries.findRatingByRaterIdAndResourceId(ratingObj)
+  .then((rating) => {
+    console.log('rating is?', rating);
+    // if rating is null, it doesn't exist and user can rate resource
+    if (!rating) {
+      console.log('rating doesnt exist');
+      res.send(null);
+    }
+    else if (rating) {
+      console.log('rating exists');
+      res.send(true);
+    }
+  })
+
+
+  }
+
+})
+
 
 module.exports = router;
 
