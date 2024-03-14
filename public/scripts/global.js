@@ -2,8 +2,9 @@
 
 
 const pageCleanup = () => {
-  $("#navbarTogglerDemo02").collapse('hide')
+  $("#navbarTogglerDemo02").collapse('hide');
 
+  // empty all sections on index.html
   $("#all-resources").empty();
   $("#recent-resources").empty();
   $('#section-registration-page').empty();
@@ -15,26 +16,35 @@ const pageCleanup = () => {
   $('#section-edit-resource').empty();
   $('#section-delete-resource').empty();
 
-  // check if user is logged in
+  // check if user is logged in, update nav bar
   $.ajax({
     method: 'GET',
     url: 'api/users/active'
   })
-  .done((response) => {
-    console.log('userid?', response);
-
-    if(response) {
-      console.log('user logged in');
-      $('.nav-user-only').removeClass('hidden')
-      $('.nav-no-user-only').addClass('hidden')
-
-    }
-    if(!response) {
-      console.log('user NOT logged in');
-      $('.nav-user-only').addClass('hidden')
-      $('.nav-no-user-only').removeClass('hidden')
-    }
-
-  })
+    .done((response) => {
+      if (response) {
+        $('.nav-user-only').removeClass('hidden');
+        $('.nav-no-user-only').addClass('hidden');
+      }
+      if (!response) {
+        $('.nav-user-only').addClass('hidden');
+        $('.nav-no-user-only').removeClass('hidden');
+      }
+    });
 };
+
+// Placeholder until markup is updated - will 'load' homepage on nav bar logo click
+$(() => {
+  $('.navbar-brand').on('click', function() {
+    $.ajax({
+      method: 'GET',
+      url: 'api/resources/recent',
+    })
+      .done((response) => {
+        console.log(response);
+        // load recent resources via render resource elements
+      });
+  });
+});
+
 

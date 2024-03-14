@@ -48,6 +48,20 @@ router.get('/new', (req, res) => {
     });
 });
 
+// Get recent resources for homepage
+router.get('/recent', (req, res) => {
+  // insert get recent resources query
+    // .then(resources => {
+    //   res.send({ resources });
+    // })
+    // .catch(err => {
+    //   res
+    //     .status(500)
+    //     .json({ error: err.message });
+    // });
+    res.send('here are the resources to load')
+});
+
 // Route for submitting new resource
 router.post('/', (req, res) => {
   const resource = req.body;
