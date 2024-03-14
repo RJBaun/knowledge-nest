@@ -76,7 +76,7 @@ const createResourceMarkup = (resource) => {
   const $resource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
   <i class=${resource.icon_link}></i>
-  <a href="${resource.url}" target="_blank" class="btn btn-primary">Visit Resource</a>
+  <a href="${resource.url}" target="_blank" class="btn btn-primary">Launch In New Tab</a>
   <section id="resource-link" class="card-body">
     <h4 class="card-title">${resource.name}</h4>
     <h6 class="card-owner">@${resource.owner_name}</h6>
@@ -148,7 +148,7 @@ const singleResourceMarkup = (resource) => {
     <h6 class="card-owner">@${resource.owner_name}</h6>
     <span>${timeago.format(resource.date_added)}</span>
     <p class="card-text">${resource.description}</p>
-    <a href="${resource.url}" class="btn btn-primary">Visit Resource</a>
+    <a href="${resource.url}" class="btn btn-primary">Launch In New Tab</a>
     <span>
     <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
     <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
@@ -184,7 +184,7 @@ const commentMarkup = (comment) => {
   const $comment = $(`
   <section class="comment">
   <p class="comment-message">${comment.message}</p>
-  <footer>Posted By: ${comment.commenter_name} Date Posted: ${comment.post_date}</footer>
+  <footer>Posted By: ${comment.commenter_name} Date Posted: ${timeago.format(comment.post_date)}</footer>
   </section>
   `);
   return $comment;
@@ -217,7 +217,7 @@ const editResourceFormMarkup = (resource) => {
     <option selected>${resource.category_name}</option>
   </select>
   <select class="form-select" id="resource_type-dropdown">
-    <option selected>Resource Type</option>
+    <option selected>${resource.resource_type_name}</option>
   </select>
   <span id="${resource.id}" style="display: none;"></span>
   <button type="submit" class="btn btn-primary" id="edit-resource">Submit</button>
@@ -346,7 +346,6 @@ $(() => {
 $(() => {
   $(document).on('click', '#resource-link', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
-    console.log(resourceId)
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
@@ -385,7 +384,6 @@ $(() => {
 });
 
 // On single resource page - on submission of comment form, save comment and update page
-
 $(() => {
   $('#section-single-resource').on('submit', '#new-comment-form', function(event) {
     const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
@@ -412,6 +410,7 @@ $(() => {
               url: `api/resources/${resourceId}`,
             })
               .done((response) => {
+                $(this).trigger('reset');
                 renderResourcePage(response);
               });
           }

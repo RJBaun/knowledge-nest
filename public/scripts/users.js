@@ -72,6 +72,7 @@ $(() => {
       url: 'api/users/resources'
     })
     .done((data) => {
+      $('#section-user-resources').append('<h1>My Nest</h1>');
       $('#section-user-resources').append(userResourcesMarkup());
       renderUserResources("#owned-resources-tab-pane", data.ownedResources);
       renderUserResources("#liked-resources-tab-pane", data.likedResources);
@@ -361,10 +362,10 @@ const userResourcesMarkup = () => {
   const $userResources = $(`
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="owned-resources-tab" data-bs-toggle="tab" data-bs-target="#owned-resources-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">My Resources</button>
+      <button class="nav-link active" id="owned-resources-tab" data-bs-toggle="tab" data-bs-target="#owned-resources-tab-pane" type="button" role="tab" aria-controls="owned-resources-tab-pane" aria-selected="true">My Resources</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="liked-resources-tab" data-bs-toggle="tab" data-bs-target="#liked-resources-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Saved Resources</button>
+      <button class="nav-link" id="liked-resources-tab" data-bs-toggle="tab" data-bs-target="#liked-resources-tab-pane" type="button" role="tab" aria-controls="liked-resources-tab-pane" aria-selected="false">Liked Resources</button>
     </li>
   </ul>
   <section class="tab-content" id="myTabContent">

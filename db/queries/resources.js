@@ -87,7 +87,7 @@ const getResourcesByLiker = (id) => {
  */
 const getResourceById = (id) => {
   return db
-    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, categories.name AS category_name, COALESCE(likes_count.count_likes, 0) AS count_likes, ratings_avg.avg_rating AS avg_rating FROM resources
+    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, resource_types.name AS resource_type_name, categories.name AS category_name, COALESCE(likes_count.count_likes, 0) AS count_likes, ratings_avg.avg_rating AS avg_rating FROM resources
     JOIN resource_types ON resource_types.id = resources.resource_type_id
     JOIN categories ON categories.id = resources.category_id
     LEFT JOIN users ON resources.owner_id = users.id
@@ -100,7 +100,7 @@ const getResourceById = (id) => {
       GROUP BY resource_id
       ) AS ratings_avg ON resources.id = ratings_avg.resource_id
     WHERE resources.id=$1
-    GROUP BY resources.id, resources.name, resources.url, resources.description, resources.owner_id, resources.category_id, resources.resource_type_id, resources.date_added, users.username, likes_count.count_likes, ratings_avg.avg_rating, resource_types.icon_link, categories.name;`, [id])
+    GROUP BY resources.id, resources.name, resources.url, resources.description, resources.owner_id, resources.category_id, resources.resource_type_id, resources.date_added, users.username, likes_count.count_likes, ratings_avg.avg_rating, resource_types.icon_link, resource_types.name, categories.name;`, [id])
     .then(data => {
       return data.rows[0];
     })
