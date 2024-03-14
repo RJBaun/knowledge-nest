@@ -11,7 +11,7 @@
 const loadAllResources = (response) => {
   pageCleanup();
   renderResources("#all-resources", response.resources);
-  $('#all-resources').prepend($(`<h1>Grow Your Nest</h1>`));
+  $('#all-resources').prepend($(`<h1 id="all-resources-h1">Grow Your Nest</h1>`));
 };
 
 // load homepage
@@ -721,16 +721,21 @@ $(() => {
 
 // Listener for submitting search form
 $(() => {
-  $(document).on('submit', '#search-resources', function() {
+  $(document).on('click', '#submit-search', function() {
     const searchQuery = $('#search-field').val();
     $.ajax({
       method: 'GET',
-      url: 'api/resources/search',
-      data: searchQuery
+      url: `api/resources/search/${searchQuery}`
     })
     .done((response) => {
-      loadAllResources(response.resources)
-      $('#all-resources').prepend(`<h2>Results for '${response.searchValue}'`)
+      $('#search-field').val('');
+      if(response.resources.length === 0) {
+        pageCleanup();
+        $('#all-resources').prepend(`<h1>No results for '${response.searchValue}'</h1>`)
+      } else {
+        loadAllResources(response)
+        $('#all-resources-h1').html(`Search Results For '${response.searchValue}'`)
+    }
     })
   })
 })

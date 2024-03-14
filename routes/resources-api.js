@@ -170,14 +170,13 @@ router.post('/:id/delete', (req, res) => {
 });
 
 //Route for searching resources
-router.get('/find', (req, res) => {
-  console.log(req.body)
+router.get('/search/:query', (req, res) => {
+  const search = req.params.query;
   const response = {
-    searchValue: req.body
+    searchValue: req.params.query
   };
-  resourceQueries.findResources(req.body)
+  resourceQueries.findResources(search.slice(1))
   .then((resources) => {
-    console.log(resources)
     response.resources = resources
     res.send(response)
   })

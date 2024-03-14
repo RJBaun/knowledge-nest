@@ -234,9 +234,9 @@ const findResources = (searchValue) => {
       GROUP BY resource_id
       ) AS ratings_avg ON resources.id = ratings_avg.resource_id
     WHERE resources.is_archived = false
-    AND (resources.name LIKE '%$1%' OR resources.description LIKE '%$1%')
+    AND (resources.name LIKE $1 OR resources.description LIKE $1)
     GROUP BY resources.id, resource_types.icon_link, categories.name, users.username, likes_count.count_likes, ratings_avg.avg_rating
-    ORDER BY date_added DESC;`, [searchValue])
+    ORDER BY date_added DESC;`, ['%' + searchValue + '%'])
     .then(data => {
       return data.rows;
     })
