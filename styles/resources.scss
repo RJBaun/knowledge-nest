@@ -67,9 +67,13 @@ article {
 #modify-resource-buttons {
   display: flex;
   justify-content: space-around;
+  margin: 10px;
 
   button {
     width: 30vw;
+    height: 4em;
+    font-size: 1em;
+
   }
 }
 
@@ -85,14 +89,44 @@ article {
   ol {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     list-style-type: none;
+    padding:0;
+
+    li {
+      padding: .25em;
+      font-size: 2em;
+    }
   }
 
 }
 
 #rating-stars.hidden {
-  display: none
+  display: none;
+}
+
+#new-comment-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  textarea {
+  overflow: auto;
+  resize: none;
+  width: 100%;
+  min-height: 10vh;
+  max-height: 100vh;
+
+  }
+
+  .btn {
+    align-self:flex-end;
+    width: 30vw;
+    height: 4em;
+    font-size: 1em;
+    margin: .5em;
+    margin-right: 0;
+  }
 }
 
 
