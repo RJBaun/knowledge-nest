@@ -190,6 +190,7 @@ const archiveResourceByOwnerId = (ownerId) => {
 const getRecentResources = (limit = 10) => {
   return db
     .query(`SELECT * FROM resources
+    WHERE is_archived = false
     ORDER BY date_added DESC
     LIMIT $1`, [limit])
     .then(data => {
