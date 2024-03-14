@@ -103,16 +103,16 @@ router.post('/comment', (req, res) => {
   // if user not logged in, cannot comment on resource
   if (commenter_id === undefined) {
     res.status(401).json("Log in to comment on this resource.");
+  } else {
+    commentQueries.createNewComment(commentObj)
+      .then(savedComment => {
+        console.log('saved comment', savedComment);
+        res.send(savedComment);
+      })
+      .catch(err => {
+        res.status(500).json({ error: err.message });
+      });
   }
-
-  commentQueries.createNewComment(commentObj)
-    .then(savedComment => {
-      console.log('saved comment', savedComment);
-      res.send(savedComment);
-    })
-    .catch(err => {
-      res.status(500).json({ error: err.message });
-    });
 });
 
 module.exports = router;
