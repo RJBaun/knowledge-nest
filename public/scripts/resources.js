@@ -115,7 +115,7 @@ const newResourceFormMarkup = () => {
     <option selected>Resource Type</option>
   </select>
   <button type="submit" class="btn btn-success" id="submit-new-resource">Submit</button>
-  <button type="button" class="btn btn-danger">Cancel</button>
+  <button type="button" class="btn btn-danger" id="cancel-new-resource" >Cancel</button>
 </form>
   `);
   return $resourceForm;
@@ -325,7 +325,22 @@ $(() => {
   });
 });
 
-
+//Listener for cancelling new resource submission
+$(() => {
+  $(document).on('click', '#cancel-new-resource', function() {
+    $.ajax({
+      method: 'GET',
+      url: `api/resources`
+    })
+      .done((response) => {
+        pageCleanup();
+        renderResources(response);
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  });
+});
 
 // Listener for displaying a single resource when selected from all resources
 $(() => {
