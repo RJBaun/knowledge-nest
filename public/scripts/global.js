@@ -14,5 +14,27 @@ const pageCleanup = () => {
   $('#section-single-resource').empty();
   $('#section-edit-resource').empty();
   $('#section-delete-resource').empty();
+
+  // check if user is logged in
+  $.ajax({
+    method: 'GET',
+    url: 'api/users/active'
+  })
+  .done((response) => {
+    console.log('userid?', response);
+
+    if(response) {
+      console.log('user logged in');
+      $('.nav-user-only').removeClass('hidden')
+      $('.nav-no-user-only').addClass('hidden')
+
+    }
+    if(!response) {
+      console.log('user NOT logged in');
+      $('.nav-user-only').addClass('hidden')
+      $('.nav-no-user-only').removeClass('hidden')
+    }
+
+  })
 };
 

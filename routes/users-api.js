@@ -68,6 +68,14 @@ router.get('/logout', (req, res) => {
   res.json(null);
 });
 
+// Checks if user is logged in, returns true or false.
+router.get('/active', (req,res) => {
+  console.log('in active');
+  const user_id = req.session.user_id;
+  if (!user_id) {res.send(false)}
+  if (user_id) {res.send(true)}
+})
+
 
 router.get('/id', (req, res) => {
   const user_id = req.session.user_id;
