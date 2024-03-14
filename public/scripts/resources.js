@@ -708,7 +708,7 @@ $(() => {
     pageCleanup();
     $.ajax({
       method: 'GET',
-      url: `api/resources/${resourceId}`,
+      url: `api/resources/${resourceId}`
     })
       .done((response) => {
         loadSingleResource(response);
@@ -718,3 +718,19 @@ $(() => {
       });
   });
 });
+
+// Listener for submitting search form
+$(() => {
+  $(document).on('submit', '#search-resources', function() {
+    const searchQuery = $('#search-field').val();
+    $.ajax({
+      method: 'GET',
+      url: 'api/resources/search',
+      data: searchQuery
+    })
+    .done((response) => {
+      loadAllResources(response.resources)
+      $('#all-resources').prepend(`<h2>Results for '${response.searchValue}'`)
+    })
+  })
+})
