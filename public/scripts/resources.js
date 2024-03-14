@@ -320,10 +320,7 @@ $(() => {
       url: '/api/resources/new'
     })
       .done((response) => {
-        pageCleanup();
-        $('#section-add-new-resource').append(newResourceFormMarkup());
-        showCategoryOptions(response);
-        showResourceTypeOptions(response);
+        loadForm('#section-add-new-resource', newResourceFormMarkup, response)
       })
       .catch((err) => {
         console.log('err:', err);
@@ -439,7 +436,6 @@ $(() => {
     const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
     const newComment = $(this).serializeArray();
     const commentLength = $(this)[0][0].value.trim().length;
-    console.log('commentLength', commentLength);
     const commentData = { resourceId, newComment };
 
     if (commentLength === 0) {
@@ -452,9 +448,7 @@ $(() => {
       })
         .done((response) => {
           if (response.status === 401) {
-            console.log('responded 401', response);
           } else {
-            console.log('responded', response);
             $.ajax({
               method: 'GET',
               url: `api/resources/${resourceId}`,
@@ -472,12 +466,6 @@ $(() => {
 
 
 // On single resource page - on click on star to save rating and update page
-
-$(() => {
-  $('#section-single-resource').on('click', '#rating-stars', function() {
-    $('#rating-stars').css('color', 'green');
-  });
-});
 
 $(() => {
   $('#section-single-resource').on('click', '#1-star', function() {
