@@ -40,7 +40,7 @@ const loadForm = (destination, markup, response) => {
 // renders all resources in array at destination
 const renderResources = (destination, resourceArr) => {
   resourceArr.forEach(resource => {
-    $(destination).prepend(resourceMarkup(resource));
+    $(destination).append(resourceMarkup(resource));
   });
 };
 
