@@ -26,7 +26,6 @@ const loadSingleResource = (response) => {
   pageCleanup();
   checkUserRated(response);
   renderSingleResource('#section-single-resource', response.resource);
-  $('#section-single-resource').find('#resource-link').append(singleResourceAppendixMarkup());
   renderComments('#section-single-resource', response.comments);
 };
 
@@ -47,6 +46,7 @@ const renderResources = (destination, resourceArr) => {
 // renders single resource at destination
 const renderSingleResource = (destination, resource) => {
   $(destination).prepend(resourceMarkup(resource));
+  $(destination).append(singleResourceAppendixMarkup());
   $(destination).append($commentForm);
 };
 
@@ -110,7 +110,7 @@ const resourceMarkup = (resource) => {
   <aside>
   <i class=${resource.icon_link}></i>
   </aside>
-  <div id="cardbody">
+  <div id="card-text">
   <header>
   <h2 class="card-title">${resource.name}</h2>
   <div>
@@ -186,9 +186,9 @@ const singleResourceAppendixMarkup = () => {
     <div id="modify-resource-buttons">
     <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
     <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
-    <section id="rating-stars" style="color: red">
+    </div>
+    <section id="rating-stars">
     <h3>Rate this resource!</h3>
-    <p>Red rating stars if user hasn't rated yet (else green)</p>
     <ol>
     <li><i id="1-star" class="fa-solid fa-star"></i></li>
     <li><i id="2-star" class="fa-solid fa-star"></i></li>
