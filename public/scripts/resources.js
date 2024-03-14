@@ -330,7 +330,7 @@ $(() => {
   $(document).on('click', '#cancel-new-resource', function() {
     $.ajax({
       method: 'GET',
-      url: `api/resources`
+      url: `api/resources/recent`
     })
       .done((response) => {
         pageCleanup();
@@ -536,6 +536,7 @@ $(() => {
       });
   });
 });
+
 $(() => {
   $('#section-single-resource').on('click', '#5-star', function() {
     const rating = 5;

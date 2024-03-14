@@ -41,8 +41,29 @@ $(() => {
       url: 'api/resources/recent',
     })
       .done((response) => {
-        console.log(response);
-        // load recent resources via render resource elements
+        pageCleanup();
+        renderResources(response);
+        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  });
+});
+
+$(() => {
+  $(document).ready(function() {
+    $.ajax({
+      method: 'GET',
+      url: 'api/resources/recent',
+    })
+      .done((response) => {
+        pageCleanup();
+        renderResources(response);
+        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+      })
+      .catch((err) => {
+        console.log('err:', err);
       });
   });
 });
