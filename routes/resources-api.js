@@ -185,7 +185,6 @@ router.post('/:id', (req, res) => {
 
 //Route for Archiving/Deleting a resource
 router.post('/:id/delete', (req, res) => {
-  console.log(req.params.id);
   resourceQueries.archiveResource(req.params.id)
     .then((data) => {
       res.send(data);
@@ -193,6 +192,24 @@ router.post('/:id/delete', (req, res) => {
     .catch((err) => {
       res.status(500).send("Error creating resource: " + err.message);
     });
+});
+
+//Route for searching resources
+router.get('/search/:query', (req, res) => {
+  const search = req.params.query;
+  const response = {
+    searchValue: req.params.query
+  };
+  resourceQueries.findResources(search.slice(1))
+  .then((resources) => {
+    response.resources = resources
+    res.send(response)
+  })
+  .catch(err => {
+    res
+      .status(500)
+      .json({ error: err.message });
+  });
 });
 
 

@@ -233,4 +233,35 @@ const getRecentResources = (limit = 10) => {
     });
 };
 
-module.exports = { getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker,checkUserOwnsResource };
+/**
+ * Get all resources data that meets search criteria
+ * @returns {Promise<[{}]|null>} Promise to resources.
+*/
+const findResources = (searchValue) => {
+  return db
+    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, categories.name AS category_name, COALESCE(likes_count.count_likes, 0) AS count_likes, ratings_avg.avg_rating AS avg_rating FROM resources
+    JOIN resource_types ON resource_types.id = resources.resource_type_id
+    JOIN categories ON categories.id = resources.category_id
+    LEFT JOIN users ON resources.owner_id = users.id
+    LEFT JOIN (
+      SELECT resource_id, COUNT(*) AS count_likes FROM likes
+      GROUP BY resource_id
+      ) AS likes_count ON resources.id = likes_count.resource_id
+    LEFT JOIN (
+      SELECT resource_id, ROUND(AVG(rating), 1) AS avg_rating FROM ratings
+      GROUP BY resource_id
+      ) AS ratings_avg ON resources.id = ratings_avg.resource_id
+    WHERE resources.is_archived = false
+    AND (resources.name LIKE $1 OR resources.description LIKE $1)
+    GROUP BY resources.id, resource_types.icon_link, categories.name, users.username, likes_count.count_likes, ratings_avg.avg_rating
+    ORDER BY date_added DESC;`, ['%' + searchValue + '%'])
+    .then(data => {
+      return data.rows;
+    })
+    .catch(err => {
+      return null;
+    });
+};
+
+
+module.exports = { findResources, getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker };
