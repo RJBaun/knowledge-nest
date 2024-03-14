@@ -10,7 +10,7 @@ const db = require('../connection');
 */
 const getResources = () => {
   return db
-    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, categories.name AS category_name, likes_count.count_likes AS count_likes, ratings_avg.avg_rating AS avg_rating FROM resources
+    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, categories.name AS category_name, COALESCE(likes_count.count_likes, 0) AS count_likes, ratings_avg.avg_rating AS avg_rating FROM resources
     JOIN resource_types ON resource_types.id = resources.resource_type_id
     JOIN categories ON categories.id = resources.category_id
     LEFT JOIN users ON resources.owner_id = users.id
@@ -87,14 +87,20 @@ const getResourcesByLiker = (id) => {
  */
 const getResourceById = (id) => {
   return db
-    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, categories.name AS category_name, count(likes.*) AS count_likes, round(avg(ratings.rating), 1) AS avg_rating FROM resources
+    .query(`SELECT resources.*, users.username AS owner_name, resource_types.icon_link, categories.name AS category_name, COALESCE(likes_count.count_likes, 0) AS count_likes, ratings_avg.avg_rating AS avg_rating FROM resources
     JOIN resource_types ON resource_types.id = resources.resource_type_id
     JOIN categories ON categories.id = resources.category_id
     LEFT JOIN users ON resources.owner_id = users.id
-    LEFT JOIN likes ON resources.id = likes.resource_id
-    LEFT JOIN ratings ON resources.id = ratings.resource_id
+    LEFT JOIN (
+      SELECT resource_id, COUNT(*) AS count_likes FROM likes
+      GROUP BY resource_id
+      ) AS likes_count ON resources.id = likes_count.resource_id
+    LEFT JOIN (
+      SELECT resource_id, ROUND(AVG(rating), 1) AS avg_rating FROM ratings
+      GROUP BY resource_id
+      ) AS ratings_avg ON resources.id = ratings_avg.resource_id
     WHERE resources.id=$1
-    GROUP BY resources.id, resources.name, resources.url, resources.description, resources.owner_id, resources.category_id, resources.resource_type_id, resources.date_added, users.username, resource_types.icon_link, categories.name;`, [id])
+    GROUP BY resources.id, resources.name, resources.url, resources.description, resources.owner_id, resources.category_id, resources.resource_type_id, resources.date_added, users.username, likes_count.count_likes, ratings_avg.avg_rating, resource_types.icon_link, categories.name;`, [id])
     .then(data => {
       return data.rows[0];
     })
