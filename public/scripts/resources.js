@@ -409,7 +409,7 @@ $(() => {
 
 $(() => {
   $('#section-single-resource').on('click', '#like-button', function() {
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const likeData = { resourceId: resourceId };
     $.ajax({
       method: 'POST',
@@ -434,7 +434,7 @@ $(() => {
 // On single resource page - on submission of comment form, save comment and update page
 $(() => {
   $('#section-single-resource').on('submit', '#new-comment-form', function(event) {
-    const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const newComment = $(this).serializeArray();
     const commentLength = $(this)[0][0].value.trim().length;
     const commentData = { resourceId, newComment };
@@ -471,7 +471,7 @@ $(() => {
 $(() => {
   $('#section-single-resource').on('click', '#1-star', function() {
     const rating = 1;
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
     $.ajax({
       method: 'POST',
@@ -496,7 +496,7 @@ $(() => {
 $(() => {
   $('#section-single-resource').on('click', '#2-star', function() {
     const rating = 2;
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
     $.ajax({
       method: 'POST',
@@ -520,7 +520,7 @@ $(() => {
 $(() => {
   $('#section-single-resource').on('click', '#3-star', function() {
     const rating = 3;
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
     $.ajax({
       method: 'POST',
@@ -544,7 +544,7 @@ $(() => {
 $(() => {
   $('#section-single-resource').on('click', '#4-star', function() {
     const rating = 4;
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
     $.ajax({
       method: 'POST',
@@ -568,7 +568,7 @@ $(() => {
 $(() => {
   $('#section-single-resource').on('click', '#5-star', function() {
     const rating = 5;
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('#section-single-resource').find('article').attr('id').split('-')[1];
     const ratingData = { rating, resourceId };
     $.ajax({
       method: 'POST',
@@ -593,7 +593,7 @@ $(() => {
 // listener for displaying form to edit resource when selected from single resource page
 $(() => {
   $(document).on('click', '#edit-resource-button', function() {
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}/edit`,
@@ -659,7 +659,7 @@ $(() => {
 // Listener for displaying delete/archive resource confirmation page
 $(() => {
   $(document).on('click', '#delete-resource-button', function() {
-    const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    const resourceId = $(this).closest('section').find('article').attr('id').split('-')[1];
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}/delete`,
@@ -704,7 +704,6 @@ $(() => {
 $(() => {
   $(document).on('click', '#cancel-delete-resource', function() {
     const resourceId = $(this).closest('form').attr('id').split('-')[1];
-    console.log(resourceId);
     pageCleanup();
     $.ajax({
       method: 'GET',
