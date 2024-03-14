@@ -315,6 +315,7 @@ $(() => {
 $(() => {
   $(document).on('click', '#resource-link', function() {
     const resourceId = $(this).closest('article').attr('id').split('-')[1];
+    console.log(resourceId)
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
