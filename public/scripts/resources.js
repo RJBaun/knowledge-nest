@@ -7,11 +7,16 @@
 ///// Helper Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// renders all resources on the webpage
-const renderResources = (response) => {
-  response.resources.forEach(resource => {
-    $("#all-resources").prepend(createResourceMarkup(resource));
-  });
+// load All Resources Page
+const loadAllResources = (response) =>{
+  renderUserResources("#all-resources",response.resources);
+}
+
+// renders all resources in array at destination
+const renderUserResources = (destination, resourceArr) => {
+  resourceArr.forEach (resource => {
+    $(destination).prepend(createResourceMarkup(resource));
+  })
 };
 
 //Adds categories to the dropdown
@@ -35,8 +40,8 @@ const renderComments = (comments) => {
   });
 };
 
-const renderResourcePage = (response) => {
-  // Check if user has already rated resource, if yes hide 'rate this' section.
+// check if user has rated resource, hides rating option is so.
+const checkUserRated = ((response) => {
   const resource_id = response.resource.id;
   $.ajax({
     method: 'GET',
@@ -44,10 +49,15 @@ const renderResourcePage = (response) => {
   })
     .done((response) => {
       if(response) {
-        console.log('rating exists');
         $('#rating-stars').addClass('hidden');
       }
     });
+})
+
+// renders specific resource page
+const renderResourcePage = (response) => {
+  // Check if user has already rated resource, if yes hide 'rate this' section.
+  checkUserRated(response);
   // empty sections, load page
   pageCleanup();
   $('#section-single-resource').append(singleResourceMarkup(response.resource));
@@ -142,37 +152,36 @@ const singleResourceMarkup = (resource) => {
   const resource_ratings = checkRatingsExist(resource.avg_rating);
   const $singleResource = $(`
   <article id="resource-${resource.id}" class="card" style="width: 90vw;">
-  <i class=${resource.icon_link}></i>
   <section id="single-resource" class="card-body">
-    <h4 class="card-title">${resource.name}</h4>
-    <h6 class="card-owner">@${resource.owner_name}</h6>
-    <span>${timeago.format(resource.date_added)}</span>
+  <i class=${resource.icon_link}></i>
+  <a href="${resource.url}" class="btn btn-primary">Launch In New Tab</a>
+    <h2 class="card-title">${resource.name}</h2>
+    <h3 class="card-owner">@${resource.owner_name}</h3>
+    <p>${timeago.format(resource.date_added)}</p>
     <p class="card-text">${resource.description}</p>
-    <a href="${resource.url}" class="btn btn-primary">Launch In New Tab</a>
-    <span>
-    <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
-    <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
     <footer>
     <div class="likes">
-      <p>${resource.count_likes}
-      <i id="like-button" class="fa-solid fa-heart"></i></p>
+    <p>${resource.count_likes}<i id="like-button" class="fa-solid fa-heart"></i></p>
     </div>
     <div class="ratings">
-      <p>${resource_ratings}
-      <i class="fa-solid fa-star"></i></p>
-      </div>
-    <div id="rating-stars" style="color: red">
-      <h3>Rate this resource!</h3>
-      <p>Red rating stars if user hasn't rated yet (else green)</p>
-      <ol>
-      <li><i id="1-star" class="fa-solid fa-star"></i></li>
-      <li><i id="2-star" class="fa-solid fa-star"></i></li>
-      <li><i id="3-star" class="fa-solid fa-star"></i></li>
-      <li><i id="4-star" class="fa-solid fa-star"></i></li>
-      <li><i id="5-star" class="fa-solid fa-star"></i></li>
-      </ol>
-      </div>
+    <p>${resource_ratings}<i class="fa-solid fa-star"></i></p>
+    </div>
     </footer>
+    <div id="modify-resource-buttons">
+    <button type="button" id="edit-resource-button" class="btn btn-primary btn-sm">Edit Resource</button>
+    <button type="button" id="delete-resource-button" class="btn btn-primary btn-sm">Delete Resource</button>
+    </div>
+    <div id="rating-stars" style="color: red">
+    <h3>Rate this resource!</h3>
+    <p>Red rating stars if user hasn't rated yet (else green)</p>
+    <ol>
+    <li><i id="1-star" class="fa-solid fa-star"></i></li>
+    <li><i id="2-star" class="fa-solid fa-star"></i></li>
+    <li><i id="3-star" class="fa-solid fa-star"></i></li>
+    <li><i id="4-star" class="fa-solid fa-star"></i></li>
+    <li><i id="5-star" class="fa-solid fa-star"></i></li>
+    </ol>
+    </div>
   </section>
   </article>
   `);
@@ -252,6 +261,43 @@ const deleteResourceFormMarkup = (resource) => {
 ///// Listeners
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Load 'Homepage' on navbar logo click
+$(() => {
+  $('.navbar-brand').on('click', function() {
+    $.ajax({
+      method: 'GET',
+      url: 'api/resources/recent',
+    })
+      .done((response) => {
+        pageCleanup();
+        loadAllResources(response);
+        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  });
+});
+
+
+// 'Homepage' -- Load 10 most recent resources on first page load and full reload
+$(() => {
+  $(document).ready(function() {
+    $.ajax({
+      method: 'GET',
+      url: 'api/resources/recent',
+    })
+      .done((response) => {
+        pageCleanup();
+        loadAllResources(response);
+        $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+      })
+      .catch((err) => {
+        console.log('err:', err);
+      });
+  });
+});
+
 // listener for "View all resources" when clicked from the nav bar
 $(() => {
   $('#get-all-resources').on('click', () => {
@@ -261,7 +307,7 @@ $(() => {
     })
       .done((response) => {
         pageCleanup();
-        renderResources(response);
+        loadAllResources(response);
         $('.resource-link').on('click', function() {
         });
       })
@@ -334,7 +380,7 @@ $(() => {
     })
       .done((response) => {
         pageCleanup();
-        renderResources(response);
+        loadAllResources(response);
       })
       .catch((err) => {
         console.log('err:', err);
