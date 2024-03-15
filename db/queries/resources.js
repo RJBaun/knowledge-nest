@@ -264,4 +264,4 @@ const findResources = (searchValue) => {
 };
 
 
-module.exports = { findResources, getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker };
+module.exports = { checkUserOwnsResource, findResources, getResources, getResourceById, createNewResource, updateResource, archiveResource, getRecentResources, archiveResourceByOwnerId, getResourcesByUser, getResourcesByLiker };
