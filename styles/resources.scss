@@ -1,6 +1,8 @@
 
 .card {
   width: 90vw;
+  min-width: 400px;
+  max-width: 1200px;
   border: thin solid var(--accent-gray);
   border-radius: 7px;
 
@@ -161,7 +163,8 @@
   border-radius: 1em;
   margin: 0.5em;
   padding: .25em;
-  max-width: 90vw;
+  min-width: 400px;
+  max-width: 1200px;
 
 
   .comment-message {
