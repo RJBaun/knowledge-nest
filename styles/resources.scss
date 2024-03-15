@@ -5,6 +5,7 @@
   border-radius: 7px;
 
 
+
   section {
     display: flex;
     flex-direction: row;
@@ -185,3 +186,12 @@
   }
 
 }
+
+
+#section-single-resource {
+  :hover {
+    box-shadow:none;
+    transform: none;
+  }
+}
+
