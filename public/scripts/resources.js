@@ -131,7 +131,7 @@ const resourceMarkup = (resource) => {
   <h2 class="card-title">${resource.name}</h2>
   <div>
   <h3 class="card-owner">@${resource.owner_name}</h3>
-  <p>${timeago.format(resource.date_added)}</p>
+  <time>${timeago.format(resource.date_added)}</time>
   </div>
   </header>
     <p class="card-text">${resource.description}</p>

@@ -1,11 +1,17 @@
 @import "./variables.scss";
 
-article {
+.card {
   width: 90vw;
+  border: thin solid var(--accent-gray);
+  border-radius: 7px;
+
 
   section {
     display: flex;
     flex-direction: row;
+
+
+    // margin:0.5em;
 
     aside {
       width: 10vw;
@@ -15,6 +21,8 @@ article {
       justify-content: center;
       align-items: center;
       font-size: clamp(0.5rem, 10vw, 20vw);
+      border: medium solid var(--black);
+
       background-color: var(--secondary-green)
     }
 
@@ -28,6 +36,7 @@ article {
         display: flex;
         flex-direction: column;
 
+
         .card-title {
           align-self: center;
         }
@@ -38,6 +47,16 @@ article {
         flex-direction: row;
         justify-content: space-between;
         align-items: flex-start;
+
+        h3, time {
+          color: var(--accent-gray);
+          align-self: center;
+          margin: 0;
+          padding-bottom:1vw;
+          padding-left: 1vw;
+          padding-right: 1vw;
+          font-size:medium
+        }
       }
     }
 
@@ -49,9 +68,19 @@ article {
       display: flex;
       justify-content: space-between;
       align-content: flex-end;
+      border: solid var(--accent-gray);
+      border-bottom: 0;
+      border-left: 0;
+      border-right: 0;
+      border-width: .05em;
+
+      .resource-category {
+        color: var(--accent-gray);
+      }
+
 
       i {
-        padding: .25vw;
+        padding: .4vw;
       }
     }
   }
@@ -140,7 +169,7 @@ article {
     margin: 0;
     padding: 1rem;
     text-wrap: pretty;
-    word-break: break-all;
+    word-break: break-word;
   }
 
   footer {
