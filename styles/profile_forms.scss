@@ -1,18 +1,36 @@
 #section-user-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .user-profile {
     background-color: var(--white);
     border-radius: 0.5em;
     width: 40vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     border: thin solid var(--secondary-green);
   }
 
   h2 {
     padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2em;
+
+    .btn {
+      margin: 1em;
+    }
+  }
+
+  i {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
   }
 
   #profile-data {
@@ -52,11 +70,15 @@
   }
 
   #update-profile-form {
+    background-color: var(--white);
+    border-radius: 0.5em;
+    width: 40vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 0.5rem;
+    border: thin solid var(--secondary-green);
 
     div.mb-3 {
       display: flex;
@@ -77,19 +99,22 @@
   }
 
   #delete-profile-form {
-    padding: 0.5rem;
-    margin: 1rem;
+    background-color: var(--white);
+    border-radius: 0.5em;
+    width: 40vw;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
+    padding: 0.5rem;
+    border: thin solid var(--secondary-green);
+    text-align: center;
 
     h2 {
-      color: var(--light-red)
-    }
-
-    p {
-      align-self: flex-start;
+      color: var(--light-red);
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
     }
 
     .buttons {
@@ -128,6 +153,11 @@
       height: 3rem;
       font-size: large;
     }
+
+    input {
+      width: 35vw;
+    }
+
   }
 
   footer {
@@ -135,7 +165,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 4rem;
+    font-size: 3rem;
 
     i {
       margin-top: 2rem;
@@ -147,6 +177,7 @@
 #section-registration-page {
 
   form {
+    border: thin solid var(--secondary-green);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,7 +185,6 @@
     background-color: var(--white);
     border-radius: 0.5em;
     width: 60vw;
-    border: thin solid var(--secondary-green);
 
     h2 {
       margin: 1rem;
@@ -164,6 +194,10 @@
       width: 10rem;
       height: 3rem;
       font-size: large;
+    }
+
+    input {
+      width: 35vw;
     }
   }
 

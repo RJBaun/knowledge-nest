@@ -214,6 +214,13 @@
   padding-bottom: 30px;
 }
 
+#section-add-new-resource {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .new-resource-form {
   display: flex;
   flex-direction: column;
@@ -221,10 +228,28 @@
   align-items: center;
   background-color: var(--white);
   border-radius: 0.5em;
-  width: 50vw;
+  width: 60vw;
   border: thin solid var(--secondary-green);
-  padding-top: 3.5em;
-  padding-bottom: 3.5em;
+  padding: 1.5em;
+
+  input {
+    resize: horizontal;
+    width: 50vw;
+  }
+
+  textarea {
+    width: 50vw;
+    text-wrap: balance;
+  }
+
+  #description-field {
+    min-height: 10vw;
+  }
+
+  .form-select {
+    margin: 0.5rem;
+    width: 50vw;
+  }
 
     h2 {
       padding-bottom: 1em;
