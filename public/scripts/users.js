@@ -311,19 +311,19 @@ const editUserProfileMarkup = (user) => {
 <h2>Update Profile</h2>
 <div class="mb-3 row">
   <label for="updated-username" class="col-sm-2 col-form-label">Username:</label>
-  <div class="col-sm-10">
     <input type="text" class="form-control" id="updated-username" value="${user.username}">
-  </div>
+
 <div class="mb-3 row">
   <label for="updated-email" class="col-sm-2 col-form-label">Email:</label>
-  <div class="col-sm-10">
     <input type="email" class="form-control" id="updated-email" value="${user.email}">
-  </div>
 </div>
 <div class="buttons">
   <button id="update-button" type="submit" class="btn btn-success">Update</button>
   <button id="cancel-button" type="button" class="btn btn-danger">Cancel</button>
 </div>
+<footer>
+<i class="fa-brands fa-earlybirds"></i>
+</footer>
 </form>
 `;
   return editUserProfile;
