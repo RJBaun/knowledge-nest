@@ -1,16 +1,4 @@
-/* color variables */
-$primary-green: #63C132;
-$secondary-green: #036016;
-$accent-brown: #D9C5B2;
-$accent-gray: #7E7F83;
-$white: #FFFFFF;
-$black: #071013;
-$dark-red: #C90404;
-$light-red: #FF0000;
-
-/* Font variables */
-$logo-font-family: "Angkor", serif;
-
+@import "./variables.scss";
 
 body {
   display: flex;
@@ -19,26 +7,26 @@ body {
   align-items: center;
   min-height: 100vh;
 
-  background: $accent-brown;
+  background: var(--accent-brown);
 }
 
 nav {
   width: 100vw;
   position: sticky;
   top: 0;
-  background-color: $primary-green;
+  background-color: var(--primary-green);
   color: $white;
-  border-bottom: 1px solid $black;
+  border-bottom: 1px solid var(--black);
 
   .hidden {
     display: none;
   }
 
   .navbar-brand {
-    font-family: $logo-font-family;
+    font-family: var(--logo-font-family);
     font-weight: 400;
     font-style: normal;
-    color: $white;
+    color: var(--white);
 
     i {
       font-size: 30px;
@@ -52,22 +40,22 @@ nav {
     padding-right: 15px;
 
     .nav-link {
-      color: $white;
+      color: var(--white);
     }
 
   }
 }
 
 .navbar {
-  position:fixed;
-  color: $white;
+  position: fixed;
+  color: var(--white);
 
   .navbar-toggler {
-    border: 2px solid $white;
+    border: 2px solid var(--white);
   }
 
   .fa-solid {
-    color: $white;
+    color: var(--white);
   }
 }
 
@@ -84,21 +72,21 @@ main {
   margin-top: 100px;
 
   .btn-success {
-    background-color: $secondary-green;
-    border-color: $secondary-green;
+    background-color: var(--secondary-green);
+    border-color: var(--secondary-green);
   }
 
   .btn-success:hover {
-    background-color: $primary-green;
+    background-color: var(--secondary-green);
   }
 
   .btn-danger {
-    background-color: $dark-red;
-    border-color: $dark-red;
+    background-color: var(--dark-red);
+    border-color: var(--dark-red);
   }
 
   .btn-danger:hover {
-    background-color: $light-red;
+    background-color: var(--light-red);
   }
 
   .card {
@@ -106,13 +94,13 @@ main {
     position: static;
 
     .btn-primary {
-      background-color: $secondary-green;
-      border-color: $secondary-green;
+      background-color: var(--secondary-green);
+      border-color: var(--secondary-green);
     }
 
 
     .btn-primary:hover {
-      background-color: $primary-green;
+      background-color: var(--primary-green);
     }
 
 
