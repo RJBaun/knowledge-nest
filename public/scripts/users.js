@@ -357,6 +357,7 @@ const deleteUserProfileMarkup = () => {
 const myResourcesShellMarkup = () => {
   const $myResourcesShell = $(`
   <h1>My Nest</h1>
+  <section id="resource-file">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="owned-resources-tab" data-bs-toggle="tab" data-bs-target="#owned-resources-tab-pane" type="button" role="tab" aria-controls="owned-resources-tab-pane" aria-selected="true">My Resources</button>
@@ -371,6 +372,7 @@ const myResourcesShellMarkup = () => {
     <article class="tab-pane fade" id="liked-resources-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
     </article>
   </section>
+  <section>
   `);
   return $myResourcesShell;
 };
