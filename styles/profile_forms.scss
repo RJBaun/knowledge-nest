@@ -177,3 +177,39 @@
     }
   }
 }
+
+
+#section-edit-resource {
+  form {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: var(--white);
+    border-radius: 0.5em;
+    width: 60vw;
+    border: thin solid var(--secondary-green);
+
+    input {
+      resize: horizontal;
+      width: 50vw;
+    }
+    #description-field {
+      min-height: 10vw;
+      text-wrap:balance;
+  }
+
+
+    footer {
+      button {
+        width: 10rem;
+        height: 3rem;
+        font-size: large;
+      }
+    }
+
+
+  }
+}
