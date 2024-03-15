@@ -178,7 +178,6 @@
   }
 }
 
-
 #section-edit-resource {
   form {
 
@@ -196,20 +195,28 @@
       resize: horizontal;
       width: 50vw;
     }
+
+    textarea {
+      width: 50vw;
+      text-wrap: balance;
+    }
+
     #description-field {
       min-height: 10vw;
-      text-wrap:balance;
-  }
+    }
 
+    .form-select {
+      margin: 0.5rem;
+      width: 50vw;
+    }
 
     footer {
       button {
         width: 10rem;
         height: 3rem;
         font-size: large;
+        margin-top: 2rem;
       }
     }
-
-
   }
 }
