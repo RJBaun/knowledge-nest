@@ -33,14 +33,32 @@ nav {
     }
   }
 
+  .form-control {
+    width: 150px;
+
+  }
+
+  .btn-outline-success {
+    margin-left: 4px;
+    background-color: var(--secondary-green);
+    color: var(--primary-green);
+    border: 2px solid var(--black);
+  }
+
+  .btn-outline-success:hover {
+    background-color: var(--primary-green);
+    color: var(--secondary-green);
+    border: 2px solid var(--black);
+  }
+
   ul {
     display: flex;
-    flex-direction: column;
-    align-items: end;
-    padding-right: 15px;
 
     .nav-link {
       color: var(--white);
+      flex-direction: column;
+      align-items: start;
+      padding-right: 15px;
     }
 
   }
@@ -52,6 +70,7 @@ nav {
 
   .navbar-toggler {
     border: 2px solid var(--white);
+    margin-right: 160px;
   }
 
   .fa-solid {
@@ -126,11 +145,22 @@ main {
 
     .nav-link {
       color: var(--black);
+      border-color: var(--black);
     }
 
     .nav-link.active {
       background-color: var(--primary-green);
+      border-color: var(--black);
     }
 
+    .nav-link:hover {
+      border-color: var(--black);
+      color: var(--white)
+    }
+
+  }
+
+  .nav-tabs {
+    border-bottom: 2px solid var(--black);
   }
 }
