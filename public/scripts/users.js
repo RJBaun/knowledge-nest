@@ -283,21 +283,19 @@ const loginPageMarkup = () => {
 const userProfileMarkup = (user) => {
   const userProfile = `
   <h2>Profile</h2>
-  <div class="mb-3 row">
-    <label for="static-username" class="col-sm-2 col-form-label">Username:</label>
-    <div class="col-sm-10">
-      <input type="text" readonly class="form-control-plaintext" id="static-username" value="${user.username}">
-    </div>
-  <div class="mb-3 row">
-    <label for="static-email" class="col-sm-2 col-form-label">Email:</label>
-    <div class="col-sm-10">
-      <input type="text" readonly class="form-control-plaintext" id="static-email" value="${user.email}">
-    </div>
-  </div>
+  <section id="profile-data">
+    <h3>Username:</h3>
+    <p>${user.username}</p>
+    <h3>Email:</h3>
+    <p>${user.email}</p>
+  </section>
   <div class="buttons">
     <button id="user-edit-button" type="button" class="btn btn-success">Edit</button>
     <button id="user-delete-button" type="button" class="btn btn-danger">Delete</button>
   </div>
+  <footer>
+  <i class="fa-brands fa-earlybirds"></i>
+  </footer>
   `;
   return userProfile;
 };
