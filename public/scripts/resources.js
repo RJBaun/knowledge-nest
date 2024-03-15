@@ -153,29 +153,31 @@ const resourceMarkup = (resource) => {
 //Renders form for new resources
 const newResourceFormMarkup = () => {
   const $resourceForm = $(`
-  <form>
-  <h2>Create New Resource</h2>
-  <article class="mb-3">
-    <label for="url-field" class="form-label" style="display: none">Resource URL</label>
-    <input type="url" class="form-control" id="url-field" placeholder="URL">
-  </article>
-  <article class="mb-3">
-    <label for="name-field" class="form-label" style="display: none">Resource Title</label>
-    <input type="text" class="form-control" id="name-field" placeholder="Title">
-  </article>
-  <article class="mb-3">
-    <label for="description-field" class="form-label" style="display: none">Resource Description</label>
-    <input type="text" class="form-control" id="description-field" placeholder="Description">
-  </article>
-  <select class="form-select" id="category-dropdown">
-    <option selected>Category</option>
-  </select>
-  <select class="form-select" id="resource_type-dropdown">
-    <option selected>Resource Type</option>
-  </select>
-  <button type="submit" class="btn btn-success" id="submit-new-resource">Submit</button>
-  <button type="button" class="btn btn-danger" id="cancel-new-resource" >Cancel</button>
-</form>
+  <form class="new-resource-form">
+    <h2>Create New Resource</h2>
+    <article class="mb-3">
+      <label for="url-field" class="form-label" style="display: none">Resource URL</label>
+      <input type="url" class="form-control" id="url-field" placeholder="URL">
+    </article>
+    <article class="mb-3">
+      <label for="name-field" class="form-label" style="display: none">Resource Title</label>
+      <input type="text" class="form-control" id="name-field" placeholder="Title">
+    </article>
+    <article class="mb-3">
+      <label for="description-field" class="form-label" style="display: none">Resource Description</label>
+      <input type="text" class="form-control" id="description-field" placeholder="Description">
+    </article>
+    <select class="form-select resource-dropdown" id="category-dropdown">
+      <option selected>Category</option>
+    </select>
+    <select class="form-select resource-dropdown" id="resource_type-dropdown">
+      <option selected>Resource Type</option>
+    </select>
+    <section class="add-resource-buttons">
+      <button type="submit" class="btn btn-success new-button" id="submit-new-resource">Submit</button>
+      <button type="button" class="btn btn-danger new-button" id="cancel-new-resource" >Cancel</button>
+    </section>
+  </form>
   `);
   return $resourceForm;
 };
