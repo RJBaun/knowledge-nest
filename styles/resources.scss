@@ -195,3 +195,21 @@
   }
 }
 
+#all-resources h1 {
+  display: flex;
+  justify-content: center;
+  font-family: var(--h1-font-family);
+  font-weight: 700;
+  text-shadow: 2px 2px var(--accent-gray);
+  padding-bottom: 30px;
+}
+
+#section-user-resources h1 {
+  display: flex;
+  justify-content: center;
+  font-family: var(--h1-font-family);
+  font-weight: 700;
+  text-shadow: 2px 2px var(--accent-gray);
+  padding-bottom: 30px;
+}
+

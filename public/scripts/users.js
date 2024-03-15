@@ -282,6 +282,7 @@ const loginPageMarkup = () => {
  */
 const userProfileMarkup = (user) => {
   const userProfile = `
+  <section class="user-profile">
   <h2>Profile</h2>
   <section id="profile-data">
     <h3>Username:</h3>
@@ -296,6 +297,7 @@ const userProfileMarkup = (user) => {
   <footer>
   <i class="fa-brands fa-earlybirds"></i>
   </footer>
+  </section>
   `;
   return userProfile;
 };
