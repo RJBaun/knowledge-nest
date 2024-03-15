@@ -271,7 +271,11 @@ const loginPageMarkup = () => {
     <input type="password" name="password" class="form-control" id="login-password">
   </div>
   <button id="login-button" type="submit" class="btn btn-success">Login</button>
-</form>`;
+  <footer>
+  <i class="fa-brands fa-earlybirds"></i>
+  <p>Welcome Back!</p>
+  </footer>
+  </form>`;
   return loginPage;
 };
 

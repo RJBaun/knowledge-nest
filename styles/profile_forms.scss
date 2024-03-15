@@ -68,10 +68,10 @@
 
     }
   }
+
   label {
     min-width: 20vw;
   }
-
 
   #delete-profile-form {
     padding: 0.5rem;
@@ -82,7 +82,7 @@
     align-items: center;
 
     h2 {
-      color:var(--light-red)
+      color: var(--light-red)
     }
 
     p {
@@ -98,9 +98,48 @@
         width: 8rem;
         // height: 3rem;
         margin: 0.5rem;
-        text-wrap:balance
+        text-wrap: balance
       }
     }
+  }
+}
+
+
+
+#section-login-page {
+  background-color: var(--white);
+  border-radius: 0.5em;
+  width: 60vw;
+  border: thin solid var(--secondary-green);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      width: 10rem;
+      height: 3rem;
+      font-size: large;
+
+    }
+
+  }
+
+  footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+
+    i {
+      margin-top: 2rem;
+      font-size: 10rem;
+    }
+
+
   }
 
 
