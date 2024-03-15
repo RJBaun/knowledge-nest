@@ -72,8 +72,8 @@ main {
   margin-top: 100px;
 
   .btn-success {
-    background-color: var(--secondary-green);
-    border-color: var(--secondary-green);
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
   }
 
   .btn-success:hover {
@@ -81,30 +81,56 @@ main {
   }
 
   .btn-danger {
-    background-color: var(--dark-red);
-    border-color: var(--dark-red);
+    background-color: var(--light-red);
+    border-color: var(--light-red);
   }
 
   .btn-danger:hover {
-    background-color: var(--light-red);
+    background-color: var(--dark-red);
   }
 
   .card {
     margin-top: 2vh;
     position: static;
+    transition: box-shadow .3s;
 
     .btn-primary {
-      background-color: var(--secondary-green);
-      border-color: var(--secondary-green);
+      background-color: var(--primary-green);
+      border-color: var(--primary-green);
     }
 
 
     .btn-primary:hover {
-      background-color: var(--primary-green);
+      background-color: var(--secondary-green) !important;
     }
-
-
 
   }
 
+  .card:hover {
+    box-shadow:5px 5px 0 0 var(--accent-gray);
+    transform: translateY(-3px)
+  }
+
+  .fa-heart:hover {
+    color: var(--dark-red);
+  }
+
+  .fa-star:hover {
+    color: var(--gold);
+  }
+
+  .nav-item {
+    background-color: var(--secondary-brown);
+    border-top-right-radius : 8px;
+    border-top-left-radius : 8px;
+
+    .nav-link {
+      color: var(--black);
+    }
+
+    .nav-link.active {
+      background-color: var(--primary-green);
+    }
+
+  }
 }
