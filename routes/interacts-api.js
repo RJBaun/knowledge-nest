@@ -32,23 +32,23 @@ router.post('/like', (req, res) => {
   if (likerId === undefined) {
     res.status(401);
     res.send("Log in to 'like' a resource.");
+  } else {
+    // if user has already liked resource, cannot like again
+    likeQueries.findLikeByLikerIdAndResourceId(likerId, resourceId)
+      .then(like => {
+        if (like !== null) {
+          res.status(401).json('You cannot like a resource more than once.');
+        } else {
+          likeQueries.createNewLike(likerId, resourceId)
+            .then(like => {
+              res.send(like);
+            });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({ error: err.message });
+      });
   }
-
-  // if user has already liked resource, cannot like again
-  likeQueries.findLikeByLikerIdAndResourceId(likerId, resourceId)
-    .then(like => {
-      if (like !== null) {
-        res.status(401).json('You cannot like a resource more than once.');
-      } else {
-        likeQueries.createNewLike(likerId, resourceId)
-          .then(like => {
-            res.send(like);
-          });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ error: err.message });
-    });
 });
 
 /////////////////////////////////////
@@ -68,23 +68,24 @@ router.post('/rate', (req, res) => {
   // if user not logged in, cannot rate resource
   if (rater_id === undefined) {
     res.status(401).json("Log in to rate this resource.");
+  } else {
+    // if user has already rated resource, cannot rate again
+    ratingQueries.findRatingByRaterIdAndResourceId(ratingObj)
+      .then(rating => {
+        if (rating !== null) {
+          res.status(401).json('You cannot rate a resource more than once.');
+        } else {
+          ratingQueries.createNewRating(ratingObj)
+            .then(savedRating => {
+              res.send(rating);
+            });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({ error: err.message });
+      });
   }
 
-  // if user has already rated resource, cannot rate again
-  ratingQueries.findRatingByRaterIdAndResourceId(ratingObj)
-    .then(rating => {
-      if (rating !== null) {
-        res.status(401).json('You cannot rate a resource more than once.');
-      } else {
-        ratingQueries.createNewRating(ratingObj)
-          .then(savedRating => {
-            res.send(rating);
-          });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ error: err.message });
-    });
 });
 
 /////////////////////////////////////
