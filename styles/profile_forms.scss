@@ -104,8 +104,6 @@
   }
 }
 
-
-
 #section-login-page {
   background-color: var(--white);
   border-radius: 0.5em;
@@ -118,13 +116,15 @@
     justify-content: center;
     align-items: center;
 
+    h2 {
+      margin: 1rem;
+    }
+
     button {
       width: 10rem;
       height: 3rem;
       font-size: large;
-
     }
-
   }
 
   footer {
@@ -138,9 +138,42 @@
       margin-top: 2rem;
       font-size: 10rem;
     }
+  }
+}
 
+#section-registration-page {
+  background-color: var(--white);
+  border-radius: 0.5em;
+  width: 60vw;
+  border: thin solid var(--secondary-green);
 
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h2 {
+      margin: 1rem;
+    }
+
+    button {
+      width: 10rem;
+      height: 3rem;
+      font-size: large;
+    }
   }
 
+  footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
 
+    i {
+      margin-top: 2rem;
+      font-size: 10rem;
+    }
+  }
 }

@@ -251,7 +251,11 @@ const registrationPageMarkup = () => {
     <input type="password" name="password" class="form-control" id="register-password">
   </div>
   <button id="register-button" type="submit" class="btn btn-success">Register</button>
-</form>`;
+  <footer>
+  <i class="fa-brands fa-earlybirds"></i>
+  <p>Welcome to Knowledge Nest!</p>
+  </footer>
+  </form>`;
   return registrationPage;
 };
 
