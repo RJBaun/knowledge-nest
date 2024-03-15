@@ -220,3 +220,50 @@
     }
   }
 }
+
+#section-delete-resource {
+
+  form {
+    padding: 2rem;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: 0.5em;
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: thin solid var(--secondary-green);
+  }
+
+  h2 {
+    color: var(--light-red);
+    margin: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  p {
+    align-self: center;
+  }
+
+  footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      width: 8rem;
+      height: 3rem;
+      margin: 0.5rem;
+    }
+
+
+
+
+  }
+}
