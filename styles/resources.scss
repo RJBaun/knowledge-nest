@@ -1,12 +1,4 @@
-/* color variables */
-$primary-green: #63C132;
-$secondary-green: #036016;
-$accent-brown: #D9C5B2;
-$accent-gray: #7E7F83;
-$white: #FFFFFF;
-$black: #071013;
-
-
+@import "./variables.scss";
 
 article {
   width: 90vw;
@@ -19,10 +11,11 @@ article {
       width: 10vw;
       margin: 1vw;
       display: flex;
+      border-radius:0.1em;
       justify-content: center;
       align-items: center;
       font-size: clamp(0.5rem, 10vw, 20vw);
-      background-color: $secondary-green
+      background-color: var(--secondary-green)
     }
 
     #card-text {
@@ -134,7 +127,7 @@ article {
 }
 
 .comment {
-  background-color: $secondary-green;
+  background-color: var(--secondary-green);
   border-radius: 1em;
   margin: 0.5em;
   padding: .25em;
@@ -142,7 +135,7 @@ article {
 
 
   .comment-message {
-    background-color: $white;
+    background-color: var(--white);
     border-radius: 2rem 0.9rem 0 0;
     margin: 0;
     padding: 1rem;
@@ -151,9 +144,9 @@ article {
   }
 
   footer {
-    color: gray;
+    color: var(--accent-gray);
     border-radius: 0 0 0.9rem 0.9em;
-    background-color: $white;
+    background-color: var(--white);
     font-size: small;
     display: flex;
     justify-content: space-between;
