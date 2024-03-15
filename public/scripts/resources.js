@@ -261,9 +261,11 @@ const editResourceFormMarkup = (resource) => {
     <option selected>${resource.resource_type_name}</option>
   </select>
   <span id="${resource.id}" style="display: none;"></span>
+  <footer>
   <button type="submit" class="btn btn-success" id="edit-resource">Submit</button>
   <button type="button" class="btn btn-danger" id="back-to-resource">Cancel</button>
-</form>
+</footer>
+  </form>
   `);
   return $editResourceForm;
 };
@@ -273,9 +275,11 @@ const deleteResourceFormMarkup = (resource) => {
   const $deleteResourceForm = $(`
   <form id="delete-${resource.id}">
   <h2>Are You Sure?</h2>
-  <p>Deleting <span class="resource name">${resource.name}</span> will permanently remove it from Your Resources<p>
-    <button type="submit" class="btn btn-danger" id="confirm-delete-resource">Delete</button>
+  <p>Deleting <span class="resource name">${resource.name}</span> will permanently remove it from Your Resources.<p>
+  <footer>
+  <button type="submit" class="btn btn-danger" id="confirm-delete-resource">Delete</button>
     <button type="button" class="btn btn-success" id="cancel-delete-resource">Cancel</button>
+    </footer>
 </form>
   `);
   return $deleteResourceForm;
@@ -630,7 +634,7 @@ $(() => {
 $(() => {
   $(document).on('click', '#edit-resource', function(event) {
     event.preventDefault();
-    const resourceId = $(this).siblings('span').attr('id');
+    const resourceId = $(this).closest('form').find('span').attr('id');
     const resource = {
       name: $('#name-field').val(),
       description: $('#description-field').val(),
@@ -661,7 +665,7 @@ $(() => {
 //Listener for cancelling resource edits from edit resource page
 $(() => {
   $(document).on('click', '#back-to-resource', function() {
-    const resourceId = $(this).siblings('span').attr('id');
+    const resourceId = $(this).closest('form').find('span').attr('id');
     $.ajax({
       method: 'GET',
       url: `api/resources/${resourceId}`,
@@ -696,7 +700,7 @@ $(() => {
 // Listener for deleting a resource once confirmed
 $(() => {
   $(document).on('click', '#confirm-delete-resource', function() {
-    const resourceId = $(this).siblings('span').attr('id');
+    const resourceId = $(this).closest('form').attr('id').split('-')[1];
     $.ajax({
       method: 'POST',
       url: `api/resources/${resourceId}/delete`
