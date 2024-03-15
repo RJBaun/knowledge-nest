@@ -108,16 +108,16 @@
 }
 
 #section-login-page {
-  background-color: var(--white);
-  border-radius: 0.5em;
-  width: 60vw;
-  border: thin solid var(--secondary-green);
 
   form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: var(--white);
+    border-radius: 0.5em;
+    width: 60vw;
+    border: thin solid var(--secondary-green);
 
     h2 {
       margin: 1rem;
@@ -145,16 +145,16 @@
 }
 
 #section-registration-page {
-  background-color: var(--white);
-  border-radius: 0.5em;
-  width: 60vw;
-  border: thin solid var(--secondary-green);
 
   form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: var(--white);
+    border-radius: 0.5em;
+    width: 60vw;
+    border: thin solid var(--secondary-green);
 
     h2 {
       margin: 1rem;
