@@ -18,7 +18,7 @@ const loadAllResources = (response) => {
 const loadHomepage = (response) => {
   pageCleanup();
   renderResources("#all-resources", response.resources);
-  $('#all-resources').prepend($('<h1>Check Out Whats New</h1>'));
+  $('#all-resources').prepend($(`<h1>Check Out What's New</h1>`));
 };
 
 // load single resource in Single-Resource section
