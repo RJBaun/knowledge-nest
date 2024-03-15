@@ -23,9 +23,8 @@ Users can view, like, rate, and comment on other users' resources. Liked resourc
 - Node 10.x or above
 - NPM 5.x or above
 - PG 6.x
-- Express 4.x
-- Bcrypt 2.x
-- Cookie-session 2.x
-- Sass 1.x
-- Timeago 4.x
 
+## Screenshots
+!["Create a new resource"](https://github.com/RJBaun/knowledge-nest/blob/master/docs/Screenshot%202024-03-15%20at%2011.26.02%E2%80%AFAM.png?raw=true)
+!["Single resource page"](https://github.com/RJBaun/knowledge-nest/blob/master/docs/Screenshot%202024-03-15%20at%2011.24.54%E2%80%AFAM.png?raw=true)
+!["Search results page"](https://github.com/RJBaun/knowledge-nest/blob/master/docs/Screenshot%202024-03-15%20at%2011.23.57%E2%80%AFAM.png?raw=true)
